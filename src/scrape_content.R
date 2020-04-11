@@ -7,23 +7,23 @@ library(glue)
 # if dates is not supplied, then ... passes args to the make_dates()
 # function, which are [ year, month, from_day, to_day, all_dates (logical),
 # respectively ]. Please refer to `make_dates.R`.
+seasons <- c("1617", "1718", "1819", "1920")
+seasonsID <- c("01SNI60QL4000007VS54898EVT9SILN7", "0209KP9SAC00000AVS54898DVUVCCN5J",
+               "023VNLHG8000000CVS54898DVVG1IBJM", "027II28DH8000009VS5489B3VS3GHJJU")
+source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
+md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .x, seasonID = .y)) %>%
+  unlist()
 
-scrape_content <- function(page_num, dates = NULL, ...) {
- ' source("src/make_dates.R") # sources make_dates()
-  source("src/generate_article_urls.R") # sources generate_urls()
-
-  if (is_null(dates)) {
-    dates <- make_dates(...)
-    dates <- as.Date(unlist(unname(dates)), origin)
-  }'
-
-  '# Article urls for the given year -----------------------------
-  # ================================= ---------------------------
-  article_urls <- suppressWarnings(
-    map_df(dates, ~ generate_urls(.x, page_num))
-    )'
-  season_urls <- url_seasons
   # Download content ----------------------------------------------
   source("src/get_season_table_contents.R")
-   map_df(md_url_1617, ~extract_content(md_url_season = .x))
-}
+  database_season <-  map_df(md_season_url, ~f_extract_season(md_url_season = .x ))
+
+  season_1617 <- database_season %>% filter(season == "1617")
+  season_1718 <- database_season %>% filter(season == "1718")
+  season_1819 <- database_season %>% filter(season == "1819")
+  season_1920 <- database_season %>% filter(season == "1920")
+  
+  library(RMariaDB)
+  
+  
+  
