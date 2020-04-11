@@ -1,6 +1,7 @@
 # func 1. ======================= start ------------------------------
 f_extract_season <- function(md_url_season) {
   Sys.sleep(runif(1, 5L, 10L))
+  message(paste("Now scraping ", md_url_season))
   page <- read_html(md_url_season)
 
   get_rank <- compose(

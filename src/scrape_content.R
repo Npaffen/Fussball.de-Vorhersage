@@ -16,7 +16,10 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
 
   # Download content ----------------------------------------------
   source("src/get_season_table_contents.R")
+  message(paste("Loaded game days: ", length(md_season_url),
+                "Will begin scraping..."))
   database_season <-  map_df(md_season_url, ~f_extract_season(md_url_season = .x ))
+  saveRDS(database_season, here::here("/data/database_season.rds"))
 
   season_1617 <- database_season %>% filter(season == "1617")
   season_1718 <- database_season %>% filter(season == "1718")
