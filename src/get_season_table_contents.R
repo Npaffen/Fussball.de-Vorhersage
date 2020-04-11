@@ -1,5 +1,6 @@
 # func 1. ======================= start ------------------------------
-extract_content <- function(md_url_season , season = season) {
+f_extract_season <- function(md_url_season) {
+  Sys.sleep(runif(1, 5L, 10L))
   page <- read_html(md_url_season)
 
   get_rank <- compose(
@@ -11,28 +12,33 @@ extract_content <- function(md_url_season , season = season) {
 
   get_club_name <- compose(html_text,
     partial(html_nodes, css = ".club-name"),
+    partial(html_nodes, css = "#fixture-league-tables"),
     .dir = "backward"
   )
 
   get_games <- compose(html_text,
     partial(html_nodes, css = "td:nth-child(4)"),
+    partial(html_nodes, css = "#fixture-league-tables"),
     .dir = "backward"
   )
 
   
   get_wins <- compose(html_text,
-                       partial(html_nodes, css = ".row-promotion:nth-child(5)"),
+                      partial(html_nodes, css = "td:nth-child(5)"),
+                      partial(html_nodes, css = "#fixture-league-tables"),
                        .dir = "backward"
   )
   
   
   get_ties <- compose(html_text,
-                        partial(html_nodes, css = ".hidden-small:nth-child(6)"),
+                      partial(html_nodes, css = "td:nth-child(6)"),
+                      partial(html_nodes, css = "#fixture-league-tables"),
                       .dir = "backward"
   )
   
   get_loss <- compose(html_text,
                       partial(html_nodes, css = ".hidden-small:nth-child(7)"),
+                      partial(html_nodes, css = "#fixture-league-tables"),
                       .dir = "backward"
   )
 
@@ -55,7 +61,6 @@ extract_content <- function(md_url_season , season = season) {
   
   
   df <- list(
-    id = season,
     rank = get_rank(page) %>% 1:.,
     club_name = get_club_name(page) %>% gsub(x = .,  pattern = "\\n(\\t)+", replacement = ""),
     games = get_games(page),
@@ -66,9 +71,14 @@ extract_content <- function(md_url_season , season = season) {
     goal_diff = get_goal_diff(page),
     points = get_points(page)
   )
-  df <- tibble(
-    season = df$id,
-    matchday = df$games,
+  df_tb <- tibble(
+    season = stringr::str_extract(md_url_season, "([\\d]{4}-)") %>%
+      gsub(x = ., pattern = "-", replacement = "")%>%
+      rep(length(df$rank)),
+    matchday <- stringr::str_extract(md_url_season, "(\\/[0-9]{1,2}\\/)") %>%
+      stringr::str_extract("[0-9]{1,2}") %>%
+      rep(length(df$rank)),
+    games = df$games,
     rank = df$rank,
     club_name = df$club_name,
     wins = df$wins,
@@ -77,50 +87,14 @@ extract_content <- function(md_url_season , season = season) {
     goal_relations = df$goal_relations,
     goal_diff = df$goal_diff,
     points = df$points
-  )
-  df
+  ) 
+  
+  
+  
+  df_tb
 }
 # func 1. ======================= end -----------------------------------
 
-
-# func 2. ======================= start ---------------------------
-# create a function that extractes the article text data and
-# other additional info en mass.
-
-get_article_data <- function(article_urls) {
-  len <- length(article_urls$column_url)
-  dat <- map(article_urls$column_url, function(x) {
-    len <<- len - 1
-    if (len %% 10 == 0 || len < 10) {
-      message(
-        message("GETTING TEXT DATA"),
-        "Grab some coffee ", "<", len, "> ",
-        "iter", if (len > 1) "s", " left....."
-      )
-    }
-    safely(slowly(extract_content))(x)
-    # so that there is a short pause between consecutive requests.
-  })
-
-  names(dat) <- article_urls$cols
-  dat <- transpose(dat)
-  is_ok <- dat$error %>% map_lgl(is_null)
-  dat_ok <- suppressWarnings(bind_rows(dat$result[is_ok], .id = "id"))
-  dat_notok <- dat$error[!is_ok]
-  'dat_ok <- dat_ok %>%
-    mutate(
-      date = ymd(str_extract(id, "\\d{8}")),
-      column_num = str_extract(id, "(_\\d-)"),
-      column_num = str_extract(column_num, "\\d"),
-      id = str_replace(str_extract(id, "_[\\d_-]+"), "-", "_"),
-      page_num = str_extract(id, "\\d{2}$")
-    ) %>%
-    select(
-      id, page_num, date, column_num, title, subtitle,
-      content, everything()
-    )'
-  dat_ok
-}
+#
 
 
-# func 2. ======================= end -------------------------------
