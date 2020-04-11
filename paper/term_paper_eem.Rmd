@@ -1,0 +1,314 @@
+---
+title: 'The Irish Electricity Market'
+author: 'Jens Klenke, Nils Paffen'
+subtitle: "A forcestaing Study for the half-hourly Day-Ahead Prices"
+type: "Seminar Paper"
+discipline: "VWL M.Sc."
+date: "today"
+studid: "3071594"
+supervisor: "Prof. Dr. Florian Ziel"
+secondsupervisor: "NA"
+semester: "5"
+estdegree_emester: "Winter Term 2020"
+deadline: "Jan. 27th 2020"
+output:
+  pdf_document:
+    keep_tex: yes
+    template: template.tex
+    fig_caption: yes
+    citation_package: biblatex
+    number_sections: true
+toc: true
+lot: true
+lof: true
+graphics: true
+biblio-title: References
+fontsize: 12pt
+geometry: lmargin = 3 cm,rmargin = 2.5cm,tmargin=2.5cm,bmargin=2.5cm
+biblio-files: references.bib
+classoption: a4paper
+---
+
+
+```{r , include=FALSE}
+Sys.setlocale(locale = "English_United States.1252") ## English US Windows
+knitr::opts_chunk$set(echo = TRUE)
+source(here::here('01_code/settings/packages.R'))
+
+
+load(here::here('04_output/benchmark.RData'))
+
+DM.test<- function(EA, EB, hmax=1, power=1){
+  ## as dm.test with alternative == "less"
+  LA<- apply( abs(as.matrix(EA))^power, 1, sum)^(1/power)
+  LB<- apply( abs(as.matrix(EB))^power, 1, sum)^(1/power)
+  delta <- LA - LB
+  delta.var <- var(delta)/length(delta)## estimation of the variance 
+  STATISTIC <- mean(delta, na.rm = TRUE)/sqrt(delta.var)
+  delta.len <- length(delta)
+  k <- ((delta.len + 1 - 2 * hmax + (hmax/delta.len) * (hmax - 1))/delta.len)^(1/2)
+  STATISTIC <- STATISTIC * k
+  PVAL <- pt(STATISTIC, df = delta.len - 1)
+  list(stat=STATISTIC, p.val=PVAL)
+}
+```
+
+# Introduction
+
+In this paper we want to analyse and predict the Day-Ahead prices for Irleand. On the first of October 2018 Ireland moved from the \ac{SEM} market to the \ac{I-SEM} market in order to further strengthen its integration with the \ac{EU}. [@eridgrid_i-sem_2020]
+
+The Day-Ahead price is very important for all market participants to decide if there should commit to sell or buy at the market. In recent years, predicting day-ahead prices has become increasingly difficult due to the larger share of renewable energies and the new resulting pricing structures. [@ziel_efficient_2015]
+
+First, the Irish Electricity Market is described and the data we have received about that market is described. Next the benchmark model is presented and then the advanced models are estimated before a conclusion is drawn.  
+
+# The Irish Electricity Market
+
+The Irish electricity market was established in 2007 (\ac{SEM}) and has not been reformed in a wider sense until the \ac{I-SEM} market was introduced in 2018. In the period(s) leading up to the integrated market in October 2018, there has been some adjustment and therefore a higher volatility in the market. 
+
+\FloatBarrier
+```{r , include=TRUE , fig_energy_mix, echo = FALSE, fig.cap = " \\label{fig:energy_mix} Primary fuel mix for electricity generation", out.width = '100%',  fig.align = "center" }
+  knitr::include_graphics(here::here('04_output/fuel_mix_for_electricity_gen_IRE_2019.png'), auto_pdf = FALSE)
+```
+\FloatBarrier
+
+Figure \ref{fig:energy_mix} shows relatively clearly that Ireland generates a large part of its primary energy from gas. Furthermore, it can be seen that the share of renewable energies has increased relatively strongly. The average growth rate of renewable energy was 10.7 percent between 2015 and 2018. [@dineen_energy_2019]
+
+
+# Data Description
+
+\FloatBarrier
+```{r , include=TRUE , fig_timeline, echo = FALSE, fig.cap = " \\label{fig:timeline} Half-hourly Day-Ahead Prices in Irland", out.width = '100%',  fig.align = "left" }
+  knitr::include_graphics(here::here('04_output/timeline.png'), auto_pdf = FALSE)
+```
+\FloatBarrier
+
+Our Data contained _152_ variables from the first of January 2015 till 30 of October 2019. Due to the fact that Ireland has changed the market from the \ac{SEM} to the \ac{I-SEM} (market integration with the \ac{EU}) and thus switched from half-hourly products to hourly products, the trajectory from 25 October 2015 to 28 September 2018 has been shortened. Therefore, only 1070 full days are left for estimating and testing, which is about 2.9 years.  Due to the change from half-hourly to hourly products, there is also the problem that either only about 9 tenths of a year are left for testing, with 2 years for estimation, or only one year for estimation if you want to have more than one year for testing. [@cashman_i-sem_2019]
+
+\FloatBarrier
+```{r, out.width="0.45\\linewidth", include=TRUE, fig.align="center",  fig.cap = " \\label{fig:structure} Mean Values Weekdays and quarters of the year  ", fig.show='hold', echo=FALSE}
+
+Y <-price.S 
+days <- dates.S
+S <- 48
+
+wmean <- array(NA, dim=c(S,7))
+
+for(j in 1:7) for(i in 1:S) wmean[i,j]<- mean(Y[seq(j, dim(Y)[1], 7),i])
+
+weekdays<- format(days[1:7], "%a")
+
+dimnames(wmean)<- list( 1:48, weekdays )
+reorder <- order( (as.numeric(format(days[1:7], "%w"))+6) %% 7 +1 )
+wmean <- wmean[, reorder]
+
+#pdf( "04_output/weekly_mean_sample.pdf", width = 16, height = 12)
+par(mar=c(4.9, 4.4, 1, 4), family="Times") ## plotting area and font
+plot(0:(S-1), wmean[,1], col="white", ylim=range(wmean), cex.axis=1.3, cex.lab=1.3, xaxt="n", xlab="S", ylab="weekly mean price in EUR/MWh", las=2, sub=paste(min(days),max(days), sep=" to "))
+grid()
+axis(1, 0:(S-1), 0:(S-1) , cex.axis=1.3)
+COL<- rainbow(7)
+for(i in 1:7) lines(0:(S-1), wmean[,i], type="o", lwd=2, pch=i, col=COL[i])
+legend("topleft", weekdays[reorder], lwd=2, col=COL, pch=1:7, cex=1.2, bg = "transparent")
+#dev.off()
+
+
+
+month.list<- list(c(3,4,5), c(6,7,8),c(9,10,11), c(12,1,2))
+
+amean<- array(NA, dim=c(S,length(month.list)))
+season.names<- numeric(length(month.list))
+for(j in 1:dim(amean)[2]) for(i in 1:S) {
+  sindex<- as.numeric(format(days, "%m")) %in% month.list[[j]]
+  amean[i,j]<- median(Y[sindex,i])
+  season.names[j]<- paste(month.abb[month.list[[j]]], collapse="+")
+}
+dimnames(amean)<- list( 1:48, season.names )
+
+#pdf( "04_output/annual_mean.pdf", width = 8, height=6)
+par(mar=c(4.9, 4.4, 1, 4), family="Times") ## plotting area and font
+plot(0:(S-1), amean[,1], col="white", ylim=range(amean), cex.axis=1.3, cex.lab=1.3, xaxt="n", xlab="S", ylab="annual mean price in EUR/MWh", las=2, sub=paste(min(days),max(days), sep=" to ") )
+grid()
+axis(1, 0:(S-1), 0:(S-1) , cex.axis=1.3)
+COL<- rainbow( dim(amean)[2])
+for(i in 1:dim(amean)[2]) lines(0:(S-1), amean[,i], type="o", lwd=2, pch=i, col=COL[i])
+legend("topleft", season.names, lwd=2, col=COL, pch=1:dim(amean)[2], cex=1.2, bg = "transparent")
+#dev.off()
+
+
+```
+\FloatBarrier
+
+Both cases are not optimal, as one can also see in Figure \ref{fig:timeline}. For the estimation of annual cycles at least 2 years would be preferable. On the other hand, you actually need at least one year in the test data set to benefit from the estimates of the annual components.  
+
+Our goal is to predict the price for the next day, so we can only use data that is already known at the time of the forecast (day-ahead).  As can be seen from Table \ref{tab:data}, there is little data in our data set for this purpose. For solar and offshore energy there is no data at all and for onshore energy about half of the data is missing. Only for the load for the next day we have about 98 percent of the data, which may be implied in a multivariate model.    
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}llllll@{}}
+\toprule
+Date    & Price   & Solar     & Offshore  & Onshore  & Load    \\ \midrule
+0,00 \% & 0,18 \% & 100,00 \% & 100,00 \% & 50,74 \% & 2,59 \% \\ \bottomrule
+\end{tabular}
+\caption{Proportions of NA's in important Day Ahead variables}
+\label{tab:data}
+\end{table}
+
+
+
+
+
+
+# Basic Models 
+
+Two relatively simple models are to be estimated as a benchmark for the models that will follow later. 
+
+The first model is the _naive model_ which is relatively simple and simply takes the value of the previous day for the price prediction, unless the day to be predicted is a Monday, Saturday or Sunday. Therefore we do not need to estimate any parameters and this leads to the following model equation. 
+
+\begin{align*}
+ Y_{d,s} &=
+  \begin{cases}
+   Y_{d-7, s} + \epsilon_{d,s}       & \text{if } d \, \text{is Monday, Saturday, or Sunday}\\
+   Y_{d-1, s} + \epsilon_{d,s}        & \text{otherwise}
+  \end{cases}
+\end{align*}
+
+
+
+
+The second model is called the expert model, because it implements the knowledge of the last years. This is a parametric model, which includes dummies for the days Monday, Saturday and Sunday and other autoregressive parameters that model the influence of the previous day, the day 2 days away and the day 7 days away.
+
+\begin{align*}
+ Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s} + \beta_{s,4 } DoW^1_{d}    \\
+  & + \beta_{s,5 } DoW^6_{d} +\beta_{s,6 } DoW^7_{d} + \epsilon_{d,s}
+\end{align*}
+
+
+```{r expert model, echo = FALSE, warning = FALSE}
+
+#knitr::kable(forecast_expert$coefs, digits = 2, caption = '\\label{tab:expert} Coefficients of the expert model', format.args = list(decimal.mark = '.', big.mark = " "), booktabs = TRUE, linesep = "")%>%
+#  kable_styling(latex_options = c("striped", "hold_position"))
+
+#col.names = c('', 'year', '', 'N', ' ', 'mean', 'sd' ), row.names = FALSE,  
+
+knitr::kable(bench_errors, digits = 2, caption = '\\label{tab:expert} MAE and RMSE for the naive and expert Model with 1 year of data', format.args = list(decimal.mark = '.', big.mark = " "), booktabs = TRUE, linesep = "")%>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+#col.names = c('', 'year', '', 'N', ' ', 'mean', 'sd' ), row.names = FALSE,  
+
+
+```
+
+As shown in Table \ref{tab:expert}, the \ac{MAE} and \ac{RMSE} for the expert model are both smaller than for the naive model. This means that the parameterization model performs better than the pure algorithm, which takes either the day before or the day 7 days ago as estimation. 
+
+The \ac{DM} test resulted in a significant 5 percent level with a p-value of `r  formatC( dm_expert_vs_naive$p.val , format = "e", digits = 2)`. 
+  
+
+
+
+```{r expert model 2 years, echo = FALSE, warning = FALSE}
+
+knitr::kable(bench_errors_2, digits = 2, caption = '\\label{tab:expert_2} MAE and RMSE for the naive and expert Model with 2 year of data', format.args = list(decimal.mark = '.', big.mark = " "), booktabs = TRUE, linesep = "")%>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+#col.names = c('', 'year', '', 'N', ' ', 'mean', 'sd' ), row.names = FALSE,  
+
+
+```
+
+We then estimated the same models again with about two years of data. As Table \ref{tab:expert_2} shows, the naive model deteriorated in the \ac{MAE} and improved slighlty in the \ac{RMSE}.
+
+A similar pattern can be observed for the expert model, again the \ac{MAE} is larger and the \ac{RMSE} is better, although only slightly. Therefore, the \ac{DM} test was not significant with a p-value of $\approx$ `r   formatC( dm_expert_2_vs_expert$p.val , format = "e", digits = 2)`. 
+
+# Advanced Models 
+
+```{r , include=FALSE}
+load(here::here('04_output/extension.RData'))
+load(here::here('04_output/season.RData'))
+load(here::here('04_output/season_extension.RData'))
+load(here::here('04_output/external.RData'))
+load(here::here('04_output/online.RData'))
+```
+
+## Extension of the Expert Model
+
+Because we realized in Figure \ref{fig:structure} that Thursdays are also behaving differently from most other days, we included it in the Weekday dummies. We also saw in the partial autocorellllations that the 14 lag day still contains some corellations. Therefore we estimated a new extended expert model. 
+
+\begin{align*}
+ Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s}  + \beta_{s,4 } Y_{ d-14,s} \\ 
+  & + \beta_{s,5 } DoW^1_{d}   + \beta_{s,6 } DoW^4_{d}  + \beta_{s,7 } DoW^6_{d} +\beta_{s,8 } DoW^7_{d} + \epsilon_{d,s}
+\end{align*}
+
+As can be seen from a comparison of Table \ref{tab:expert} and \ref{tab:extension}, the RMSE and the MAE are smaller for both lengths of the training sets. The DM test is significant for both training sets with a p-value of `r formatC(DM.test( ERROR_extansion_1[,,1], ERROR_bench_1[,,1])$p.val  , format = "e", digits = 2)` and `r formatC(DM.test( ERROR_extansion_2[,,1], ERROR_bench_2[,,1])$p.val  , format = "e", digits = 2)`.  
+
+
+```{r extended model, echo = FALSE, warning = FALSE}
+
+knitr::kable(cbind(extension_errors_1, extension_errors_2), digits = 2, caption = '\\label{tab:extension} MAE and RMSE for the extended Model with 1 year and 2 years ', format.args = list(decimal.mark = '.', big.mark = " "), col.names = c('1 year', ' 2 years'), booktabs = TRUE, linesep = "")%>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+
+## Seaonal Model
+
+Another problem, which becomes clear in the right part of Figure \ref{fig:structure}, is that there also seem to be differences in the mean value for the individual products in the different seasons (in this case quarters). Therefore, we have extended the expert model to include sesonal dummies.
+
+\begin{align*}
+ Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s} + \beta_{s,4 } DoW^1_{d}  + \beta_{s,5 } DoW^6_{d}  \\ 
+  & + \beta_{s,6 } DoW^7_{d} + \beta_{s,7 } DoQ^{sp}_{d} + \beta_{s,8 } DoQ^{su}_{d} + \beta_{s,9 } DoQ^a_{d} + \epsilon_{d,s}
+\end{align*}
+
+Table \ref{tab:seasonal} shows relatively clearly that the \ac{RMSE} and the \ac{MAE} have hardly changed at all. Therefore, the \ac{DM} test is not significant at a 5 \% level with p-values of `r formatC(DM.test( ERROR_season_1[,,1], ERROR_bench_1[,,2])$p.val  , format = "e", digits = 2)` and `r formatC(DM.test( ERROR_season_2[,,1], ERROR_bench_2[,,2])$p.val  , format = "e", digits = 2)` for the 1 year and 2 year training data set. It seems like the seasonal structure has after all now big impact at the End. 
+
+```{r seasonal model, echo = FALSE, warning = FALSE}
+
+knitr::kable(cbind(season_errors_1, season_errors_2), digits = 2, caption = '\\label{tab:seasonal} MAE and RMSE for the seasonal Model with 1 year and 2 years ', format.args = list(decimal.mark = '.', big.mark = " "), col.names = c('1 year', ' 2 years'), booktabs = TRUE, linesep = "")%>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+
+## External Regressor Model 
+
+\begin{align*}
+ Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s}  + \beta_{s,4 } Y_{ d-14,s} + \beta_{s,5 } DoW^1_{d} \\ 
+  &   + \beta_{s,6 } DoW^4_{d}  + \beta_{s,7 } DoW^6_{d} + \beta_{s,8 } DoW^7_{d} + \beta_{s,9 } L_{d-1}  +\epsilon_{d,s}
+\end{align*}
+
+
+In principle, not only autocorellation is an important part of price forecasting, but also external factors such as renewable energies or the load. As we have shown in the data description, the data for renewable energies are hardly available for the time period and therefore, we have extended the extended expert model by the lagges regressor load.
+
+
+```{r external model, echo = FALSE, warning = FALSE}
+knitr::kable(cbind(external_errors_1, external_errors_2), digits = 2, caption = '\\label{tab:external} MAE and RMSE for the extended expert M0del with the external Regressor load with 1 year and 2 years ', format.args = list(decimal.mark = '.', big.mark = " "), col.names = c('1 year', ' 2 years'), booktabs = TRUE, linesep = "")%>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+
+At first glance, the \ac{RMSE} and \ac{MAE} look better in Table \ref{tab:external} than in the simple expert model, but according to the DM test, the difference is not significant (p-values: `r formatC(DM.test( ERROR_external_1[,,1], ERROR_bench_1[,,2])$p.val  , format = "e", digits = 2)` , `r formatC(DM.test( ERROR_external_2[,,1], ERROR_bench_2[,,2])$p.val  , format = "e", digits = 2)`). 
+
+##  Expert Model with recursive least squares
+
+As a final estimate, we used the recurisve least squares method and apllied it to the expert model.The RMSE and MAE are both smaller then compared to any other model we estimated sofar, with an RMSE of `r round(RMSE,2)` and  MAE of `r round(MAE,2)`. 
+
+
+# Conclusion
+
+The analysis of the half-hourly data of the Irish electricity market was by no means easy. For one thing, the data situation was relatively poor, we had many missing values and the change from half-hourly to hourly products further reduced the amount of data. In addition, there was also no data on renewable energy sources, which is a problem that is not to be sneezed at at all, as the share of renewable energy has increased significantly over the period and renewable energy sources are known to increase volatility. 
+
+Furthermore, market integration towards the EU also meant further adjustments, which cannot easily be explained by price or other external factors.
+
+The recursive least squares method seems to have reflected this structure best by far.  It might be very interesting to develop models that are better able to deal with such uncertainty and further improve the estimate. 
+
+
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+

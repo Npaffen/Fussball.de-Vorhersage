@@ -1,0 +1,208 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/global//global/global}
+    \entry{cashman_i-sem_2019}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=13fa9a8f15e1c86af04a29b3cb754dd3}{%
+           family={Cashman},
+           familyi={C\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en-IE}%
+      }
+      \strng{namehash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \strng{fullhash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \strng{bibnamehash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \strng{authorbibnamehash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \strng{authornamehash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \strng{authorfullhash}{13fa9a8f15e1c86af04a29b3cb754dd3}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The Integrated Single Electricity Market (I-SEM) is driving significant change in the Wholesale Energy Market in Ireland.}
+      \field{month}{9}
+      \field{title}{I-{SEM} - {Prepare} for wholesale changes in the {Irish} {Electricity} {Market}}
+      \field{urlday}{25}
+      \field{urlmonth}{1}
+      \field{urlyear}{2020}
+      \field{year}{2019}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb Snapshot:C\:\\Users\\HP\\Zotero\\storage\\C4CNHE2W\\i-sem-prepare-for-wholesale-changes-in-the-irish-electricity-market.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb https://www.ey.com/en_ie/power-utilities/i-sem-prepare-for-wholesale-changes-in-the-irish-electricity-market
+      \endverb
+      \verb{url}
+      \verb https://www.ey.com/en_ie/power-utilities/i-sem-prepare-for-wholesale-changes-in-the-irish-electricity-market
+      \endverb
+    \endentry
+    \entry{dineen_energy_2019}{article}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d58629b34ae971d2c838ef6eac06c16b}{%
+           family={Dineen},
+           familyi={D\bibinitperiod},
+           given={Denis},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{d58629b34ae971d2c838ef6eac06c16b}
+      \strng{fullhash}{d58629b34ae971d2c838ef6eac06c16b}
+      \strng{bibnamehash}{d58629b34ae971d2c838ef6eac06c16b}
+      \strng{authorbibnamehash}{d58629b34ae971d2c838ef6eac06c16b}
+      \strng{authornamehash}{d58629b34ae971d2c838ef6eac06c16b}
+      \strng{authorfullhash}{d58629b34ae971d2c838ef6eac06c16b}
+      \field{sortinit}{D}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Seai}
+      \field{title}{Energy in {Ireland} 2019 {Report}}
+      \field{year}{2019}
+      \field{pages}{96}
+      \range{pages}{1}
+      \verb{file}
+      \verb Dineen - 2019 - Energy in Ireland 2019 Report.pdf:C\:\\Users\\HP\\Zotero\\storage\\HN5SXRP7\\Dineen - 2019 - Energy in Ireland 2019 Report.pdf:application/pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://www.seai.ie/publications/Energy-in-Ireland-2019-.pdf
+      \endverb
+      \verb{url}
+      \verb https://www.seai.ie/publications/Energy-in-Ireland-2019-.pdf
+      \endverb
+    \endentry
+    \entry{eridgrid_i-sem_2020}{misc}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=d85e33e5107450fdaabce98488092e77}{%
+           family={EridGrid},
+           familyi={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{d85e33e5107450fdaabce98488092e77}
+      \strng{fullhash}{d85e33e5107450fdaabce98488092e77}
+      \strng{bibnamehash}{d85e33e5107450fdaabce98488092e77}
+      \strng{authorbibnamehash}{d85e33e5107450fdaabce98488092e77}
+      \strng{authornamehash}{d85e33e5107450fdaabce98488092e77}
+      \strng{authorfullhash}{d85e33e5107450fdaabce98488092e77}
+      \field{sortinit}{E}
+      \field{sortinithash}{c554bd1a0b76ea92b9f105fe36d9c7b0}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{I-{SEM}}
+      \field{urlday}{25}
+      \field{urlmonth}{1}
+      \field{urlyear}{2020}
+      \field{year}{2020}
+      \field{urldateera}{ce}
+      \verb{file}
+      \verb I-SEM:C\:\\Users\\HP\\Zotero\\storage\\QCCJUK23\\i-sem.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb http://www.eirgridgroup.com/customer-and-industry/i-sem/
+      \endverb
+      \verb{url}
+      \verb http://www.eirgridgroup.com/customer-and-industry/i-sem/
+      \endverb
+    \endentry
+    \entry{ziel_efficient_2015}{article}{}
+      \name{author}{3}{}{%
+        {{un=0,uniquepart=base,hash=b84096dff196730e7468c55326fa0a0e}{%
+           family={Ziel},
+           familyi={Z\bibinitperiod},
+           given={Florian},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=365462be3d6d3e05840eec34cbed958e}{%
+           family={Steinert},
+           familyi={S\bibinitperiod},
+           given={Rick},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=2cabd7ac3534d4b345ad523af475ca85}{%
+           family={Husmann},
+           familyi={H\bibinitperiod},
+           given={Sven},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{24bc36665bd20dd5416bd5a2caee69e0}
+      \strng{fullhash}{eca640cc65b4fee659cc0dbab5c9cf88}
+      \strng{bibnamehash}{eca640cc65b4fee659cc0dbab5c9cf88}
+      \strng{authorbibnamehash}{eca640cc65b4fee659cc0dbab5c9cf88}
+      \strng{authornamehash}{24bc36665bd20dd5416bd5a2caee69e0}
+      \strng{authorfullhash}{eca640cc65b4fee659cc0dbab5c9cf88}
+      \field{sortinit}{Z}
+      \field{sortinithash}{8f7b480688e809b50b6f6577b16f3db5}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{The increasing importance of renewable energy, especially solar and wind power, has led to new forces in the formation of electricity prices. Hence, this paper introduces an econometric model for the hourly time series of electricity prices of the European Power Exchange (EPEX) which incorporates specific features like renewable energy. The model consists of several sophisticated and established approaches and can be regarded as a periodic VAR-TARCH with wind power, solar power, and load as influences on the time series. It is able to map the distinct and well-known features of electricity prices in Germany. An efficient iteratively reweighted lasso approach is used for the estimation. Moreover, it is shown that several existing models are outperformed by the procedure developed in this paper.}
+      \field{issn}{0140-9883}
+      \field{journaltitle}{Energy Economics}
+      \field{month}{1}
+      \field{title}{Efficient modeling and forecasting of electricity spot prices}
+      \field{urlday}{25}
+      \field{urlmonth}{1}
+      \field{urlyear}{2020}
+      \field{volume}{47}
+      \field{year}{2015}
+      \field{urldateera}{ce}
+      \field{pages}{98\bibrangedash 111}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1016/j.eneco.2014.10.012
+      \endverb
+      \verb{file}
+      \verb ScienceDirect Snapshot:C\:\\Users\\HP\\Zotero\\storage\\G9QYCMG4\\S0140988314002576.html:text/html
+      \endverb
+      \verb{urlraw}
+      \verb http://www.sciencedirect.com/science/article/pii/S0140988314002576
+      \endverb
+      \verb{url}
+      \verb http://www.sciencedirect.com/science/article/pii/S0140988314002576
+      \endverb
+      \keyw{Electricity price,Forecasting,Lasso,Leverage effect,Renewable energy,VAR}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

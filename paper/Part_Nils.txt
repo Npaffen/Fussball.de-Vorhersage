@@ -1,0 +1,20 @@
+In this scientific report we will analyse the price data from Ireland and
+predict the half-hourly day ahead prices. 
+ A short overview of the data is followed by a section which analyses and compares different model approaches to the naive and expert model, which will serve as benchmarks. The latter achieved a RMSE of [RMSE naive] and [RMSE expert] respectively. Models like the [insert model name with lower RMSE than benchmark] failed to overcome this results, while the [insert best model] beat the benchmark and all other models with a RMSE of [RMSE best model]  . 
+ 
+ \section{Data description}
+The dataset provided by the  Chair of Environmental Economics, esp. Economics of Renewable Energy contained mostly half-hourly observations of Irelands electricity prices as well as measures and predictions for the  load and the aggregated generation per type of electricity. A heavy NA filled observation structure between 01.01. - 25.10.2015 forced us to discard these observations to improve the predictions by consecutive data. Due to Irelands electricity market integration into the "Market Coupling of the Regions" the electricity prices changed from half-hourly to hourly prices ongoing the fourth quarter of 2019. Since we want to predict day-ahead prices of half-hourly prices, all observations after the latter change were excluded for the prediction dataset. Besides that we decided to keep the variables for the date and the day-ahead price and load forecast. The latter will be used as an external regressor. The variable for day-ahead onshore wind generation forecasts follows a hourly structure, which seems contradictory to our half-hourly day-ahead price models.  
+
+\section{Energy Mix } %should not be a full section but should be intergrated some else. Maybe model with external regressors?
+\begin{figure}[]
+  \includegraphics[width=\linewidth]{includes/fuel_mix_for_electricity_gen_IRE_2019.png}
+\end{figure}
+The main fuel for electricity generation in Ireland is still gas,about 50\% in 2018 while renewables, with 22.3\% in 2018, start to catch up since 2005. Electricity generation by coal could be reduced by 17.1 percentage points in 2018 to a share of 10.7\% of  the total fuel mix. A big dependence on only a few fuel sources should lead to an observable price change when the costs for those fuel increase or decrease respectively. Therefore  day-ahead prices for gas and/or day-ahead onshore wind generation forecasts could have helped as external regressors to improve the electricity price predictions. The latter could not be implemented due to a lack of (consecutive) data, as described in the section of data description.
+Renewables, in Irelands case mainly onshore wind generation, helped to cut the energy-related CO2 emissions by half compared to the year 2000.
+%Despite that
+
+%Source : https://www.seai.ie/publications/Energy-in-Ireland-2019-.pdf
+
+
+
+% Extended model with external regressors
