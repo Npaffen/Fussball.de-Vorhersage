@@ -28,8 +28,10 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
   
   #Download match results 
   source("src/get_match_results.R")
-  database_season <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
-  saveRDS(database_season, here::here("/data/database_match_results.rds"))
+  database_match_results <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
+  saveRDS(database_match_results, here::here("/data/database_match_results.rds"))
+  
+  
   
   library(RMariaDB)
   

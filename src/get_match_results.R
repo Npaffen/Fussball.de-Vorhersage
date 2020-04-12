@@ -43,7 +43,7 @@ f_extract_match_results <- function(md_url_season) {
   
   
 get_results <- function(href_list, md_url_season ){
-
+  Sys.sleep(runif(1, 5L, 10L))
   page <- read_html(href_list[1])
   
   df <- list(
@@ -79,7 +79,7 @@ get_results <- function(href_list, md_url_season ){
   ) 
   df_tb
   }
-df_games <- map_df(href_list, ~get_results(href_list = .x, md_url_season = md_season_url[2]))
+df_games <- map_df(href_list, ~get_results(href_list = .x, md_url_season = md_url_season))
   
   df_games
 }
