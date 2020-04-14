@@ -76,7 +76,7 @@ f_extract_season <- function(md_url_season) {
     season = stringr::str_extract(md_url_season, "([\\d]{4}-)") %>%
       gsub(x = ., pattern = "-", replacement = "")%>%
       rep(length(df$rank)),
-    matchday <- stringr::str_extract(md_url_season, "(\\/[0-9]{1,2}\\/)") %>%
+    matchday = stringr::str_extract(md_url_season, "(\\/[0-9]{1,2}\\/)") %>%
       stringr::str_extract("[0-9]{1,2}") %>%
       rep(length(df$rank)),
     games = df$games,
