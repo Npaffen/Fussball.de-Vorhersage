@@ -63,8 +63,8 @@
 \fi
 \hypersetup{breaklinks=true,
             bookmarks=true,
-            pdfauthor={Jens Klenke, Nils Paffen},
-            pdftitle={The Irish Electricity Market},
+            pdfauthor={Nils Paffen, David Schulze},
+            pdftitle={What if they had played?},
             colorlinks=true,
             citecolor=blue,
             urlcolor=blue,
@@ -91,11 +91,11 @@
 }
 
 \setlength{\droptitle}{-2em}
-  \title{The Irish Electricity Market}
+  \title{What if they had played?}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-\subtitle{A forcestaing Study for the half-hourly Day-Ahead Prices}
-  \author{Jens Klenke, Nils Paffen}
+\subtitle{Predicting the Outcome Kreisliga A Reklinghausen Season 2019-2020}
+  \author{Nils Paffen, David Schulze}
   \preauthor{\centering\large\emph}
   \postauthor{\par}
   \predate{\centering\large\emph}
@@ -145,17 +145,17 @@
   \\
   \vspace{0.5cm}
   \begin{center}
-  \huge{The Irish Electricity Market}\\
+  \huge{What if they had played?}\\
   \vspace{.25cm}
-  \Large{A forcestaing Study for the half-hourly Day-Ahead Prices}\\
+  \Large{Predicting the Outcome Kreisliga A Reklinghausen Season 2019-2020}\\
   \vspace{0.5cm}
-  \large{Seminar Paper}\\
+  \large{Working Paper}\\
   \vspace{0.5cm}
   \large{  \IfLanguageName{english}{Submitted to the Faculty of \\ Economics  \\at the \\University of Duisburg-Essen}{Vorgelegt der \\Fakultät für Wirtschaftswissenschaften der \\ Universität Duisburg-Essen}\\}
   \vspace{0.75cm}
   \large{\IfLanguageName{english}{from:}{von:}}\\
   \vspace{0.5cm}
-  Jens Klenke, Nils Paffen\\
+  Nils Paffen, David Schulze\\
   \end{center}
   %\vspace{2cm}
   \vfill
@@ -165,14 +165,14 @@
   \IfLanguageName{english}{Reviewer:}{Erstgutachter:}
   \end{minipage}
   \begin{minipage}[t]{0.7\textwidth}
-  \hspace{1cm}Prof.~Dr.~Florian Ziel
+  \hspace{1cm}Prof.~Dr.~Christoph Hanck
   \end{minipage}
 
   \noindent\begin{minipage}[t]{0.3\textwidth}
   \IfLanguageName{english}{Deadline:}{Abgabefrist:}
   \end{minipage}
   \begin{minipage}[t]{0.7\textwidth}
-  \hspace{1cm}Jan.~27th 2020
+  \hspace{1cm}
   \end{minipage}
 
   \hrulefill
@@ -193,23 +193,23 @@
  
   \columnbreak
 
-  Jens Klenke
+  David Schulze
 
-  3071594
+  --
   
-  jens.klenke@stud.uni-due.de
+  david.schulze@rgs-econ.de
 
-  M.Sc. Economics
+  --
 
   \nth{5}
 
-  Winter Term 2020
+  -- 
   
   \columnbreak
 
   Nils Paffen
 
-  30
+  3071594
   
   nils.paffen@stud.uni-due.de
 
@@ -273,332 +273,138 @@
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-In this paper we want to analyse and predict the Day-Ahead prices for
-Irleand. On the first of October 2018 Ireland moved from the \ac{SEM}
-market to the \ac{I-SEM} market in order to further strengthen its
-integration with the \ac{EU}. \autocite{eridgrid_i-sem_2020}
+The Covid-19 epidemic forced sports leagues in Germany to suspend
+championships that were already in full swing. For example, the
+Kreisliga Herren Klasse 2 in Recklinghausen finished around 150 games,
+before the rest were canceled starting from Sunday 2020-03-12, leaving
+around 90 games left unplayed until the last planned day of the
+tournament on Sunday 2020-05-24. Given the distinct possibility that
+there won't be a chance to make up those games later, a burning question
+for many players and fans is naturally: What if they would have played
+those games? We attempt to use data on games already played from the
+website
+\href{http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G\#!/section/matchplan}{fussball.de}
+to answer this question, drawing on established forecasting methods from
+the literature.
 
-The Day-Ahead price is very important for all market participants to
-decide if there should commit to sell or buy at the market. In recent
-years, predicting day-ahead prices has become increasingly difficult due
-to the larger share of renewable energies and the new resulting pricing
-structures. \autocite{ziel_efficient_2015}
+\hypertarget{literature}{%
+\section{Literature}\label{literature}}
 
-First, the Irish Electricity Market is described and the data we have
-received about that market is described. Next the benchmark model is
-presented and then the advanced models are estimated before a conclusion
-is drawn.
+Some difficulties that have to be addressed in predicting outcomes of
+e.g.~the FIFA World Cup, are not relevant to the Kreisliga. For example,
+the league system in Germany features two rounds per season. Each club
+plays each other club tiwce: Once in each round, and once on each club's
+home field. This reduces the uncertainty, when compared with the mode of
+the World Cup. There, in the group stage groups are determined by luck
+of the draw, a process known as \enquote{seeding}. Groups then play a so
+called round-robin tournament, also known as all-play-all, were every
+every group member plays each other, which corresponds to the mode in
+which the Kreisliga plays. The World Cup then continues with
+single-elimination, or a knock-out stage, which introduces another even
+more random path dependencies. This implies that the existing literature
+on forecasting results in the FIFA World Cup group stage is highly
+relevant for the task at hand, since the game rules are identical.
 
-\hypertarget{the-irish-electricity-market}{%
-\section{The Irish Electricity
-Market}\label{the-irish-electricity-market}}
+A natural starting point for forecasting match or season outcomes in
+football tournaments is using the FIFA points ranking method that is
+used canonically to evaluate the strength of a team and updated after
+each game. For example, a recent study by Correa et
+al.~\autocite*{correa} uses FIFA points to forecast the results of the
+2018 FIFA Men's World Cup. This approach has however generated criticism
+and other methods have been proposed and evaluated. The benchmark study
+by Laseck et al.~\autocite*{lasek2013} compares established and proposed
+rankings. They find that FIFA rankings used to perform slightly worse
+than alternative methods, especially two versions of the Elo rating
+system originally proposed by Arpad Elo for the United States Chess
+Federation to rate competitive chess players. We will consider using the
+FIFA points method or these two alternative candidates.
 
-The Irish electricity market was established in 2007 (\ac{SEM}) and has
-not been reformed in a wider sense until the \ac{I-SEM} market was
-introduced in 2018. In the period(s) leading up to the integrated market
-in October 2018, there has been some adjustment and therefore a higher
-volatility in the market.
+The first candidate model is published by the anonymous website
+EloRatings.net \autocite*{eloratings}, and is especially adapted for the
+use in ranking football teams. The second one is the FIFA Women's World
+Rankings, which has been in use since 2003. It is worth noting that the
+FIFA Men's World Rankings have been adapted in 2018 to also be based on
+a modification of the Elo ranking.
 
-\FloatBarrier
-\begin{figure}
+The website FuPa.net \autocite*{fupa} also publishes detailed statistics
+as well as a so called \enquote{Power-Ranking} to evaluate the
+\enquote{Formkurve}, a rough measure of recent performance. Because it
+is only reflective of very recent games, it is not useful for long term
+forecasting. Another raw measure would be to calculate the probability
+of winning by dividing team's current points (victories are 3, draws are
+2) by the total of their and their opponent's points, we can call this
+the \enquote{points model}.
 
-{\centering \includegraphics[width=1\linewidth]{C:/Users/Anwender/Documents/GitHub/EEM/04_output/fuel_mix_for_electricity_gen_IRE_2019} 
+All these models just use weighted game results or point scores. Another
+approach would be to use more data, as in Berbée et
+al.~\autocite*{baseball}. While this concerns baseball, the principle is
+not dependent on the rules of the game, but it is based on the influence
+of individuals' and team's statistics on game outcomes. This is an
+application of the model proposed by Albert and Bennet
+\autocite*{bennet2007}. They use the fact that wins and losses appear to
+be normally distributed in the long run, so chance and skill should both
+play a role. Team ability is then calculated as the deviation from the
+average winning probability over time. Very generally, available
+statistics are then evaluated to find those that matter the most for
+team performance, measured in runs per game, which would be goals in
+football. Those candidate factors are then weighted by regressing them
+on the team performance. The resulting index is then used to calculate a
+winning probability and this used then to simulate the season outcome by
+using weighted coin-flips.
 
-}
+While there is not as much individual player data in football on the
+level of our analysis, the team average is still something that can be
+calculated. Also, more information on the games, such as location at
+home or away, could be candidate factors for performance. For example,
+one team might benefit more from playing at home than it hurts by being
+away, receiving a net benefit from location, or the other way around.
+While these data are certainly interesting, we must be aware of the
+danger of overfitting the model.
 
-\caption{ \label{fig:energy_mix} Primary fuel mix for electricity generation}\label{fig:fig_energy_mix}
-\end{figure}
-\FloatBarrier
+Finally the literature contains references to using betting markets as a
+benchmark, as they perform relatively well as predictors. For the
+Kreisliga however, we don't expect betting markets to be deep enough to
+reach this level of accuracy. Otherwise, they would also be an
+interesting reference point.
 
-Figure \ref{fig:energy_mix} shows relatively clearly that Ireland
-generates a large part of its primary energy from gas. Furthermore, it
-can be seen that the share of renewable energies has increased
-relatively strongly. The average growth rate of renewable energy was
-10.7 percent between 2015 and 2018. \autocite{dineen_energy_2019}
+\hypertarget{data}{%
+\section{Data}\label{data}}
 
-\hypertarget{data-description}{%
-\section{Data Description}\label{data-description}}
+(Nils: Describe the website and scraping process)
 
-\FloatBarrier
-\begin{figure}
+(David: Describe calculating the values needed for the models.)
 
-\includegraphics[width=1\linewidth]{C:/Users/Anwender/Documents/GitHub/EEM/04_output/timeline} \hfill{}
+\hypertarget{predictive-model}{%
+\section{Predictive Model}\label{predictive-model}}
 
-\caption{ \label{fig:timeline} Half-hourly Day-Ahead Prices in Irland}\label{fig:fig_timeline}
-\end{figure}
-\FloatBarrier
+To predict the outcome of the cancelled games, we calculate the
+candidate rankings and use them to simulate the end of the 2019/2020
+season. Specifically we calculate the EloRankings.net Ranking, the FIFA
+Women's Ranking, the points model and a version of the Total Team
+Average incorporating additional information. We discard the classic
+FIFA Men's Ranking, since it was shown to perform worse than the other
+candidates and was discarded by the FIFA Men's World Rankings as well in
+2018.
 
-Our Data contained \emph{152} variables from the first of January 2015
-till 30 of October 2019. Due to the fact that Ireland has changed the
-market from the \ac{SEM} to the \ac{I-SEM} (market integration with the
-\ac{EU}) and thus switched from half-hourly products to hourly products,
-the trajectory from 25 October 2015 to 28 September 2018 has been
-shortened. Therefore, only 1070 full days are left for estimating and
-testing, which is about 2.9 years. Due to the change from half-hourly to
-hourly products, there is also the problem that either only about 9
-tenths of a year are left for testing, with 2 years for estimation, or
-only one year for estimation if you want to have more than one year for
-testing. \autocite{cashman_i-sem_2019}
+Following Correa et al.~\autocite*{correa}, we then run the simulation
+by drawing the results of each game from a binomial distribution. For
+each game and team, the probability of winning is dividing the ranking
+points awarded each team by their and their competitors sum of points.
 
-\FloatBarrier
-\begin{figure}
+Running this simulation repeatedly should indicate the distribution and
+expected average of outcomes. Correa et al.~\autocite*{correa} execute
+200,000 runs, but because of the relatively low complexity of the
+Kreisliga's format compared to the World Cup, especially because there
+are no eleminiation rounds, we expect to need less repetitions.
 
-{\centering \includegraphics[width=0.45\linewidth]{term_paper_eem_files/figure-latex/unnamed-chunk-2-1} \includegraphics[width=0.45\linewidth]{term_paper_eem_files/figure-latex/unnamed-chunk-2-2} 
-
-}
-
-\caption{ \label{fig:structure} Mean Values Weekdays and quarters of the year  }\label{fig:unnamed-chunk-2}
-\end{figure}
-\FloatBarrier
-
-Both cases are not optimal, as one can also see in Figure
-\ref{fig:timeline}. For the estimation of annual cycles at least 2 years
-would be preferable. On the other hand, you actually need at least one
-year in the test data set to benefit from the estimates of the annual
-components.
-
-Our goal is to predict the price for the next day, so we can only use
-data that is already known at the time of the forecast (day-ahead). As
-can be seen from Table \ref{tab:data}, there is little data in our data
-set for this purpose. For solar and offshore energy there is no data at
-all and for onshore energy about half of the data is missing. Only for
-the load for the next day we have about 98 percent of the data, which
-may be implied in a multivariate model.
-
-\begin{table}[]
-\centering
-\begin{tabular}{@{}llllll@{}}
-\toprule
-Date    & Price   & Solar     & Offshore  & Onshore  & Load    \\ \midrule
-0,00 \% & 0,18 \% & 100,00 \% & 100,00 \% & 50,74 \% & 2,59 \% \\ \bottomrule
-\end{tabular}
-\caption{Proportions of NA's in important Day Ahead variables}
-\label{tab:data}
-\end{table}
-
-\hypertarget{basic-models}{%
-\section{Basic Models}\label{basic-models}}
-
-Two relatively simple models are to be estimated as a benchmark for the
-models that will follow later.
-
-The first model is the \emph{naive model} which is relatively simple and
-simply takes the value of the previous day for the price prediction,
-unless the day to be predicted is a Monday, Saturday or Sunday.
-Therefore we do not need to estimate any parameters and this leads to
-the following model equation.
-
-\begin{align*}
- Y_{d,s} &=
-  \begin{cases}
-   Y_{d-7, s} + \epsilon_{d,s}       & \text{if } d \, \text{is Monday, Saturday, or Sunday}\\
-   Y_{d-1, s} + \epsilon_{d,s}        & \text{otherwise}
-  \end{cases}
-\end{align*}
-
-The second model is called the expert model, because it implements the
-knowledge of the last years. This is a parametric model, which includes
-dummies for the days Monday, Saturday and Sunday and other
-autoregressive parameters that model the influence of the previous day,
-the day 2 days away and the day 7 days away.
-
-\begin{align*}
- Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s} + \beta_{s,4 } DoW^1_{d}    \\
-  & + \beta_{s,5 } DoW^6_{d} +\beta_{s,6 } DoW^7_{d} + \epsilon_{d,s}
-\end{align*}
-
-\begin{table}[!h]
-
-\caption{\label{tab:expert model}\label{tab:expert} MAE and RMSE for the naive and expert Model with 1 year of data}
-\centering
-\begin{tabular}{lrr}
-\toprule
-  & naive & expert\\
-\midrule
-\rowcolor{gray!6}  MAE & 11.11 & 9.07\\
-RMSE & 19.60 & 15.97\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-As shown in Table \ref{tab:expert}, the \ac{MAE} and \ac{RMSE} for the
-expert model are both smaller than for the naive model. This means that
-the parameterization model performs better than the pure algorithm,
-which takes either the day before or the day 7 days ago as estimation.
-
-The \ac{DM} test resulted in a significant 5 percent level with a
-p-value of 6.62e-30.
-
-\begin{table}[!h]
-
-\caption{\label{tab:expert model 2 years}\label{tab:expert_2} MAE and RMSE for the naive and expert Model with 2 year of data}
-\centering
-\begin{tabular}{lrr}
-\toprule
-  & naive & expert\\
-\midrule
-\rowcolor{gray!6}  MAE & 11.11 & 9.23\\
-RMSE & 19.60 & 16.07\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-We then estimated the same models again with about two years of data. As
-Table \ref{tab:expert_2} shows, the naive model deteriorated in the
-\ac{MAE} and improved slighlty in the \ac{RMSE}.
-
-A similar pattern can be observed for the expert model, again the
-\ac{MAE} is larger and the \ac{RMSE} is better, although only slightly.
-Therefore, the \ac{DM} test was not significant with a p-value of
-\(\approx\) 1.00e+00.
-
-\hypertarget{advanced-models}{%
-\section{Advanced Models}\label{advanced-models}}
-
-\hypertarget{extension-of-the-expert-model}{%
-\subsection{Extension of the Expert
-Model}\label{extension-of-the-expert-model}}
-
-Because we realized in Figure \ref{fig:structure} that Thursdays are
-also behaving differently from most other days, we included it in the
-Weekday dummies. We also saw in the partial autocorellllations that the
-14 lag day still contains some corellations. Therefore we estimated a
-new extended expert model.
-
-\begin{align*}
- Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s}  + \beta_{s,4 } Y_{ d-14,s} \\ 
-  & + \beta_{s,5 } DoW^1_{d}   + \beta_{s,6 } DoW^4_{d}  + \beta_{s,7 } DoW^6_{d} +\beta_{s,8 } DoW^7_{d} + \epsilon_{d,s}
-\end{align*}
-
-As can be seen from a comparison of Table \ref{tab:expert} and
-\ref{tab:extension}, the RMSE and the MAE are smaller for both lengths
-of the training sets. The DM test is significant for both training sets
-with a p-value of 9.15e-19 and 6.18e-18.
-
-\begin{table}[!h]
-
-\caption{\label{tab:extended model}\label{tab:extension} MAE and RMSE for the extended Model with 1 year and 2 years }
-\centering
-\begin{tabular}{lrr}
-\toprule
-  & 1 year &  2 years\\
-\midrule
-\rowcolor{gray!6}  MAE & 9.03 & 9.07\\
-RMSE & 15.94 & 15.90\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\hypertarget{seaonal-model}{%
-\subsection{Seaonal Model}\label{seaonal-model}}
-
-Another problem, which becomes clear in the right part of Figure
-\ref{fig:structure}, is that there also seem to be differences in the
-mean value for the individual products in the different seasons (in this
-case quarters). Therefore, we have extended the expert model to include
-sesonal dummies.
-
-\begin{align*}
- Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s} + \beta_{s,4 } DoW^1_{d}  + \beta_{s,5 } DoW^6_{d}  \\ 
-  & + \beta_{s,6 } DoW^7_{d} + \beta_{s,7 } DoQ^{sp}_{d} + \beta_{s,8 } DoQ^{su}_{d} + \beta_{s,9 } DoQ^a_{d} + \epsilon_{d,s}
-\end{align*}
-
-Table \ref{tab:seasonal} shows relatively clearly that the \ac{RMSE} and
-the \ac{MAE} have hardly changed at all. Therefore, the \ac{DM} test is
-not significant at a 5 \% level with p-values of 2.48e-05 and 1.00e+00
-for the 1 year and 2 year training data set. It seems like the seasonal
-structure has after all now big impact at the End.
-
-\begin{table}[!h]
-
-\caption{\label{tab:seasonal model}\label{tab:seasonal} MAE and RMSE for the seasonal Model with 1 year and 2 years }
-\centering
-\begin{tabular}{lrr}
-\toprule
-  & 1 year &  2 years\\
-\midrule
-\rowcolor{gray!6}  MAE & 7.75 & 9.63\\
-RMSE & 16.01 & 16.30\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\hypertarget{external-regressor-model}{%
-\subsection{External Regressor Model}\label{external-regressor-model}}
-
-\begin{align*}
- Y_{d,s} = &  \, \beta_{s,0 } + \beta_{s,1 } Y_{ d-1,s} + \beta_{s,2 } Y_{ d-2,s} + \beta_{s,3 } Y_{ d-7,s}  + \beta_{s,4 } Y_{ d-14,s} + \beta_{s,5 } DoW^1_{d} \\ 
-  &   + \beta_{s,6 } DoW^4_{d}  + \beta_{s,7 } DoW^6_{d} + \beta_{s,8 } DoW^7_{d} + \beta_{s,9 } L_{d-1}  +\epsilon_{d,s}
-\end{align*}
-
-In principle, not only autocorellation is an important part of price
-forecasting, but also external factors such as renewable energies or the
-load. As we have shown in the data description, the data for renewable
-energies are hardly available for the time period and therefore, we have
-extended the extended expert model by the lagges regressor load.
-
-\begin{table}[!h]
-
-\caption{\label{tab:external model}\label{tab:external} MAE and RMSE for the extended expert M0del with the external Regressor load with 1 year and 2 years }
-\centering
-\begin{tabular}{lrr}
-\toprule
-  & 1 year &  2 years\\
-\midrule
-\rowcolor{gray!6}  MAE & 9.24 & 9.42\\
-RMSE & 15.75 & 15.88\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-At first glance, the \ac{RMSE} and \ac{MAE} look better in Table
-\ref{tab:external} than in the simple expert model, but according to the
-DM test, the difference is not significant (p-values: 9.95e-01 ,
-9.99e-01).
-
-\hypertarget{expert-model-with-recursive-least-squares}{%
-\subsection{Expert Model with recursive least
-squares}\label{expert-model-with-recursive-least-squares}}
-
-As a final estimate, we used the recurisve least squares method and
-apllied it to the expert model.The RMSE and MAE are both smaller then
-compared to any other model we estimated sofar, with an RMSE of 6.14 and
-MAE of 2.49.
+\hypertarget{results}{%
+\section{Results}\label{results}}
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-The analysis of the half-hourly data of the Irish electricity market was
-by no means easy. For one thing, the data situation was relatively poor,
-we had many missing values and the change from half-hourly to hourly
-products further reduced the amount of data. In addition, there was also
-no data on renewable energy sources, which is a problem that is not to
-be sneezed at at all, as the share of renewable energy has increased
-significantly over the period and renewable energy sources are known to
-increase volatility.
-
-Furthermore, market integration towards the EU also meant further
-adjustments, which cannot easily be explained by price or other external
-factors.
-
-The recursive least squares method seems to have reflected this
-structure best by far. It might be very interesting to develop models
-that are better able to deal with such uncertainty and further improve
-the estimate.
-
 \newpage
 
-\newpage
-\textbf{Eidesstattliche Versicherung}
-
-\bigskip
-
-Ich versichere an Eides statt durch meine Unterschrift, dass ich die vorstehende Arbeit selbständig und ohne fremde Hilfe angefertigt und alle Stellen, die ich wörtlich oder annähernd wörtlich aus Veröffentlichungen entnommen habe, als solche kenntlich gemacht habe, mich auch keiner anderen als der angegebenen Literatur oder sonstiger Hilfsmittel bedient habe. Die Arbeit hat in dieser oder ähnlicher Form noch keiner anderen Prüfungsbehörde vorgelegen.
-
-\vspace{1cm}
-\rule{0pt}{2\baselineskip} %
-\par\noindent\makebox[2.25in]{\indent Essen, den \hrulefill} \hfill\makebox[2.25in]{\hrulefill}%
-\par\noindent\makebox[2.25in][l]{} \hfill\makebox[2.25in][c]{Jens Klenke, Nils Paffen}%
 
 
 \end{document}

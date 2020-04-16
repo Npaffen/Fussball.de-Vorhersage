@@ -1,0 +1,18 @@
+the website
+http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1718-westfalen/-/staffel/0209KP9SAC00000AVS54898DVUVCCN5J-G#!/
+
+Int. J. Applied Pattern Recognition, Vol. 1, No. 1, 2013 27
+The predictive power of ranking systems in association football
+http://lasek.rexamine.com/football_rankings.pdf
+
+Chilean Journal of StatisticsVol. 9, No. 1, April 2018, 59-65
+The next winner of the 2018 FIFA World Cup will be...: 
+An illustration of the use of statistical simulation to make aprediction in a complex tournament
+http://chjs.mat.utfsm.cl/volumes/09/01/Correa_etal(2018).pdf
+
+Honors Theses at the University of Iowa Spring 2019
+Simulating NCAA Men's Basketball Tournament Games Charles Ruff 
+https://ir.uiowa.edu/cgi/viewcontent.cgi?article=1436&context=honors_theses
+
+https://en.wikipedia.org/wiki/FIFA_World_Rankings
+https://en.wikipedia.org/wiki/World_Football_Elo_Ratings
