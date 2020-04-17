@@ -7,16 +7,15 @@ library(glue)
 # if dates is not supplied, then ... passes args to the make_dates()
 # function, which are [ year, month, from_day, to_day, all_dates (logical),
 # respectively ]. Please refer to `make_dates.R`.
-seasons <- c( "0809", "0910", "1011", "1112", "1213", "1314", "1415", "1516", "1617", "1718", "1819", "1920")
+seasons <- c( "1112", "1213", "1314", "1415", "1516", "1617", "1718", "1819", "1920")
 
-seasonsID <- c( "011TQNTQUG000000VTVG0001VUUNAVHM" , "012T61E0SS000000VV0AG812VVC06533" ,
-                "016ON5PTKG000000VV0AG812VT3VLKUV" ,"01AE4TLH9O000000VV0AG813VS3VU5IB",
-                "01DVBP066S000000VV0AG812VS2KTNCU" ,"01HLF6ON2G000000VV0AG812VS2HNECA" ,
-                "01L8MF7QI4000001VV0AG812VVHQG9J2" , "01OVSEG8F0000009VV0AG813VS7LCAJK",
-                "01SNI60QL4000007VS54898EVT9SILN7", "0209KP9SAC00000AVS54898DVUVCCN5J",
-                "023VNLHG8000000CVS54898DVVG1IBJM", "027II28DH8000009VS5489B3VS3GHJJU")
+seasonsID <- c( "01AE4TLH9O000000VV0AG813VS3VU5IB","01DVBP066S000000VV0AG812VS2KTNCU" ,
+                "01HLF6ON2G000000VV0AG812VS2HNECA" , "01L8MF7QI4000001VV0AG812VVHQG9J2" ,
+                "01OVSEG8F0000009VV0AG813VS7LCAJK", "01SNI60QL4000007VS54898EVT9SILN7",
+                "0209KP9SAC00000AVS54898DVUVCCN5J", "023VNLHG8000000CVS54898DVVG1IBJM",
+                "027II28DH8000009VS5489B3VS3GHJJU")
 source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
-md_season_url <- map2(.x = seasons[4:8], .y = seasonsID[4:8], ~ f_url_md_season(season = .x, seasonID = .y)) %>%
+md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .x, seasonID = .y)) %>%
   unlist()
 
   # Download season table content ----------------------------------------------
@@ -31,9 +30,7 @@ md_season_url <- map2(.x = seasons[4:8], .y = seasonsID[4:8], ~ f_url_md_season(
   season_1819 <- database_season %>% filter(season == "1819")
   season_1920 <- database_season %>% filter(season == "1920")
   
-  md_season_url <- map2(.x = seasons[1:8], .y = seasonsID[1:8], ~ f_url_md_season(season = .x, seasonID = .y)) %>%
-    unlist()
-
+ 
   database_season <- readRDS(here::here("/data/database_season.rds"))
   #Download match results 
     source("src/get_match_results.R")

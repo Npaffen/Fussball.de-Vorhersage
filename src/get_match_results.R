@@ -51,7 +51,7 @@ get_results <- function(href_list, md_url_season ){
   if( page %>%
       html_nodes(".info-text") %>% 
       html_text() %>%
-      is_empty() == TRUE  ){ 
+      is_empty() == TRUE  ){ #Ist bei Spielen mit Ergebnis immer leer
   df <- list(
     club_name_home = get_club_name_home(page),
     club_name_away = get_club_name_away(page),
@@ -71,7 +71,7 @@ get_results <- function(href_list, md_url_season ){
       .[["data-match-events"]] %>%
       str_count( pattern  = "'goal','team':'away'") 
   )
-    } else {
+    } else { #Falls es kein Ergebnis gibt aufgrund wird Kein Ergebnis eingetragen. Diese Spiele können später noch manuell nachgetragen werden.
       df <- list(
         club_name_home = get_club_name_home(page),
         club_name_away = get_club_name_away(page),
