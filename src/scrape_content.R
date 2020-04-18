@@ -30,8 +30,6 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
   season_1819 <- database_season %>% filter(season == "1819")
   season_1920 <- database_season %>% filter(season == "1920")
   
- 
-  database_season <- readRDS(here::here("/data/database_season.rds"))
   #Download match results 
     source("src/get_match_results.R")
     database_match_results <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
@@ -40,7 +38,5 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
 
   
   library(RMariaDB)
-  
-  database_match_results <- readRDS(here::here("/data/database_match_results.rds"))
   
   
