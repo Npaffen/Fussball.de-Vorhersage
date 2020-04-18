@@ -9,10 +9,9 @@ f_extract_match_results <- function(md_url_season) {
 
   attr_href <- seq(from = 1,
       to =  page %>%
-        rvest::html_nodes(".column-rank") %>%
-        rvest::html_attrs() %>%
+        rvest::html_nodes("#matches .column-club") %>%
         length() %>%
-        as.integer()*2-4,
+        as.integer()*2-2,
       by = 4)
   
   
@@ -45,39 +44,51 @@ f_extract_match_results <- function(md_url_season) {
 get_results <- function(href_list, md_url_season ){
   Sys.sleep(runif(1, 5L, 10L))
   page <- read_html(href_list)
-  
-  
-  
-  if( page %>%
-      html_nodes(".info-text") %>% 
-      html_text() %>%
-      is_empty() == TRUE  ){ #Ist bei Spielen mit Ergebnis immer leer
-  df <- list(
-    club_name_home = get_club_name_home(page),
-    club_name_away = get_club_name_away(page),
-    
-   
-    
-    goals_team_a = get_game_info(page) %>%
-      xml_attrs() %>%
-      .[[1]] %>%
-      .[["data-match-events"]] %>%
-      str_count( pattern  = "'goal','team':'home'"),
-    
-    
-    goals_team_b = get_game_info(page) %>%
-      xml_attrs() %>%
-      .[[1]] %>%
-      .[["data-match-events"]] %>%
-      str_count( pattern  = "'goal','team':'away'") 
-  )
-    } else { #Falls es kein Ergebnis gibt aufgrund wird Kein Ergebnis eingetragen. Diese Spiele können später noch manuell nachgetragen werden.
+
+  if ( page %>%
+       html_nodes(".info-text") %>% 
+       html_text() %>%
+       is_empty() == FALSE  ){ #Ist bei bereits ausgetragenen Spielen ohne Ergebnis niemals leer. 
+    #Falls es kein Ergebnis gibt wird NA eingetragen. Diese Spiele können später noch manuell nachgetragen werden.
+    df <- list(
+      club_name_home = get_club_name_home(page),
+      club_name_away = get_club_name_away(page),
+      
+      goals_team_a = NA,
+      goals_team_b = NA
+    ) 
+ 
+  }else if (page %>%
+        html_nodes("sub") %>%
+        html_text() %>%
+        gsub(x = ., pattern = "\\s", replacement = "" )== "W"){ #Spiel wurde wiederholt
       df <- list(
         club_name_home = get_club_name_home(page),
         club_name_away = get_club_name_away(page),
         
-      goals_team_a = NA,
-      goals_team_b = NA
+        goals_team_a = NA,
+        goals_team_b = NA
+      )
+    }else { 
+     
+       df <- list(
+        club_name_home = get_club_name_home(page),
+        club_name_away = get_club_name_away(page),
+        
+        
+        
+        goals_team_a = get_game_info(page) %>%
+          xml_attrs() %>%
+          .[[1]] %>%
+          .[["data-match-events"]] %>%
+          str_count( pattern  = "'goal','team':'home'"),
+        
+        
+        goals_team_b = get_game_info(page) %>%
+          xml_attrs() %>%
+          .[[1]] %>%
+          .[["data-match-events"]] %>%
+          str_count( pattern  = "'goal','team':'away'") 
       )
       
     }
