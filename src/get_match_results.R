@@ -76,8 +76,8 @@ get_results <- function(href_list, md_url_season ){
         club_name_home = get_club_name_home(page),
         club_name_away = get_club_name_away(page),
         
-      goals_team_a = "Kein Ergebnis",
-      goals_team_b = "Kein Ergebnis"
+      goals_team_a = NA,
+      goals_team_b = NA
       )
       
     }
