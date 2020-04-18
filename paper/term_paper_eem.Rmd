@@ -81,11 +81,9 @@ Running this simulation repeatedly should indicate the distribution and expected
 # Conclusion
 
 
-
-
 \newpage
 
-
+\printbibliography
 
 
 

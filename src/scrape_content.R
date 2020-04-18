@@ -40,5 +40,6 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
   
   library(RMariaDB)
   
+  database_match_results <- readRDS(here::here("/data/database_match_results.rds"))
   
   
