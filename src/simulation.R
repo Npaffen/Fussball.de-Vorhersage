@@ -8,6 +8,7 @@
 
 require(dplyr)
 require(purrr)
+source("src/functions.R")
 
 # read in data
 dbs<- readRDS(here::here("/data/database_season.rds"))
@@ -26,16 +27,6 @@ for(j in unique(dbs$season)){
 }
 dbs <- dbs0
 dbs1920 <- dbs[dbs$season == "1920",]
-# for(j in unique(dbm$season)){
-#   for(i in unique(dbm[,c("club_name_home","club_name_away")])){ # filter out outdated entries
-#     first_match <- filter(db, 
-#                           club_name_home == i[[1]],
-#                           club_name_away == i[[2]],
-#                           season == j)
-#     first_match <- filter(first_match, matchday == min(matchday))
-#     dbs <- bind_rows(dbs, newest)
-#   }
-# }
 
 
 
@@ -46,20 +37,27 @@ dbs1920 <- dbs[dbs$season == "1920",]
 games_played <- find_games_played(dbs_data = dbs1920, dbm_data = dbm)
 all_games <- make_all_games(dbs_data = dbs1920, games_played)
 missing_games <- anti_join(all_games, games_played)
+#missing_games2 <- readRDS("data/database_missing_matches_1920.rds")
 
 
 # - Repeat: simulate missing games
+
 sim_results <- missing_games
 win_prob_home <- map2(
   sim_results$club_name_home,
   sim_results$club_name_away,
   ~sim_points(.x, .y, dbs_data = dbs1920)
   )
-win_sim <- 
+win_prob_home <- unlist(win_prob_home) # point winning probs
 
-sim_results$score_home <- NA
-sim_results$score_away <- NA
+N <- 100 # simulation runs
+all_final_tables <- run_points_sim(missing_games, win_prob_home, sim_results, N)
+average_table <- aggregate(all_final_tables[,-1],
+                           by = list(all_final_tables$club_name),
+                           FUN = "mean")
+
 
 
 # - evaluate result
 
+View(average_table)

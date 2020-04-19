@@ -53,6 +53,42 @@ make_all_games <- function(dbs_data, games_played){
 
 
 
+
+############################################################
+# run_points_sim() runs N simulation runs for the missing games
+
+run_points_sim <- function(missing_games, win_prob_home, sim_results, N){
+  all_final_tables <- data.frame(stringsAsFactors = FALSE)
+  for(i in 1:N){
+    if(i %% 10 == 0){message("run ", i, " out of ", N)}
+    rand_prob <- rbinom(nrow(missing_games), size = 1, p=win_prob_home)
+    sim_results$score_home <- rand_prob*3
+    sim_results$score_away <- (1-rand_prob)*3
+    final_table <- data.frame(club_name = dbs1920$club_name, stringsAsFactors = FALSE)
+    final_table$wins <- map_int(final_table$club_name, function(.x){
+      nrow(filter(sim_results,
+                  sim_results$club_name_away == .x,
+                  sim_results$score_away != 0)) +
+        nrow(filter(sim_results,
+                    sim_results$club_name_home == .x,
+                    sim_results$score_home != 0))
+    })
+    final_table$losses <- map_int(final_table$club_name, function(x){
+      nrow(filter(sim_results,
+                  sim_results$club_name_away == x,
+                  sim_results$score_away == 0)) +
+        nrow(filter(sim_results,
+                    sim_results$club_name_home == x,
+                    sim_results$score_home == 0))
+    })
+    final_table$score <- final_table$wins*3 
+    all_final_tables <- bind_rows(all_final_tables, final_table)
+  }
+  return(all_final_tables)
+}
+
+
+
 ############################################################
 # sim_points(), calculates the winning probabilty of the home team using points
 
