@@ -46,6 +46,9 @@ dr_home <-rating_home - rating_away +100
 
 dr_away <-  rating_away - rating_home
 
+#Hier muss noch W_team_home kalkuliert werden
+
+W_team_away
 
 W_e_home <- 1 / (10^(-dr_home/400) + 1)
 
@@ -59,6 +62,7 @@ rating
 }
 
 
+
 #create ratings for the first 20 matchdays
 for (i in seq_along(database_mr$season)) {
   rating <- f_rating_update(rating = rating,
@@ -70,7 +74,9 @@ for (i in seq_along(database_mr$season)) {
                             )
 }
 rating <- rating %>% arrange(desc(rating))
-db_missing_games <- read_rds(str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/"))
+db_missing_games <- read_rds(here::here("/data/database_missing_matches_1920.rds"))
+
+
 
 # - check games status
 
