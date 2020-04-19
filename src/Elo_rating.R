@@ -102,17 +102,26 @@ rating <- rating %>% arrange(desc(rating_value))
 db_missing_games <- read_rds(here::here("/data/database_missing_matches_1920.rds"))
 
 
-db_missing_games <- db_missing_games %>% mutate(K = 30,
-                                                )
+db_missing_games <- db_missing_games %>% mutate(K = 30)
+points_last_md <- database_season %>% filter(matchday == 20, season == 1920) %>% rename(teams = club_name, points_chr = points) %>%
+  mutate(points = as.numeric(points_chr))  %>%
+  select(teams,points)
+  
 
-for (h in 1:length(rating$teams)){                                               
-db_missing_games$rating_home[db_missing_games$club_name_home == rating$teams[i]] <-  rep(rating$rating_value[i], times = length(db_missing_games$rating_home[db_missing_games$club_name_home == rating$teams[i]]))      
-}
-# - check games status
-rating_sim <- rating
-for (j in unique(db_missing_games$matchday)){
-db_missing_matchday <- db_missing_games %>% filter( matchday == 21)
-rating_sim <- rating_sim %>% mutate(rating_old = rating_value)
+
+#Tabelle für das Rating der simulierten Spiele
+rating_sim <- rating %>% select(teams, rating_value) %>% mutate(rating_old = rating_value)
+#Tabelle um Gewinne zu zählen
+chart_prognose_reset <-  tibble(teams = rating_sim$teams) %>% inner_join( points_last_md)
+
+cp_20000 <- list()
+rating_sim_2000 <- list()
+for (l in 1:20000){
+
+  for (j in unique(db_missing_games$matchday)){
+db_missing_matchday <- db_missing_games %>% filter( matchday == j)
+rating_sim$rating_old <- rating_sim$rating_value
+chart_prognose <- chart_prognose_reset
 for (i in seq_along(db_missing_matchday$matchday)) {
   
   rating_sim <- f_match_simulation(rating = rating_sim,
@@ -122,9 +131,17 @@ for (i in seq_along(db_missing_matchday$matchday)) {
                             
                             
   )
-  }
-db_missing_games[db_missing_games$matchday == j] <- if (rating_sim$rating_value > rating_sim$rating_old) db_missing_games %>% mutate(wins = )
 }
+
+for (m in seq_along(chart_prognose$teams)){
+chart_prognose$points[m] <- if (rating_sim$rating_value[m] > rating_sim$rating_old[m]) {chart_prognose$points[m] +3} else chart_prognose$points[m]
+
+}
+}
+cp_20000[[l]] <- chart_prognose %>% arrange(desc(points)) %>% mutate(rank = 1:dim(.)[1] )
+rating_sim_2000[[l]] <- rating_sim
+}
+
 
 
   
