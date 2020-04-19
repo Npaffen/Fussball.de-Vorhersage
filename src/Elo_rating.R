@@ -5,6 +5,10 @@ database_mr <- read_rds(str_c(here::here() , "data", "database_match_results_192
 
 
 database_season <- readRDS(here::here("/data/database_season.rds"))  
+#Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
+#Annahme : Zwei gleichstarke Mannschaften haben eine höhere Wahrscheinlichkeit unentschieden zu spielen als zwei unterschiedlich Starke.
+#Ableitung : Für gleichstarke Mannschaften Durchschnittswert für unterschiedlich Starke den Wert diskontieren 
+#Proportion zum Rankingunterschied. 
 
 #Füge Tordifferenz hinzu
 database_mr <- database_mr %>% drop_na() %>% mutate(goal_difference = pmax(goals_team_home, goals_team_away) - pmin(goals_team_home, goals_team_away) )
@@ -28,11 +32,15 @@ database_mr <-database_mr %>%  mutate(K = case_when(goal_difference <= 1 ~ 30,
 )# K ist der Gewichtungsfaktor pro Spiel pro Tordifferenz
 
 
+  
 
-matchday_results <- filter(database_mr, matchday == 1)
-f_rating_update <- function(rating , matchday)
-rating_home <-  rating %>% filter(teams == matchday_results$club_name_home) %>% .$rating
-rating_away <-  rating %>% filter(teams == matchday_results$club_name_away) %>% .$rating
+
+
+f_rating_update <- function(rating , club_name_home, club_name_away, K, W_team_home, W_team_away ){
+
+ 
+rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating
+rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating
 
 dr_home <-rating_home - rating_away +100
 
@@ -44,11 +52,26 @@ W_e_home <- 1 / (10^(-dr_home/400) + 1)
 W_e_away <- 1 / (10^(-dr_away/400) + 1)
 
 
-rating$rating[rating$teams == matchday_results$club_name_home] <- rating_home + matchday_results$K * (matchday_results$W_team_home - W_e_home)
+rating$rating[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
 
-R_n_home
+rating$rating[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
+rating
+}
 
-rating$rating[rating$teams == matchday_results$club_name_away] <- rating_away + matchday_results$K * (matchday_results$W_team_away - W_e_away)
 
+#create ratings for the first 20 matchdays
+for (i in seq_along(database_mr$season)) {
+  rating <- f_rating_update(rating = rating,
+                            club_name_home = database_mr$club_name_home[i],
+                            club_name_away = database_mr$club_name_away[i],
+                            K = database_mr$K[i],
+                            W_team_home = database_mr$W_team_home[i],
+                            W_team_away = database_mr$W_team_away[i]
+                            )
+}
+rating <- rating %>% arrange(desc(rating))
+db_missing_games <- read_rds(str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/"))
+
+# - check games status
 
 
