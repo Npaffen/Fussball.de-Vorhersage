@@ -10,7 +10,8 @@
 
 find_games_played <- function(dbs_data, dbm_data){
   games_played <- data.frame(club_name_home = as.character(),
-                             club_name_away = as.character())
+                             club_name_away = as.character(),
+                             stringsAsFactors = FALSE)
   for(i in unique(dbs_data$club_name)){
     a <- dbm_data %>%
       filter(season == "1920", club_name_home == i) %>%
@@ -22,11 +23,13 @@ find_games_played <- function(dbs_data, dbm_data){
       unique()
     if(nrow(a) != 0){
       c <- data.frame(club_name_home = i,
-                    club_name_away = a)
+                    club_name_away = a,
+                    stringsAsFactors = FALSE)
     }
     if(nrow(b) != 0){
       d <- data.frame(club_name_home = b,
-                      club_name_away = i)
+                      club_name_away = i,
+                      stringsAsFactors = FALSE)
     }
     games_played <- bind_rows(games_played, c, d)
   }
@@ -41,11 +44,9 @@ make_all_games <- function(dbs_data, games_played){
   all_games <- games_played[0,]
   for(i in unique(dbs_data$club_name)){
     a <- data.frame(club_name_home = i,
-                    club_name_away = unique(dbs_data$club_name))
-    b <- data.frame(club_name_home = unique(dbs_data$club_name),
-                    club_name_away = i)
-    c <- bind_rows(a, b) %>%
-      filter(club_name_home != club_name_away)
+                    club_name_away = unique(dbs_data$club_name),
+                    stringsAsFactors = FALSE)
+    c <- a[a$club_name_home != a$club_name_away,]
     all_games <- bind_rows(all_games, c)
   }
   return(all_games)
