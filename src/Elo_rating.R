@@ -42,6 +42,8 @@ f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
   
   dr_away <- rating_away - rating_home
   
+  
+  
   W_e_home <- 1 / (10^(-dr_home/400) + 1)
   
   W_e_away <- 1 / (10^(-dr_away/400) + 1)
@@ -172,13 +174,9 @@ for (l in 1:200000){
   cp_200000_no_update[[l]] <- chart_prognose %>% arrange(desc(points)) %>% mutate(rank = 1:dim(.)[1] )
 }
 
-filter(cp_200000_no_update, rank = 1, teams = "VfL Ramsdorf" )
 
-tb_cp_200000 <- map_dfr(cp_20000, bind_rows)
+tb_cp_200000 <- map_dfr(cp_200000_no_update, bind_rows)
 
-tb_cp_200000 %>% filter( rank == 1, teams == "VfL Ramsdorf") %>% .$rank %>% length()/200000 %>% mutate(rank_prob)
-
-map_dfr(cp_20000, bind_rows)
 
 f_rank_prob <- function(dataset, team) {
 
@@ -194,4 +192,40 @@ analysis <- map_df(unique(tb_cp_200000$teams), ~ f_rank_prob(dataset = tb_cp_200
   mutate(rank = 1:16) %>%
   select(rank, everything())
 
+########simulation with draw
 
+tie_prob_season <- database_season %>%
+  filter(matchday == 20, season == 1920) %>%
+  select(ties) %>%
+  mutate(ties = as.numeric(ties))  %>%
+  sum()/nrow(database_season %>% filter( between(as.numeric(matchday),1,20), season == 1920))
+
+f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
+  
+  
+  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
+  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
+  
+  dr_home <- rating_home - rating_away +100
+  
+  dr_away <- rating_away - rating_home
+  
+  W_e_home <- 1 / (10^(-dr_home/400) + 1)
+  
+  W_e_away <- 1 / (10^(-dr_away/400) + 1)
+  
+  
+  tie_prob <- W_e_home * tie_prob_season
+  
+
+  W_team_home <- base::sample(x = c(1,0), size = 1, prob = c(W_e_home, W_e_away))
+  
+  W_team_away <- if (W_team_home == 1) 0 else 1
+  
+  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
+  
+  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
+  rating
+  
+  
+}
