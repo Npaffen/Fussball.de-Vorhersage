@@ -110,18 +110,21 @@ points_last_md <- database_season %>% filter(matchday == 20, season == 1920) %>%
 
 
 #Tabelle für das Rating der simulierten Spiele
-rating_sim <- rating %>% select(teams, rating_value) %>% mutate(rating_old = rating_value)
+rating_sim_reset <- rating %>% select(teams, rating_value) %>% mutate(rating_old = rating_value)
 #Tabelle um Gewinne zu zählen
-chart_prognose_reset <-  tibble(teams = rating_sim$teams) %>% inner_join( points_last_md)
+chart_prognose_reset <-  tibble(teams = rating_sim_reset$teams) %>% inner_join( points_last_md)
 
 cp_20000 <- list()
 rating_sim_2000 <- list()
-for (l in 1:20000){
 
+
+for (l in 1:200000){
+  chart_prognose <- chart_prognose_reset
+  rating_sim <- rating_sim_reset
   for (j in unique(db_missing_games$matchday)){
 db_missing_matchday <- db_missing_games %>% filter( matchday == j)
 rating_sim$rating_old <- rating_sim$rating_value
-chart_prognose <- chart_prognose_reset
+
 for (i in seq_along(db_missing_matchday$matchday)) {
   
   rating_sim <- f_match_simulation(rating = rating_sim,
@@ -142,6 +145,53 @@ cp_20000[[l]] <- chart_prognose %>% arrange(desc(points)) %>% mutate(rank = 1:di
 rating_sim_2000[[l]] <- rating_sim
 }
 
-
-
+cp_200000_no_update <- list()
+for (l in 1:200000){
+  chart_prognose <- chart_prognose_reset
   
+  for (j in unique(db_missing_games$matchday)){
+    db_missing_matchday <- db_missing_games %>% filter( matchday == j)
+
+    rating_sim <- rating_sim_reset
+    for (i in seq_along(db_missing_matchday$matchday)) {
+      
+      rating_sim <- f_match_simulation(rating = rating_sim,
+                                       club_name_home = db_missing_matchday$club_name_home[i],
+                                       club_name_away = db_missing_matchday$club_name_away[i],
+                                       K = db_missing_matchday$K[i]
+                                       
+                                       
+      )
+    }
+    
+    for (m in seq_along(chart_prognose$teams)){
+      chart_prognose$points[m] <- if (rating_sim$rating_value[m] > rating_sim$rating_old[m]) {chart_prognose$points[m] +3} else chart_prognose$points[m]
+      
+    }
+  }
+  cp_200000_no_update[[l]] <- chart_prognose %>% arrange(desc(points)) %>% mutate(rank = 1:dim(.)[1] )
+}
+
+filter(cp_200000_no_update, rank = 1, teams = "VfL Ramsdorf" )
+
+tb_cp_200000 <- map_dfr(cp_20000, bind_rows)
+
+tb_cp_200000 %>% filter( rank == 1, teams == "VfL Ramsdorf") %>% .$rank %>% length()/200000 %>% mutate(rank_prob)
+
+map_dfr(cp_20000, bind_rows)
+
+f_rank_prob <- function(dataset, team) {
+
+  rank_prob <- map_df( .x = 1:16, ~ tibble(rank_prob = dataset %>%
+                                             filter( rank == .x, teams == team ) %>%
+                                             .$rank %>%
+                                             length()/200000)) %>% 
+    setNames(str_c(team))
+  rank_prob
+}
+analysis <- map_df(unique(tb_cp_200000$teams), ~ f_rank_prob(dataset = tb_cp_200000, team = .x) ) %>%
+  map_df( ~na.omit(.x)) %>%
+  mutate(rank = 1:16) %>%
+  select(rank, everything())
+
+
