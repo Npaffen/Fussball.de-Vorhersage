@@ -1,5 +1,9 @@
 ## functions for fussball.de vorhersage
 
+require(dplyr)
+require(purrr)
+require(ggplot2)
+
 # find_games_played(), finds all games that were played
 # make_all_games(), creates list with all matchups
 # sim_points(), calculates the winning probabilty of the home team using points
@@ -58,10 +62,11 @@ make_all_games <- function(dbs_data, games_played){
 ############################################################
 # run_points_sim() runs N simulation runs for the missing games
 
-run_points_sim <- function(missing_games, win_prob_home, sim_results, N){
+run_points_sim <- function(missing_games, win_prob_home, sim_results, N, limit){
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
+  clubs <- unique(missing_games$club_name_home)
+  conv <- numeric()
   for(i in 1:N){
-    if(i %% 10 == 0){message("run ", i, " out of ", N)}
     rand_prob <- rbinom(nrow(missing_games), size = 1, p=win_prob_home)
     sim_results$score_home <- rand_prob*3
     sim_results$score_away <- (1-rand_prob)*3
@@ -84,8 +89,36 @@ run_points_sim <- function(missing_games, win_prob_home, sim_results, N){
     })
     final_table$score <- final_table$wins*3 
     all_final_tables <- bind_rows(all_final_tables, final_table)
+    average_table <- aggregate(
+      all_final_tables[1:(length(clubs)*(i-1)),-1],
+      by = list(all_final_tables$club_name[1:(length(clubs)*(i-1))]),
+      FUN = "mean"
+    )
+    average_table2 <- aggregate(
+      all_final_tables[,-1],
+      by = list(all_final_tables$club_name),
+      FUN = "mean"
+    )
+    conv_speed <- sum(abs(average_table$score-average_table2$score))
+    conv <- c(conv, conv_speed)
+    if(i %% 10 == 0){
+      message("convergence speed: ", round(conv_speed, 3), " run ", i, " out of ", N)
+    }
+    if(conv_speed < limit){
+      message("converged!")
+      break
+    }
   }
-  return(all_final_tables)
+  if(conv_speed < limit){
+    conv_plot <- qplot(x=1:length(conv), y=conv, geom = "jitter",
+                       main = paste0("converged to below ", limit, 
+                                     " after ", length(conv), " runs"))
+  } else {
+    conv_plot <- qplot(x=1:length(conv), y=conv, geom = "jitter",
+                       main = paste0("didn't converge below ", limit, 
+                                     " after ", N, " runs"))
+  }
+  return(list(all_final_tables, conv_plot))
 }
 
 
