@@ -14,6 +14,7 @@ source("src/functions.R")
 dbs<- readRDS(here::here("/data/database_season.rds"))
 dbs[,-c(1,5,9)] <- map(dbs[,-c(1,5,9)], as.numeric)
 dbm <- readRDS(here::here("/data/database_match_results_1920.rds"))
+dbm <- dbm[complete.cases(dbm),]
 dbm$matchday <- as.numeric(dbm$matchday)
 
 # clean data
@@ -37,12 +38,12 @@ dbs1920 <- dbs[dbs$season == "1920",]
 games_played <- find_games_played(dbs_data = dbs1920, dbm_data = dbm)
 all_games <- make_all_games(dbs_data = dbs1920, games_played)
 missing_games <- anti_join(all_games, games_played)
-missing_games2 <- readRDS("data/database_missing_matches_1920.rds")
+#missing_games2 <- readRDS("data/database_missing_matches_1920.rds")
 
 
 # - Repeat: simulate missing games
 
-sim_results <- missing_games2
+sim_results <- missing_games
 win_prob_home <- map2(
   sim_results$club_name_home,
   sim_results$club_name_away,
@@ -50,8 +51,10 @@ win_prob_home <- map2(
   )
 win_prob_home <- unlist(win_prob_home) # point winning probs
 
-N <- 100 # simulation runs
-all_final_tables <- run_points_sim(missing_games2, win_prob_home, sim_results, N)
+N <- 5000 # simulation runs
+sim_output <- run_points_sim(missing_games, win_prob_home, sim_results, N, limit = 0.01)
+all_final_tables <- sim_output[[1]]
+sim_output[[2]] # print convergence plot
 average_table <- aggregate(all_final_tables[,-1],
                            by = list(all_final_tables$club_name),
                            FUN = "mean")

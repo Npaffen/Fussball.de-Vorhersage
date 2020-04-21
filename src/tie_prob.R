@@ -25,7 +25,7 @@ f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K, t
     W_e_away <- 0
   }
   
-  W_e_away + W_e_home + tie_prob
+  # W_e_away + W_e_home + tie_prob
   
   W_team_home <- base::sample(x = c(1,0,0.5), size = 1, prob = c(W_e_home, W_e_away,tie_prob))
   
