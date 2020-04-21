@@ -99,3 +99,124 @@ sim_points <- function(x,y, dbs_data){
   return(a/(a+b))
 }
   
+##### rating  for the first 20 matchdays (real data)
+
+f_rating <- function(dataset , club_name_home, club_name_away){
+  
+  #Füge Tordifferenz hinzu
+  rating <- tibble( teams = unique(club_name_home), rating_value = 1000)
+  
+  dataset<- dataset %>% drop_na() %>% mutate(goal_difference = pmax(goals_team_home, goals_team_away) - pmin(goals_team_home, goals_team_away) )
+  
+  
+  
+  
+  
+  dataset <- dataset %>%  mutate(K = case_when(goal_difference <= 1 ~ 30,
+                                                      goal_difference == 2 ~ 30+0.5,
+                                                      goal_difference == 3 ~ 30+3/4,
+                                                      goal_difference >= 4 ~ 30+ 3/4+ (goal_difference -3) / 8,
+                                                      TRUE ~ 1),
+                                        W_team_home = case_when( pmax(goals_team_home, goals_team_away) == goals_team_home ~ 1,
+                                                                 goal_difference == 0 ~ 0.5,
+                                                                 TRUE ~ 0),
+                                        W_team_away = case_when(pmax(goals_team_home, goals_team_away) == goals_team_away ~ 1,
+                                                                goal_difference == 0 ~ 0.5,
+                                                                TRUE ~ 0)
+                                        
+  )# K ist der Gewichtungsfaktor pro Spiel pro Tordifferenz
+  
+  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
+  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
+  
+  dr_home <-rating_home - rating_away +100
+  
+  dr_away <-  rating_away - rating_home
+  
+  W_e_home <- 1 / (10^(-dr_home/400) + 1)
+  
+  W_e_away <- 1 / (10^(-dr_away/400) + 1)
+  
+  
+  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
+  
+  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
+  rating
+}
+
+#### Simulate simple ratings for future matches 
+f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
+  
+  
+  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
+  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
+  
+  dr_home <- rating_home - rating_away +100
+  
+  dr_away <- rating_away - rating_home
+  
+  
+  
+  W_e_home <- 1 / (10^(-dr_home/400) + 1)
+  
+  W_e_away <- 1 / (10^(-dr_away/400) + 1)
+  
+  W_team_home <- base::sample(x = c(1,0), size = 1, prob = c(W_e_home, W_e_away))
+  
+  W_team_away <- if (W_team_home == 1) 0 else 1
+  
+  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
+  
+  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
+  rating
+  
+  
+}
+
+###  creating score probabiblities
+simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
+  home_goals_avg <- predict(foot_model,
+                            data.frame(home=1, team=homeTeam, 
+                                       opponent=awayTeam), type="response")
+  away_goals_avg <- predict(foot_model, 
+                            data.frame(home=0, team=awayTeam, 
+                                       opponent=homeTeam), type="response")
+  prob_df <-  dpois(0:max_goals, home_goals_avg) %o% dpois(0:max_goals, away_goals_avg) 
+  map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
+}
+
+
+f_match_simulation_poisson <- function(rating , club_name_home, club_name_away, K, foot_model, max_goals = 10 ){
+  
+  
+  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
+  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
+  
+  dr_home <- rating_home - rating_away +100
+  
+  dr_away <- rating_away - rating_home
+  
+  W_e_home <- 1 / (10^(-dr_home/400) + 1)
+  
+  W_e_away <- 1 / (10^(-dr_away/400) + 1)
+  
+  
+  
+  score_prob <- simulate_score_prob(foot_model = foot_model, homeTeam = club_name_home, awayTeam = club_name_away, max_goals = max_goals)
+  
+  score_matrix <- map(0:max_goals, ~seq(from = .x*10, to = .x*10+max_goals )) %>% unlist() #%>%
+    #set_names(~ map(0:max_goals, ~ str_c("goals", .x)) %>%
+                #unlist() )  %>%
+    #as_tibble(.name_repair = "unique") 
+  
+  W_team_home <- base::sample(x = score_matrix, size = 1, prob = score_prob)
+  
+  W_team_away <- if (W_team_home <= 10) 0 else if (W_team_home >= 10) W_team_home/10
+  
+  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
+  
+  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
+  rating
+  
+  
+}

@@ -1,4 +1,4 @@
-f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K ){
+f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K, tie_prob_season ){
   
   # rating$rating_value <- rating$rating_value + rnorm(16,0,50)
   #club_name_home <- "1. SC BW Wulfen"
@@ -7,11 +7,10 @@ f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K ){
   rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
   rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
   
-  rating_home <- 2000
   
   dr <- rating_home - rating_away +100
   
-  tie_prob <- 0.12 # empirical tie probability
+  tie_prob <- tie_prob_season # empirical tie probability
   
   W_e_home <- 1 / (10^(+dr/400) + 1) - tie_prob/2
   W_e_away <- 1 / (10^(-dr/400) + 1) - tie_prob/2
@@ -28,9 +27,9 @@ f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K ){
   
   W_e_away + W_e_home + tie_prob
   
-  W_team_home <- base::sample(x = c(1,0), size = 1, prob = c(W_e_home, W_e_away))
+  W_team_home <- base::sample(x = c(1,0,0.5), size = 1, prob = c(W_e_home, W_e_away,tie_prob))
   
-  W_team_away <- if (W_team_home == 1) 0 else 1
+  W_team_away <- if (W_team_home == 1) 0 else if (W_team_home == 0.5) 0.5 else 1
   
   rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
   

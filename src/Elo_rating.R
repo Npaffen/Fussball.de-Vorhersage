@@ -11,78 +11,14 @@ database_season <- readRDS(here::here("/data/database_season.rds"))
 #Proportion zum Rankingunterschied. 
 
 
-f_rating_update <- function(rating , club_name_home, club_name_away, K, W_team_home, W_team_away ){
-  
-  
-  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
-  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
-  
-  dr_home <-rating_home - rating_away +100
-  
-  dr_away <-  rating_away - rating_home
-  
-  W_e_home <- 1 / (10^(-dr_home/400) + 1)
-  
-  W_e_away <- 1 / (10^(-dr_away/400) + 1)
-  
-  
-  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
-  
-  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
-  rating
-}
-
-f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
-  
-  
-  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
-  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
-  
-  dr_home <- rating_home - rating_away +100
-  
-  dr_away <- rating_away - rating_home
-  
-  
-  
-  W_e_home <- 1 / (10^(-dr_home/400) + 1)
-  
-  W_e_away <- 1 / (10^(-dr_away/400) + 1)
-  
-  W_team_home <- base::sample(x = c(1,0), size = 1, prob = c(W_e_home, W_e_away))
-  
-  W_team_away <- if (W_team_home == 1) 0 else 1
-  
-  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
-  
-  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
-  rating
-  
-
-}
-
-#Füge Tordifferenz hinzu
-database_mr <- database_mr %>% drop_na() %>% mutate(goal_difference = pmax(goals_team_home, goals_team_away) - pmin(goals_team_home, goals_team_away) )
-
-rating <- tibble( teams = unique(database_mr$club_name_home), rating_value = 1000)
 
 
 
-database_mr <-database_mr %>%  mutate(K = case_when(goal_difference <= 1 ~ 30,
-                                                    goal_difference == 2 ~ 30+0.5,
-                                                    goal_difference == 3 ~ 30+3/4,
-                                                    goal_difference >= 4 ~ 30+ 3/4+ (goal_difference -3) / 8,
-                                                    TRUE ~ 1),
-                                      W_team_home = case_when( pmax(goals_team_home, goals_team_away) == goals_team_home ~ 1,
-                                                               goal_difference == 0 ~ 0.5,
-                                                               TRUE ~ 0),
-                                      W_team_away = case_when(pmax(goals_team_home, goals_team_away) == goals_team_away ~ 1,
-                                                              goal_difference == 0 ~ 0.5,
-                                                              TRUE ~ 0)
-                                        
-)# K ist der Gewichtungsfaktor pro Spiel pro Tordifferenz
 
 
-  
+
+
+
 
 
 
@@ -182,8 +118,7 @@ f_rank_prob <- function(dataset, team) {
 
   rank_prob <- map_df( .x = 1:16, ~ tibble(rank_prob = dataset %>%
                                              filter( rank == .x, teams == team ) %>%
-                                             .$rank %>%
-                                             length()/200000)) %>% 
+                                             nrow()/filter(tb_cp_200000, teams == team) %>% nrow())) %>% 
     setNames(str_c(team))
   rank_prob
 }
@@ -200,7 +135,7 @@ tie_prob_season <- database_season %>%
   mutate(ties = as.numeric(ties))  %>%
   sum()/nrow(database_season %>% filter( between(as.numeric(matchday),1,20), season == 1920))
 
-f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
+f_match_simulation <- function(rating , club_name_home, club_name_away, K, tie_prob_season = tie_prob_season ){
   
   
   rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
@@ -228,4 +163,32 @@ f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
   rating
   
   
+}
+source(here::here("src/tie_prob.R"))
+
+cp_200000_no_update <- list()
+for (l in 1:200000){
+  chart_prognose <- chart_prognose_reset
+  
+  for (j in unique(db_missing_games$matchday)){
+    db_missing_matchday <- db_missing_games %>% filter( matchday == j)
+    
+    rating_sim <- rating_sim_reset
+    for (i in seq_along(db_missing_matchday$matchday)) {
+      
+      rating_sim <- f_match_simulation_tie(rating = rating_sim,
+                                       club_name_home = db_missing_matchday$club_name_home[i],
+                                       club_name_away = db_missing_matchday$club_name_away[i],
+                                       K = db_missing_matchday$K[i]
+                                       
+                                       
+      )
+    }
+    
+    for (m in seq_along(chart_prognose$teams)){
+      chart_prognose$points[m] <- if (rating_sim$rating_value[m] > rating_sim$rating_old[m]) {chart_prognose$points[m] +3} else chart_prognose$points[m]
+      
+    }
+  }
+  cp_200000_no_update[[l]] <- chart_prognose %>% arrange(desc(points)) %>% mutate(rank = 1:dim(.)[1] )
 }
