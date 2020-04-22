@@ -144,7 +144,12 @@ run_points_sim <- function(missing_games, dbs1920,
                        main = paste0("didn't converge below ", limit, 
                                      " after ", N, " runs"))
   }
-  return(list(all_final_tables, conv_plot, sim_results, win_prob_home))
+  sim_output <- list("all_final_tables" = all_final_tables,
+                     "conv_plot" = conv_plot,
+                     "sim_results" = sim_results,
+                     "win_prob_home" = cbind(missing_games,win_prob_home=win_prob_home)
+                     )
+  return(sim_output)
 }
 
 
