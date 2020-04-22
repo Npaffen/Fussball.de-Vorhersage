@@ -64,13 +64,18 @@ Finally the literature contains references to using betting markets as a benchma
 
 
 
-# Predictive Model
+# Predictive Models
 
 To predict the outcome of the cancelled games, we calculate the candidate rankings and use them to simulate the end of the 2019/2020 season. Specifically we calculate the EloRankings.net Ranking, the FIFA Women's Ranking, the points model and a version of the Total Team Average incorporating additional information. We discard the classic FIFA Men's Ranking, since it was shown to perform worse than the other candidates and was discarded by the FIFA Men's World Rankings as well in 2018.
 
 Following Correa et al. -@correa, we then run the simulation by drawing the results of each game from a binomial distribution. For each game and team, the probability of winning is dividing the ranking points awarded each team by their and their competitors sum of points.
 
 Running this simulation repeatedly should indicate the distribution and expected average of outcomes. Correa et al. -@correa execute 200,000 runs, but because of the relatively low complexity of the Kreisliga's format compared to the World Cup, especially because there are no eleminiation rounds, we expect to need less repetitions.
+
+A few alternatives have been developed for forecasting football games. The potential of using independent Poisson distributions to match the empirical distribution of goals scored by a team has been improved on by introducing correlation between the teams playing against one another in a bivariate Poisson distribution @karlis2003.
+
+While the independent Poisson distributions already allowed for a better fit and to model the outcome of draws, Boshnakov et al. -@boshnakov2016 used a Weibull count model to improve even on the bivariate Poisson model, allowing them even to outperform betting market in selected bets.
+
 
 
 

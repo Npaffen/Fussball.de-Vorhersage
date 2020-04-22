@@ -41,26 +41,63 @@ missing_games <- anti_join(all_games, games_played)
 #missing_games2 <- readRDS("data/database_missing_matches_1920.rds")
 
 
-# - Repeat: simulate missing games
+# repeatedly simulate missing games and calculate average
 
-sim_results <- missing_games
-win_prob_home <- map2(
-  sim_results$club_name_home,
-  sim_results$club_name_away,
-  ~sim_points(.x, .y, dbs_data = dbs1920)
-  )
-win_prob_home <- unlist(win_prob_home) # point winning probs
-
-N <- 5000 # simulation runs
-sim_output <- run_points_sim(missing_games, win_prob_home, sim_results, N, limit = 0.01)
-all_final_tables <- sim_output[[1]]
-sim_output[[2]] # print convergence plot
+if(0){
+  N <- 5000 # simulation runs
+  sim_output <- run_points_sim(missing_games, dbs1920, win_prob_home,
+                               sim_results, N, limit = 0.01)
+  saveRDS(sim_output, paste0(getwd(), "/data/point_simulation.rds"))
+}
+sim_output <- loadRDS(paste0(getwd(), "/data/point_simulation.rds"))
+# simulated data
+all_final_tables <- sim_output[[1]] 
+# convergence plot
+sim_output[[2]]
+# missing game results
+sim_output[[3]] 
+# winning probabilities
+cbind(missing_games,sim_output[[4]])
+# average rable results
 average_table <- aggregate(all_final_tables[,-1],
                            by = list(all_final_tables$club_name),
                            FUN = "mean")
-
-
-
 # - evaluate result
 
-View(average_table)
+print(average_table)
+
+
+# calculate ranking plot
+
+all_final_tables <- sim_output[[1]] 
+all_final_tables$run <- rep(1:(length(all_final_tables$score)/16), each = 16)
+all_final_tables$rank <- NA
+
+for(i in 1:(length(all_final_tables$score)/16)){
+  tab <- all_final_tables[all_final_tables$run == i,]
+  tab <- transform(tab, rank = rank(-score, ties.method = "first"))
+  all_final_tables[all_final_tables$run == i,] <- tab
+}
+
+df <- all_final_tables
+df <- df[,c("club_name","run","rank")]
+#df <- group_by(df, "club_name")
+
+# plot selection
+dfa <- filter(df, club_name %in% c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II", "	SV Altendorf-Ulfkotte"))
+# rank as lines
+rank_plot <- ggplot(dfa, aes(x=run, y=rank, colour = club_name))
+rank_plot + geom_line()
+# rank as histogram
+dfa <- filter(df, club_name %in% c("VfL Ramsdorf"))
+rank_plot <- ggplot(dfa, aes(x = factor(rank)))
+rank_plot + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title= "VfL Ramsdorf ranking distribution")
+# all ranks hist
+dfa <- filter(df, club_name %in%
+                c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II",
+                  "SV Altendorf-Ulfkotte"))
+ggplot(dfa,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
+ggplot(df,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
