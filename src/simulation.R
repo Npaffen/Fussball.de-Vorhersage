@@ -1,8 +1,12 @@
 ## Simulate results of the 19/20 season for Kreisliga Recklinghausen
-# starting with the coin flip simulation
-# 1. (Weighted) Table Points
-# 2. EloRatings.Net
-# 3. FIFA Women's World Cup Ranking
+# starting with the coin flip simulation and the table point method
+
+## 0. Preparation
+## 1. simulation
+## 2. evaluate result
+## 3. calculate plots
+
+
 
 ## 0. Preparation
 
@@ -31,7 +35,7 @@ dbs1920 <- dbs[dbs$season == "1920",]
 
 
 
-## 1. Table Point
+## 1. simulation
 
 
 # - check games status
@@ -49,55 +53,68 @@ if(0){
                                sim_results, N, limit = 0.01)
   saveRDS(sim_output, paste0(getwd(), "/data/point_simulation.rds"))
 }
-sim_output <- loadRDS(paste0(getwd(), "/data/point_simulation.rds"))
+sim_output <- readRDS(paste0(getwd(), "/data/point_simulation.rds"))
 # simulated data
-all_final_tables <- sim_output[[1]] 
+sim_output$all_final_tables
 # convergence plot
-sim_output[[2]]
+sim_output$conv_plot
 # missing game results
-sim_output[[3]] 
+sim_output$sim_results
 # winning probabilities
-cbind(missing_games,sim_output[[4]])
-# average rable results
-average_table <- aggregate(all_final_tables[,-1],
-                           by = list(all_final_tables$club_name),
-                           FUN = "mean")
-# - evaluate result
+sim_output$win_prob_home
+# average table convergence
+sim_output$all_avg_tables
 
+
+
+## 2. evaluate result
+
+all_final_tables <- sim_output$all_final_tables
+all_final_tables <- add_run_rank_col(x = all_final_tables)
+all_avg_tables <- sim_output$all_avg_tables
+all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+
+# average table result
+average_table <- all_avg_tables[
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),]
 print(average_table)
+#View(average_table)
 
 
-# calculate ranking plot
 
-all_final_tables <- sim_output[[1]] 
-all_final_tables$run <- rep(1:(length(all_final_tables$score)/16), each = 16)
-all_final_tables$rank <- NA
+## 3. calculate plots
 
-for(i in 1:(length(all_final_tables$score)/16)){
-  tab <- all_final_tables[all_final_tables$run == i,]
-  tab <- transform(tab, rank = rank(-score, ties.method = "first"))
-  all_final_tables[all_final_tables$run == i,] <- tab
-}
 
-df <- all_final_tables
-df <- df[,c("club_name","run","rank")]
-#df <- group_by(df, "club_name")
+# compare some clubs
+club_names <- c("SV Altendorf-Ulfkotte",
+                "SV Schermbeck II",
+                "TuS Gahlen",
+                "VfL Ramsdorf")
 
-# plot selection
-dfa <- filter(df, club_name %in% c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II", "	SV Altendorf-Ulfkotte"))
-# rank as lines
-rank_plot <- ggplot(dfa, aes(x=run, y=rank, colour = club_name))
-rank_plot + geom_line()
-# rank as histogram
-dfa <- filter(df, club_name %in% c("VfL Ramsdorf"))
-rank_plot <- ggplot(dfa, aes(x = factor(rank)))
-rank_plot + 
-  geom_bar(aes(y = (..count..)/sum(..count..))) + 
-  scale_y_continuous(labels = scales::percent) +
-  labs(title= "VfL Ramsdorf ranking distribution")
-# all ranks hist
-dfa <- filter(df, club_name %in%
-                c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II",
-                  "SV Altendorf-Ulfkotte"))
-ggplot(dfa,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
-ggplot(df,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
+# track one club
+club_names <- "VfL Ramsdorf"
+
+# all
+club_names <- unique(dbs1920$club_name)
+
+# run plots
+
+# rankings
+make_plot(x = all_final_tables, y = "rank",
+          club_names, type = "hist")
+make_plot(x = all_final_tables, y = "rank",
+          club_names, type = "line")
+
+# final table score
+make_plot(x = all_final_tables, y = "score",
+          club_names, type = "hist")
+make_plot(x = all_final_tables, y = "score",
+          club_names, type = "line")
+
+# convergence
+make_plot(x = all_avg_tables, y = "rank",
+          club_names, type = "line")
+make_plot(x = all_avg_tables, y = "score",
+            club_names, type = "line")
+
+
