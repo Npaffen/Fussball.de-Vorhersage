@@ -18,7 +18,15 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
   source("src/get_season_table_contents.R")
   message(paste("Loaded game days: ", length(md_season_url),
                 "\n Will begin scraping..."))
-  database_season <-  map_df(md_season_url, ~f_extract_season(md_url_season = .x ))
+  database_season <-  map_df(md_season_url, ~f_extract_season(md_url_season = .x )) %>% mutate(season = as.numeric(season),
+                                               matchday = as.numeric(matchday),
+                                               games = as.numeric(games),
+                                               wins = as.numeric(wins),
+                                               ties = as.numeric(ties),
+                                               loss = as.numeric(loss),
+                                               goal_diff = as.numeric(goal_diff),
+                                               points = as.numeric(points))
+  
   saveRDS(database_season, here::here("/data/database_season_1920.rds"))
   
   #Download match results 
