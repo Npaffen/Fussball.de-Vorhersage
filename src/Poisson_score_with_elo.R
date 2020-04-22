@@ -34,7 +34,7 @@ poisson_model <-
   glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
 summary(poisson_model)
 
-matchday30 <- databse_season %>% filter(season == 1920, matchday == 30)
+matchday30 <- database_season %>% filter(season == 1920, matchday == 30)
 
 
 N <- 5000 # simulation runs
@@ -44,3 +44,21 @@ sim_output[[2]] # print convergence plot
 average_table <- aggregate(all_final_tables[,-1],
                            by = list(all_final_tables$club_name),
                            FUN = "mean")
+# plot selection
+dfa <- filter(df, club_name %in% c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II", "	SV Altendorf-Ulfkotte"))
+# rank as lines
+rank_plot <- ggplot(dfa, aes(x=run, y=rank, colour = club_name))
+rank_plot + geom_line()
+# rank as histogram
+dfa <- filter(df, club_name %in% c("VfL Ramsdorf"))
+rank_plot <- ggplot(dfa, aes(x = factor(rank)))
+rank_plot + 
+  geom_bar(aes(y = (..count..)/sum(..count..))) + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(title= "VfL Ramsdorf ranking distribution")
+# all ranks hist
+dfa <- filter(df, club_name %in%
+                c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II",
+                  "SV Altendorf-Ulfkotte"))
+ggplot(dfa,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
+ggplot(df,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)

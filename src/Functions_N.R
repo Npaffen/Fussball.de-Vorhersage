@@ -1,9 +1,9 @@
 ##### rating  for the first 20 matchdays (real data)
 
-f_rating <- function(played_matchdays , club_name_home, club_name_away){
+f_rating <- function(played_matchdays){
   
   #Füge Tordifferenz hinzu
-  rating <- tibble( teams = unique(club_name_home), rating_value = 1000)
+  rating <- tibble( teams = unique(club_name_home), rating_value_home = 1000, rating_value_away = 1000)
   
   played_matchdays<- played_matchdays %>%
     mutate(goal_difference = pmax(goals_team_home, goals_team_away) - pmin(goals_team_home, goals_team_away) )
@@ -23,55 +23,33 @@ f_rating <- function(played_matchdays , club_name_home, club_name_away){
                                  W_team_away = case_when(pmax(goals_team_home, goals_team_away) == goals_team_away ~ 1,
                                                          goal_difference == 0 ~ 0.5,
                                                          TRUE ~ 0)
-                                 
-  )# K ist der Gewichtungsfaktor pro Spiel pro Tordifferenz
-  
-  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
-  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
+                                 )# K ist der Gewichtungsfaktor pro Spiel pro Tordifferenz
+  rating_home <- as.numeric()
+  rating_away <- as.numeric()
+  dr_home <- as.numeric()
+  W_e_home <- as.numeric()
+  W_e_away <- as.numeric()
+  for (m in seq_along(played_matchdays$club_name_home)){
+  rating_home <-  rating %>% filter(teams == played_matchdays$club_name_home[m]) %>% .$rating_value_home
+  rating_away <-  rating %>% filter(teams == played_matchdays$club_name_away[m]) %>% .$rating_value_away
   
   dr_home <-rating_home - rating_away +100
   
   dr_away <-  rating_away - rating_home
-  
+
   W_e_home <- 1 / (10^(-dr_home/400) + 1)
   
   W_e_away <- 1 / (10^(-dr_away/400) + 1)
   
   
-  rating$rating_value[rating$teams == club_name_home] <- rating_home + played_matchdays$K * (played_matchdays$W_team_home - W_e_home)
+  rating$rating_value_home[rating$teams == played_matchdays$club_name_home[m]] <- rating_home + played_matchdays$K[m] * (played_matchdays$W_team_home[m] - W_e_home)
   
-  rating$rating_value[rating$teams == club_name_away] <- rating_away + played_matchdays$K * (played_matchdays$W_team_away - W_e_away)
+  rating$rating_value_away[rating$teams == played_matchdays$club_name_away[m]] <- rating_away + played_matchdays$K[m] * (played_matchdays$W_team_away[m] - W_e_away)
+  }
   rating
 }
 
-#### Simulate simple ratings for future matches 
-f_match_simulation <- function(rating , club_name_home, club_name_away, K ){
-  
-  
-  rating_home <-  rating %>% filter(teams == club_name_home) %>% .$rating_value
-  rating_away <-  rating %>% filter(teams == club_name_away) %>% .$rating_value
-  
-  dr_home <- rating_home - rating_away +100
-  
-  dr_away <- rating_away - rating_home
-  
-  
-  
-  W_e_home <- 1 / (10^(-dr_home/400) + 1)
-  
-  W_e_away <- 1 / (10^(-dr_away/400) + 1)
-  
-  W_team_home <- base::sample(x = c(1,0), size = 1, prob = c(W_e_home, W_e_away))
-  
-  W_team_away <- if (W_team_home == 1) 0 else 1
-  
-  rating$rating_value[rating$teams == club_name_home] <- rating_home + K * (W_team_home - W_e_home)
-  
-  rating$rating_value[rating$teams == club_name_away] <- rating_away + K * (W_team_away - W_e_away)
-  rating
-  
-  
-}
+
 
 ###  creating score probabiblities
 f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
@@ -84,7 +62,7 @@ f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
   dpois(0:max_goals, home_goals_avg) %o% dpois(0:max_goals, away_goals_avg) 
   #map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
 }
-
+#simulate poisson score prob model
 f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goals = 10, N, limit ){
   
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
@@ -92,26 +70,26 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
   matchday30_reset <- matchday30
   conv <- numeric()
   for(i in 1:N){
-    Goals_team_away <- 0
-    Goals_team_home <- 0
+    Goals_team_away_u <- 0
+    Goals_team_home_u <- 0
     matchday30 <- matchday30_reset
       for (m in seq_along(missinggames$club_name_home)){
-        score_prob <- simulate_score_prob(foot_model = foot_model,
+        score_prob <- f_simulate_score_prob(foot_model = foot_model,
                                           homeTeam = missinggames$club_name_home[m],
                                           awayTeam = missinggames$club_name_away[m],
                                           max_goals = max_goals)
         
         score <- base::sample(x = score_prob, size = 1, prob = score_prob)
         
-        Goals_team_home[m] <- which(score_prob == score, arr.ind = T)[1]
+        Goals_team_home_u[m] <- which(score_prob == score, arr.ind = T)[1]
         
-        Goals_team_away[m] <- which(score_prob == score, arr.ind = T)[2]
-      }
+        Goals_team_away_u[m] <- which(score_prob == score, arr.ind = T)[2]
+        }
     
-    missinggames <- missinggames %>% mutate(Goals_team_home = Goals_team_home,
-                                            Goals_team_away = Goals_team_away,
-                                            Goal_diff_home = Goals_team_home - Goals_team_away,
-                                            Goal_diff_away = Goals_team_away - Goals_team_home)
+    missinggames <- missinggames %>% mutate(Goals_team_home = Goals_team_home_u,
+                                            Goals_team_away = Goals_team_away_u,
+                                            Goal_diff_home = Goals_team_home_u - Goals_team_away_u,
+                                            Goal_diff_away = Goals_team_away_u - Goals_team_home_u)
     
     missinggames <- missinggames %>%
       mutate(points_team_home = case_when(Goals_team_home > Goals_team_away ~3, Goals_team_home == Goals_team_away ~ 1, TRUE ~ 0),
@@ -144,9 +122,116 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
               goal_diff_new = goal_diff_update,
               goal_diff = goal_diff + goal_diff_new) %>%
       select(club_name, points, goal_diff) %>%
-      arrange(desc(points), desc(goal_diff)) %>%
-      mutate(rank = 1:16)%>%
-      select(rank, everything())
+      arrange(desc(points), desc(goal_diff)) 
+    
+    all_final_tables <- bind_rows(all_final_tables,final_table)
+    
+    average_table <- aggregate(
+      all_final_tables[1:(length(clubs)*(i-1)),-1],
+      by = list(all_final_tables$club_name[1:(length(clubs)*(i-1))]),
+      FUN = "mean"
+    )
+    average_table2 <- aggregate(
+      all_final_tables[,-1],
+      by = list(all_final_tables$club_name),
+      FUN = "mean"
+    )
+    conv_speed <- sum(abs(average_table$points-average_table2$points))
+    conv <- c(conv, conv_speed)
+    if(i %% 10 == 0){
+      message("convergence speed: ", round(conv_speed, 3), " run ", i, " out of ", N)
+    }
+    if(conv_speed < limit){
+      message("converged!")
+      break
+    }
+  }
+  if(conv_speed < limit){
+    conv_plot <- qplot(x=1:length(conv), y=conv, geom = "jitter",
+                       main = paste0("converged to below ", limit, 
+                                     " after ", length(conv), " runs"))
+  } else {
+    conv_plot <- qplot(x=1:length(conv), y=conv, geom = "jitter",
+                       main = paste0("didn't converge below ", limit, 
+                                     " after ", N, " runs"))
+  }
+  return(list(all_final_tables, conv_plot))
+}
+#simulation of elo ratin model
+f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, limit ){
+  
+  all_final_tables <- data.frame(stringsAsFactors = FALSE)
+  
+  clubs <- matchday30$club_name
+  
+  matchday30_reset <- matchday30
+  
+  tie_prob <- database_season %>%
+    filter( season == 1920) %>%
+    select(ties) %>% 
+    sum/length(database_season$ties)
+  
+  
+  conv <- numeric()
+  for(i in 1:N){
+    Goals_team_away_u <- 0
+    Goals_team_home_u <- 0
+    matchday30 <- matchday30_reset
+    for (m in seq_along(missinggames$club_name_home)){
+      rating_home <-  rating %>% filter(teams == club_name_home[m]) %>% .$rating_value_home
+      rating_away <-  rating %>% filter(teams == club_name_away[m]) %>% .$rating_value_away
+      
+      
+      dr <- rating_home - rating_away +100
+      
+      if (ties == T){
+        
+        W_e_home <- 1 / (10^(+dr/400) + 1) - tie_prob/2
+        W_e_away <- 1 / (10^(-dr/400) + 1) - tie_prob/2
+      } else {
+        
+        W_e_home <- 1 / (10^(+dr/400) + 1)
+        W_e_away <- 1 / (10^(-dr/400) + 1)
+      }
+      
+      if(W_e_home <= 0){
+        tie_prob <- tie_prob + W_e_home
+        W_e_home <- 0
+      }
+      
+      if(W_e_away <= 0){
+        tie_prob <- tie_prob + W_e_away
+        W_e_away <- 0
+      }
+      
+      # W_e_away + W_e_home + tie_prob
+      
+      W_team_home[m] <- base::sample(x = c(3,0,1), size = 1, prob = c(W_e_home, W_e_away,tie_prob))
+      
+      W_team_away[m] <- if (W_team_home[m] == 3) 0 else if (W_team_home[m] == 1) 1 else 0
+      
+    }
+    
+    missinggames <- missinggames %>% mutate(points_team_home = W_team_home,
+                                            points_team_away = W_team_away,
+    )
+    
+    
+    points_update <- map(clubs, ~ missinggames %>%
+                           filter(club_name_home == .x ) %>%
+                           select(points_team_home) %>%
+                           sum()+ missinggames %>% 
+                           filter(club_name_away == .x ) %>%
+                           select(points_team_away) %>% 
+                           sum()) %>%
+      unlist 
+    
+    
+    final_table <- matchday30 %>%
+      mutate( points_new =  points_update,
+              points = points + points_new)%>%
+      select(club_name, points) %>%
+      arrange(desc(points)) 
     
     all_final_tables <- bind_rows(all_final_tables,final_table)
     
