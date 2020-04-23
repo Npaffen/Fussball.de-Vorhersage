@@ -38,3 +38,6 @@ f_match_simulation_tie <- function(rating , club_name_home, club_name_away, K, t
   
   
 }
+
+
+

@@ -4,7 +4,7 @@ database_mr <- read_rds(str_c(here::here() , "data", "database_match_results_192
 
 missinggames <- read_rds(here::here("/data/database_missing_matches_1920.rds"))
 
-database_season <- readRDS(here::here("/data/database_season.rds"))  
+database_season <- readRDS(here::here("/data/database_season_1920.rds"))  
 
 source(here::here("src/functions_N.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 

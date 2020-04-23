@@ -20,8 +20,6 @@ source(here::here("src/functions_N.R"))
 
 
 
-function(played_matchdays , club_name_home, club_name_away)
-
 
 
 
@@ -35,4 +33,9 @@ played_matchdays <- database_mr %>% filter(between(matchday,1,20))
 matchday30 <- database_season %>% filter(matchday == 30)
 
 N = 5000
-f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.000001 )
+sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01 )
+all_final_tables <- sim_output[[1]]
+sim_output[[2]] # print convergence plot
+average_table <- aggregate(all_final_tables[,-1],
+                           by = list(all_final_tables$club_name),
+                           FUN = "mean")

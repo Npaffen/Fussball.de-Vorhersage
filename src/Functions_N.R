@@ -35,7 +35,7 @@ f_rating <- function(played_matchdays){
   
   dr_home <-rating_home - rating_away +100
   
-  dr_away <-  rating_away - rating_home
+  dr_away <-  1 - dr_home
 
   W_e_home <- 1 / (10^(-dr_home/400) + 1)
   
@@ -177,21 +177,28 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
     Goals_team_away_u <- 0
     Goals_team_home_u <- 0
     matchday30 <- matchday30_reset
+    rating_home <- as.numeric()
+    rating_away <- as.numeric()
+    dr_home <- as.numeric()
+    W_e_home <- as.numeric()
+    W_e_away <- as.numeric()
     for (m in seq_along(missinggames$club_name_home)){
       rating_home <-  rating %>% filter(teams == club_name_home[m]) %>% .$rating_value_home
       rating_away <-  rating %>% filter(teams == club_name_away[m]) %>% .$rating_value_away
       
       
-      dr <- rating_home - rating_away +100
+      dr_home <- rating_home - rating_away +100
+      
+      dr_away <-  1 - dr_home
       
       if (ties == T){
         
-        W_e_home <- 1 / (10^(+dr/400) + 1) - tie_prob/2
-        W_e_away <- 1 / (10^(-dr/400) + 1) - tie_prob/2
+        W_e_home <- 1 / (10^(+dr_home/400) + 1) - tie_prob/2
+        W_e_away <- 1 / (10^(-dr_away/400) + 1) - tie_prob/2
       } else {
         
-        W_e_home <- 1 / (10^(+dr/400) + 1)
-        W_e_away <- 1 / (10^(-dr/400) + 1)
+        W_e_home <- 1 / (10^(+dr_home/400) + 1)
+        W_e_away <- 1 / (10^(-dr_away/400) + 1)
       }
       
       if(W_e_home <= 0){
@@ -208,7 +215,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
       
       W_team_home[m] <- base::sample(x = c(3,0,1), size = 1, prob = c(W_e_home, W_e_away,tie_prob))
       
-      W_team_away[m] <- if (W_team_home[m] == 3) 0 else if (W_team_home[m] == 1) 1 else 0
+      W_team_away[m] <- if (W_team_home[m] == 3) 0 else if (W_team_home[m] == 1) 1 else 3
       
     }
     
@@ -236,12 +243,12 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
     all_final_tables <- bind_rows(all_final_tables,final_table)
     
     average_table <- aggregate(
-      all_final_tables[1:(length(clubs)*(i-1)),-1],
+      all_final_tables[1:(length(clubs)*(i-1)),],
       by = list(all_final_tables$club_name[1:(length(clubs)*(i-1))]),
       FUN = "mean"
     )
     average_table2 <- aggregate(
-      all_final_tables[,-1],
+      all_final_tables,
       by = list(all_final_tables$club_name),
       FUN = "mean"
     )
