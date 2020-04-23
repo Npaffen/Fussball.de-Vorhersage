@@ -1,9 +1,11 @@
+# !diagnostics suppress=<played_matchdays>
+
 ##### rating  for the first 20 matchdays (real data)
 
 f_rating <- function(played_matchdays){
   
   #Füge Tordifferenz hinzu
-  rating <- tibble( teams = unique(club_name_home), rating_value_home = 1000, rating_value_away = 1000)
+  rating <- tibble( teams = unique(played_matchdays$club_name_home), rating_value_home = 1000, rating_value_away = 1000)
   
   played_matchdays<- played_matchdays %>%
     mutate(goal_difference = pmax(goals_team_home, goals_team_away) - pmin(goals_team_home, goals_team_away) )
@@ -64,7 +66,7 @@ f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
 }
 #simulate poisson score prob model
 f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goals = 10, N, limit ){
-  
+  all_avg_tables <- data.frame(stringsAsFactors = FALSE)
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
   clubs <- matchday30$club_name
   matchday30_reset <- matchday30
@@ -136,6 +138,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
       by = list(all_final_tables$club_name),
       FUN = "mean"
     )
+    all_avg_tables <- bind_rows(all_avg_tables, average_table2)
     conv_speed <- sum(abs(average_table$points-average_table2$points))
     conv <- c(conv, conv_speed)
     if(i %% 10 == 0){
@@ -155,11 +158,16 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
                        main = paste0("didn't converge below ", limit, 
                                      " after ", N, " runs"))
   }
-  return(list(all_final_tables, conv_plot))
+  all_avg_tables <- rename(all_avg_tables, club_name = Group.1)
+  sim_output <- list("all_final_tables" = all_final_tables,
+                     "conv_plot" = conv_plot,
+                     "all_avg_tables" = all_avg_tables
+  )
+  return(sim_output)
 }
 #simulation of elo ratin model
 f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, limit ){
-  
+  all_avg_tables <- data.frame(stringsAsFactors = FALSE)
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
   
   clubs <- matchday30$club_name
@@ -182,9 +190,11 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
     dr_home <- as.numeric()
     W_e_home <- as.numeric()
     W_e_away <- as.numeric()
+    W_team_home <- as.numeric()
+    W_team_away <- as.numeric()
     for (m in seq_along(missinggames$club_name_home)){
-      rating_home <-  rating %>% filter(teams == club_name_home[m]) %>% .$rating_value_home
-      rating_away <-  rating %>% filter(teams == club_name_away[m]) %>% .$rating_value_away
+      rating_home <-  rating %>% filter(teams == missinggames$club_name_home[m]) %>% .$rating_value_home
+      rating_away <-  rating %>% filter(teams == missinggames$club_name_away[m]) %>% .$rating_value_away
       
       
       dr_home <- rating_home - rating_away +100
@@ -252,6 +262,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
       by = list(all_final_tables$club_name),
       FUN = "mean"
     )
+    all_avg_tables <- bind_rows(all_avg_tables, average_table2)
     conv_speed <- sum(abs(average_table$points-average_table2$points))
     conv <- c(conv, conv_speed)
     if(i %% 10 == 0){
@@ -271,5 +282,53 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
                        main = paste0("didn't converge below ", limit, 
                                      " after ", N, " runs"))
   }
-  return(list(all_final_tables, conv_plot))
+  all_avg_tables <- all_avg_tables 
+  sim_output <- list("all_final_tables" = all_final_tables,
+                     "conv_plot" = conv_plot,
+                     "all_avg_tables" = all_avg_tables
+  )
+  return(sim_output)
 }
+
+############################################################
+## add_rank_col(), adds run and rank column to all_tables output
+
+add_run_rank_col <- function(x = all_final_tables){
+  x$run <- rep(1:(length(x$score)/16), each = 16)
+  x$rank <- NA
+  for(i in 1:(length(x$score)/16)){
+    tab <- x[x$run == i,]
+    tab <- transform(tab, rank = rank(-score, ties.method = "first"))
+    x[x$run == i,] <- tab
+  }
+  return(x)
+}
+
+############################################################
+## make_plot(), makes output plots
+
+make_plot <- function(x = all_final_tables,
+                      y = "rank",
+                      club_names = c("SV Altendorf-Ulfkotte",
+                                     "SV Schermbeck II",
+                                     "TuS Gahlen",
+                                     "VfL Ramsdorf"),
+                      type = "hist"){
+  dfa <- x
+  dfa <- filter(dfa, club_name %in% club_names)
+  if(type == "line"){
+    make_plot <- ggplot(dfa, aes_string(x="run", y=y, colour = "club_name"))
+    return(make_plot + geom_line())
+  }
+  if(type == "hist"){
+    make_plot <- ggplot(dfa, aes_string(x=y, fill="club_name"))
+    return(make_plot + 
+             geom_bar(aes(y = (..count..)/sum(..count..))) + 
+             scale_y_continuous(labels = scales::percent)+
+             labs(title= paste0(y, " histogram")) 
+    )
+  }
+}
+
+
+

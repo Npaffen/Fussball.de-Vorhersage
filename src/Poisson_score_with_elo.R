@@ -26,9 +26,9 @@ poisson_model <-
       opponent=database_mr$club_name_away,
       home=1),
     tibble(
-      goals=database_mr$goals_team_home,
-      team=database_mr$club_name_home,
-      opponent=database_mr$club_name_away,
+      goals=database_mr$goals_team_away,
+      team=database_mr$club_name_away,
+      opponent=database_mr$club_name_home,
       home=0)) %>%
   
   glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
@@ -36,29 +36,66 @@ summary(poisson_model)
 
 matchday30 <- database_season %>% filter(season == 1920, matchday == 30)
 
-
+if(0){
 N <- 5000 # simulation runs
-sim_output <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 10, N, limit = 0.01)
-all_final_tables <- sim_output[[1]]
-sim_output[[2]] # print convergence plot
-average_table <- aggregate(all_final_tables[,-1],
-                           by = list(all_final_tables$club_name),
-                           FUN = "mean")
-# plot selection
-dfa <- filter(df, club_name %in% c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II", "	SV Altendorf-Ulfkotte"))
-# rank as lines
-rank_plot <- ggplot(dfa, aes(x=run, y=rank, colour = club_name))
-rank_plot + geom_line()
-# rank as histogram
-dfa <- filter(df, club_name %in% c("VfL Ramsdorf"))
-rank_plot <- ggplot(dfa, aes(x = factor(rank)))
-rank_plot + 
-  geom_bar(aes(y = (..count..)/sum(..count..))) + 
-  scale_y_continuous(labels = scales::percent) +
-  labs(title= "VfL Ramsdorf ranking distribution")
-# all ranks hist
-dfa <- filter(df, club_name %in%
-                c("VfL Ramsdorf","TuS Gahlen", "SV Schermbeck II",
-                  "SV Altendorf-Ulfkotte"))
-ggplot(dfa,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
-ggplot(df,aes(x=rank, fill=club_name)) + geom_histogram(alpha=0.25, binwidth = 1)
+sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 10, N, limit = 0.01)
+saveRDS(sim_output, paste0(getwd(), "/data/poisson_score_simulation.rds"))
+}
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+
+# 2. evaluate result
+
+all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
+all_final_tables <- add_run_rank_col(x = all_final_tables)
+all_avg_tables <- sim_output$all_avg_tables%>% rename(score = points)
+all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+
+# average table result
+average_table <- all_avg_tables[
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),]
+print(average_table)
+#View(average_table)
+
+
+
+## 3. calculate plots
+
+
+# compare some clubs
+club_names <- c("SV Altendorf-Ulfkotte",
+                "SV Schermbeck II",
+                "TuS Gahlen",
+                "VfL Ramsdorf")
+
+# track one club
+club_names <- "VfL Ramsdorf"
+
+# all
+club_names <- unique(database_season$club_name)
+
+# run plots
+
+# rankings
+make_plot(x = all_final_tables, y = "rank",
+          club_names, type = "hist")
+make_plot(x = all_final_tables, y = "rank",
+          club_names, type = "line")
+
+# final table score
+make_plot(x = all_final_tables, y = "score",
+          club_names, type = "hist")
+make_plot(x = all_final_tables, y = "score",
+          club_names, type = "line")
+
+# final table goal difference
+make_plot(x = all_final_tables, y = "goal_diff",
+          club_names, type = "hist")
+make_plot(x = all_final_tables, y = "goal_diff",
+          club_names, type = "line")
+
+# convergence
+make_plot(x = all_avg_tables, y = "rank",
+          club_names, type = "line")
+make_plot(x = all_avg_tables, y = "score",
+          club_names, type = "line")
+
