@@ -98,4 +98,8 @@ make_plot(x = all_avg_tables, y = "rank",
           club_names, type = "line")
 make_plot(x = all_avg_tables, y = "score",
           club_names, type = "line")
-
+summe <- 0
+for (i in 2000:2004){
+  summe <- 33.8 + (2006-2000) *1.6 
+}
+summe/5
