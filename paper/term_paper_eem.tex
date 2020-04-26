@@ -341,7 +341,7 @@ al.~\autocite*{baseball}. While this concerns baseball, the principle is
 not dependent on the rules of the game, but it is based on the influence
 of individuals' and team's statistics on game outcomes. This is an
 application of the model proposed by Albert and Bennet
-\autocite*{bennet2007}. They use the fact that wins and losses appear to
+\autocite*{albert2007}. They use the fact that wins and losses appear to
 be normally distributed in the long run, so chance and skill should both
 play a role. Team ability is then calculated as the deviation from the
 average winning probability over time. Very generally, available
@@ -370,12 +370,37 @@ interesting reference point.
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-(Nils: Describe the website and scraping process)
+For the simulation study we decided to use data from the amateur
+football league of the Kreisliga A Kreis Recklinghausen class A1 in
+Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16
+clubs will play against each other on a total of 30 match days in one
+home and one away game each. Due to the well known Corona crisis the
+association has decided to cancel all matches from 15.03.2020. After
+all, 20 matchdays have already been played until this point in time
+which corresponds to a database of 158 matches. As the first half of the
+season had already been completed, each team had already played at least
+once against each team in the table. The extraction of real data from
+websites using scraping scripts can be complicated, as website operators
+have an interest in protecting their data from such automated queries.
+\enquote{Fussball.de} is a website of the DFB (German Football
+Association) which acts as a collection point for match results and
+news, especially in the amateur sector. The match results of the website
+itself cannot be directly read out. They are masked ,so they are made
+unreadable when viewing the HTML file and are only evaluated afterwards
+using a javascript and transferred to the CSS of the site. The site also
+offers a match report, which graphically represents a temporal course of
+the match. This is broken down in the HTML code, in contrast to the
+match results, unmasked, and shows the course of the match in text form.
+With the help of regular expression operations, such as pattern
+matching, the game result can be reconstructed. The data record was then
+divided into completed and unplayed games. The latter amount to 89 in
+this season, which were simulated with the methods of the following
+chapters.
 
 (David: Describe calculating the values needed for the models.)
 
-\hypertarget{predictive-model}{%
-\section{Predictive Model}\label{predictive-model}}
+\hypertarget{predictive-models}{%
+\section{Predictive Models}\label{predictive-models}}
 
 To predict the outcome of the cancelled games, we calculate the
 candidate rankings and use them to simulate the end of the 2019/2020
@@ -385,6 +410,33 @@ Average incorporating additional information. We discard the classic
 FIFA Men's Ranking, since it was shown to perform worse than the other
 candidates and was discarded by the FIFA Men's World Rankings as well in
 2018.
+
+Our second model is based on the rating algorithm of
+\hyperref{eloratings.net}{eloratings.net/about}. The anonymous site
+operator formulates the rating, representative for the strength of a
+team, as follows : \begin{align*}
+R_n = R_0 + K \times (W - W_e).
+\end{align*} Here R\_n is defined as the new rating and R\_o is the old
+rating. The weighting factor for each match is defined by the type of
+tournament in which the match takes place and also controls for friendly
+matches, which is given to the lowest weight of 20. While matches in
+world championships and other major international tournaments are given
+weights between 40 and 60, the rest falls into the category \enquote{all
+other tournaments} which are given a weighting factor of 30. Following
+this example, we also set K to 30 for matches already played in the
+Kreisliga A. The weighting factor K is adjusted again based on the goal
+difference of the result. Thus, K is increased by \(K/2\) if the match
+was won with two goals, by \(3/4\times K\) if the match was won with
+three goals and by \(3/4 + (N-3)/8 \times K\), where N defines the goal
+difference of the match if the match was won with four or more goals. W
+is the result of the match. 0 for a loss, 0.5 for a draw and 1 for a
+win. W\_e is the probability of winning defined by the following formula
+: \begin{align*}
+W_e = 1/(10^{(-dr/400)}+1)
+\end{align*} where dr is defined as the rating difference and the home
+team receives a bonus of 100 points. This bonus is considered to be a
+psychological advantage resulting from the fact that the game is played
+in the home stadium(see, e.g., \textcite{Pollard2008}).
 
 Following Correa et al.~\autocite*{correa}, we then run the simulation
 by drawing the results of each game from a binomial distribution. For
@@ -397,13 +449,33 @@ expected average of outcomes. Correa et al.~\autocite*{correa} execute
 Kreisliga's format compared to the World Cup, especially because there
 are no eleminiation rounds, we expect to need less repetitions.
 
+A few alternatives have been developed for forecasting football games.
+The potential of using independent Poisson distributions to match the
+empirical distribution of goals scored by a team has been improved on by
+introducing correlation between the teams playing against one another in
+a bivariate Poisson distribution \textcite{karlis2003}.
+
+While the independent Poisson distributions already allowed for a better
+fit and to model the outcome of draws, Boshnakov et
+al.~\autocite*{boshnakov2016} used a Weibull count model to improve even
+on the bivariate Poisson model, allowing them even to outperform betting
+market in selected bets.
+
 \hypertarget{results}{%
 \section{Results}\label{results}}
+
+For the simulation study using the elo rating, as explained in the
+predictive models chapter,we used the average of all matches played in
+the current season resulting in a tie for the probability of a draw.
+Half of the percentage points are deducted from the home team's winning
+probability and half from the away team's winning probability.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
 \newpage
+
+\printbibliography
 
 
 
