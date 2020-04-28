@@ -28,8 +28,13 @@ classoption: a4paper
 ---
 
 
-```{r , include=FALSE}
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(knitr)
+library(tidyverse)
+require(stargazer)
 
+source(here::here("src/functions.R"))
 ## load data or something for preparation
 
 ```
@@ -92,10 +97,10 @@ goals = home + team + opponent .
 Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team, team representing the home team, and opponent, team representing the opponent team.  
 
 ```{r ,eval = F, include=FALSE, results = "asis"}
-library(tidyverse)
-require(stargazer)
-library(knitr)
+
+
 opts_chunk$set(echo = TRUE)
+
 
 database_mr <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
 
@@ -144,7 +149,53 @@ While the independent Poisson distributions already allowed for a better fit and
 
 # Results
 For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. 
+```{r echo=FALSE, results = "asis"}
+sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
 
+
+
+
+# 2. evaluate result
+
+all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
+all_final_tables <- add_run_rank_col(x = all_final_tables)
+all_avg_tables <- sim_output$all_avg_tables  
+all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+
+# average table result
+average_table <- all_avg_tables[
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+average_table %>% arrange(rank) %>% select(rank, everything()) %>% kable(col.names = c("Rank",
+                                                        "Club",
+                                                        "Score",
+                                                        "Run"
+                                                        ))
+```
+
+
+
+The simulation of the elo rating 
+```{r echo=FALSE}
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+
+# 2. evaluate result
+
+all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
+all_final_tables <- add_run_rank_col(x = all_final_tables)
+all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
+all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+
+# average table result
+average_table <- all_avg_tables[
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+ 
+
+average_table %>% arrange(rank) %>% select(rank, everything()) %>% kable(col.names = c("Rank",
+                                                        "Club",
+                                                        "Score",
+                                                        "Run"
+                                                        ))
+```
 
 # Conclusion
 
