@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.4.1)  28 APR 2020 16:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.4.1)  28 APR 2020 16:56
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
@@ -1204,33 +1204,13 @@ as been already used, duplicate ignored
 l.328 
        [1
 
-] [2] [3]
-Overfull \hbox (91.78102pt too wide) in paragraph at lines 468--471
-[]\T1/lmr/m/n/12 (-20) database_mr <- readr::read_rds(stringr::str_c(here::here
-() ,   data,   database_match_results_1920.rds,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 478--483
-\OML/lmm/m/it/12 database[]r$\T1/lmr/m/n/12 (+20) club_name_home, opponent=data
-base_mr$\OML/lmm/m/it/12 club[]ame[]way; home \OT1/lmr/m/n/12 (+20) =
- []
-
-
-Overfull \hbox (43.63007pt too wide) in paragraph at lines 478--483
-\OT1/lmr/m/n/12 (-20) 1)\OML/lmm/m/it/12 ; tibble\OT1/lmr/m/n/12 (-20) (\OML/lm
-m/m/it/12 goals \OT1/lmr/m/n/12 (-20) = \OML/lmm/m/it/12 database[]r$\T1/lmr/m/
-n/12 (-20) goals_team_away, team=database_mr$\OML/lmm/m/it/12 club[]ame[]way; o
-pponent \OT1/lmr/m/n/12 (-20) =
- []
-
-[4] [5] [6]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 542.
-[7]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 542.
+] [2] [3] [4] [5]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 515.
+[6]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 515.
 (term_paper_eem.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 542.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 542.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 515.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 515.
 Package rerunfilecheck Info: File `term_paper_eem.out' has not changed.
 (rerunfilecheck)             Checksum: 9E0CA749EF660EB50DF5B7EC0A1C0367;961.
 
@@ -1245,11 +1225,11 @@ Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 21740 strings out of 480897
- 363662 string characters out of 2898683
+ 21737 strings out of 480897
+ 363636 string characters out of 2898683
  1188369 words of memory out of 3000000
  37137 multiletter control sequences out of 15000+200000
- 574261 words of font info for 92 fonts, out of 3000000 for 9000
+ 574170 words of font info for 91 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  58i,10n,63p,821b,6737s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc
@@ -1266,9 +1246,9 @@ public/lm/lmr8.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
 /public/lm/lmri12.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
 pe1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts
 /type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (10 pages, 204031 bytes).
+Output written on term_paper_eem.pdf (9 pages, 198560 bytes).
 PDF statistics:
- 187 PDF objects out of 1000 (max. 8388607)
- 39 named destinations out of 1000 (max. 500000)
+ 183 PDF objects out of 1000 (max. 8388607)
+ 38 named destinations out of 1000 (max. 500000)
  8276 words of extra memory for PDF output out of 10000 (max. 10000000)
 

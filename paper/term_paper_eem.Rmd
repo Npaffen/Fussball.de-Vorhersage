@@ -91,7 +91,7 @@ goals = home + team + opponent .
 \end{align}
 Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team, team representing the home team, and opponent, team representing the opponent team.  
 
-```{r , results = "asis"}#Does not work right now
+```{r ,eval = F, include=FALSE, results = "asis"}
 library(tidyverse)
 require(stargazer)
 library(knitr)
