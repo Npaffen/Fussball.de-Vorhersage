@@ -9,6 +9,8 @@ studid: "3071594 (Nils Paffen)"
 supervisor: "Prof. Dr. Christoph Hanck"
 secondsupervisor: "NA"
 estdegree_emester: "Summer Term 2020"
+header-includes:
+   - \usepackage{dcolumn}
 output:
   pdf_document:
     keep_tex: yes
@@ -96,35 +98,65 @@ goals = home + team + opponent .
 \end{align}
 Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team, team representing the home team, and opponent, team representing the opponent team.  
 
-```{r ,eval = F, include=FALSE, results = "asis"}
 
 
-opts_chunk$set(echo = TRUE)
-
-
-database_mr <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
-
-home_goals_avg <- database_mr$goals_team_home %>% mean()
-
-away_goals_avg <- database_mr$goals_team_away %>% mean()
-
-poisson_model <- 
+```{r , echo=FALSE, results = "asis"}
+d <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
+d <- 
   bind_rows(
     tibble(
-      goals = database_mr$goals_team_home,
-      team = database_mr$club_name_home,
-      opponent=database_mr$club_name_away,
+      goals = d$goals_team_home,
+      team = d$club_name_home,
+      opponent=d$club_name_away,
       home=1),
     tibble(
-      goals=database_mr$goals_team_away,
-      team=database_mr$club_name_away,
-      opponent=database_mr$club_name_home,
-      home=0)) %>%
-  
-  glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
-half <- list(coefficients =list(poisson_model$coefficients[1:17]))
+      goals=d$goals_team_away,
+      team=d$club_name_away,
+      opponent=d$club_name_home,
+      home=0))
 
-stargazer(half, title = "These are awesome results!",  notes="stargazer html", no.space = T)
+# create a fake model
+# note that team needs to include all of your factors
+fake <- lm(goals ~ home + team , d)
+# rename the coefficients
+names(fake$coefficients) <- gsub("team","",names(fake$coefficients))
+
+
+# 
+m <- glm(goals ~ home + team +opponent, family=poisson(link=log),data=d)
+m.s <- summary(m)
+
+## write a function that fixes the names in the glm output
+f <- function(x){
+  names(x) <- gsub("team|opponent","", names(x))
+  return(x)
+}
+
+stargazer(fake,fake,fake,
+          # coefficients
+          coef = list(
+            f( m.s$coefficients[grepl("Intercept|home", rownames(m.s$coefficients)), 1]),
+            f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 1]),
+            f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 1])
+          ),
+          # standard errors
+          se = list(
+            f( m.s$coefficients[grepl("Intercept|home", rownames(m.s$coefficients)), 2]),
+            f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 2]),
+            f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 2])
+          ),
+          column.labels = c("control","team", "opponent"),
+          # calculate pvalue using supplied coeff and se
+          t.auto = T,
+          out = "stargazer_data.html",
+          omit.stat=c("all"),
+          type = "latex",
+          single.row = TRUE,
+          order = c("Constant", "home"),
+          align = TRUE,
+          column.sep.width = "-30pt",
+          font.size = "small"
+          )
 ```
 
 
@@ -149,6 +181,7 @@ While the independent Poisson distributions already allowed for a better fit and
 
 # Results
 For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. 
+
 ```{r echo=FALSE, results = "asis"}
 sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
 
@@ -203,11 +236,6 @@ average_table %>% arrange(rank) %>% select(rank, everything()) %>% kable(col.nam
 \newpage
 
 \printbibliography
-
-
-
-
-
 
 
 
