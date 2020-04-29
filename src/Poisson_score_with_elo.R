@@ -47,12 +47,14 @@ sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
 
 all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
 all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables%>% rename(score = points)
+all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
 all_avg_tables <- add_run_rank_col(x = all_avg_tables)
 
 # average table result
 average_table <- all_avg_tables[
-  (nrow(all_avg_tables)-15):nrow(all_avg_tables),]
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+average_table <- average_table %>% arrange(rank)
+
 print(average_table)
 #View(average_table)
 
@@ -98,8 +100,5 @@ make_plot(x = all_avg_tables, y = "rank",
           club_names, type = "line")
 make_plot(x = all_avg_tables, y = "score",
           club_names, type = "line")
-summe <- 0
-for (i in 2000:2004){
-  summe <- 33.8 + (2006-2000) *1.6 
-}
-summe/5
+
+    
