@@ -159,9 +159,7 @@ stargazer(fake,fake,fake,
           column.sep.width = "-30pt",
           font.size = "small"
           )
-stargaz <- readLines(str_c(here::here(), "/paper/stargazer_data.html"))
-stargaz <- stargaz[-5]
-writeLines(stargaz,str_c(here::here(), "/paper/stargazer_data.html"))
+
 ```
 
 
