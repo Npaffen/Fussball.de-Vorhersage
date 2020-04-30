@@ -45,7 +45,6 @@
 \setlength\bibitemsep{1.5\itemsep}
 \addbibresource{R_packages.bib}
 \bibliography{references.bib}
-\usepackage{longtable,booktabs}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -104,6 +103,20 @@
   \date{today}
 
 \usepackage{dcolumn}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
 
 %% linespread settings
 
@@ -464,17 +477,17 @@ and 0 for the away team, team representing the home team, and opponent,
 team representing the opponent team.
 
 \% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard
-University. E-mail: hlavac at fas.harvard.edu \% Date and time: Mi, Apr
-29, 2020 - 18:14:42 \% Requires LaTeX packages: dcolumn
+University. E-mail: hlavac at fas.harvard.edu \% Date and time: Do, Apr
+30, 2020 - 11:28:23 \% Requires LaTeX packages: dcolumn
 
 \begin{table}[!htbp] \centering 
-  \caption{} 
+  \caption{Regression ouput of the Poisson Model} 
   \label{} 
 \small 
 \begin{tabular}{@{\extracolsep{-30pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
- & \multicolumn{3}{c}{\textit{Dependent variable:}} \\ 
+ & \multicolumn{3}{c}{Dependet variable = goals} \\ 
 \cline{2-4} 
 \\[-1.8ex] & \multicolumn{3}{c}{goals} \\ 
  & \multicolumn{1}{c}{control} & \multicolumn{1}{c}{team} & \multicolumn{1}{c}{opponent} \\ 
@@ -546,55 +559,52 @@ the current season resulting in a tie for the probability of a draw.
 Half of the percentage points are deducted from the home team's winning
 probability and half from the away team's winning probability.
 
-\begin{longtable}[]{@{}rlrr@{}}
-\toprule
-Rank & Club & Score & Run\tabularnewline
-\midrule
-\endhead
-1 & VfL Ramsdorf & 64.34676 & 2581\tabularnewline
-2 & TuS Gahlen & 58.74429 & 2581\tabularnewline
-3 & SV Schermbeck II & 57.74274 & 2581\tabularnewline
-4 & Fenerbahce I. Marl & 53.52383 & 2581\tabularnewline
-5 & 1. SC BW Wulfen & 50.88454 & 2581\tabularnewline
-6 & TSV Raesfeld & 50.64084 & 2581\tabularnewline
-7 & TuS Velen & 41.79078 & 2581\tabularnewline
-8 & SC Marl-Hamm & 40.90701 & 2581\tabularnewline
-9 & BVH Dorsten & 39.89500 & 2581\tabularnewline
-10 & SV Lembeck & 39.56838 & 2581\tabularnewline
-11 & FC RW Dorsten & 35.82449 & 2581\tabularnewline
-12 & Westfalia Gemen II & 32.40101 & 2581\tabularnewline
-13 & SC Reken II & 29.11275 & 2581\tabularnewline
-14 & TuS 05 Sinsen II & 23.86207 & 2581\tabularnewline
-15 & Adler Weseke II & 22.59512 & 2581\tabularnewline
-16 & SV Altendorf-Ulfkotte & 19.50446 & 2581\tabularnewline
-\bottomrule
-\end{longtable}
-
 The simulation of the elo rating
 
-\begin{longtable}[]{@{}rlrr@{}}
-\toprule
-Rank & Club & Score & Run\tabularnewline
-\midrule
-\endhead
-1 & VfL Ramsdorf & 63.46088 & 1981\tabularnewline
-2 & TuS Gahlen & 57.54770 & 1981\tabularnewline
-3 & SV Schermbeck II & 56.68854 & 1981\tabularnewline
-4 & Fenerbahce I. Marl & 52.45432 & 1981\tabularnewline
-5 & 1. SC BW Wulfen & 49.74609 & 1981\tabularnewline
-6 & TSV Raesfeld & 49.58253 & 1981\tabularnewline
-7 & TuS Velen & 40.56790 & 1981\tabularnewline
-8 & SC Marl-Hamm & 39.67895 & 1981\tabularnewline
-9 & BVH Dorsten & 38.56991 & 1981\tabularnewline
-10 & SV Lembeck & 38.49319 & 1981\tabularnewline
-11 & FC RW Dorsten & 34.61080 & 1981\tabularnewline
-12 & Westfalia Gemen II & 31.46037 & 1981\tabularnewline
-13 & SC Reken II & 27.79455 & 1981\tabularnewline
-14 & TuS 05 Sinsen II & 22.68854 & 1981\tabularnewline
-15 & Adler Weseke II & 21.69107 & 1981\tabularnewline
-16 & SV Altendorf-Ulfkotte & 18.52751 & 1981\tabularnewline
-\bottomrule
-\end{longtable}
+\begin{table}[H]
+
+\caption{\label{tab:unnamed-chunk-3}Simulated Final Score Table}
+\centering
+\begin{tabular}[t]{r|l|r|l|r}
+\hline
+\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Poisson Distribution} & \multicolumn{2}{c}{Elo Rating} \\
+\cline{2-3} \cline{4-5}
+rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo\\
+\hline
+\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676\\
+\hline
+2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429\\
+\hline
+\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274\\
+\hline
+4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383\\
+\hline
+\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454\\
+\hline
+6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084\\
+\hline
+\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078\\
+\hline
+8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701\\
+\hline
+\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500\\
+\hline
+10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838\\
+\hline
+\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449\\
+\hline
+12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101\\
+\hline
+\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275\\
+\hline
+14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207\\
+\hline
+\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512\\
+\hline
+16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446\\
+\hline
+\end{tabular}
+\end{table}
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}

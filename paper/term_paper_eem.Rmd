@@ -35,7 +35,7 @@ knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
 library(knitr)
 library(tidyverse)
 require(stargazer)
-
+require(kableExtra)
 source(here::here("src/functions.R"))
 ## load data or something for preparation
 
@@ -145,9 +145,11 @@ stargazer(fake,fake,fake,
             f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 2]),
             f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 2])
           ),
+          title  = "Regression ouput of the Poisson Model"  ,
           column.labels = c("control","team", "opponent"),
           # calculate pvalue using supplied coeff and se
           t.auto = T,
+          dep.var.caption  = "Dependet variable = goals",
           out = "stargazer_data.html",
           omit.stat=c("all"),
           type = "latex",
@@ -157,6 +159,9 @@ stargazer(fake,fake,fake,
           column.sep.width = "-30pt",
           font.size = "small"
           )
+stargaz <- readLines(str_c(here::here(), "/paper/stargazer_data.html"))
+stargaz <- stargaz[-5]
+writeLines(stargaz,str_c(here::here(), "/paper/stargazer_data.html"))
 ```
 
 
@@ -182,27 +187,26 @@ While the independent Poisson distributions already allowed for a better fit and
 # Results
 For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. 
 
+
+
+
 ```{r echo=FALSE, results = "asis"}
-sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
+sim_output_elo <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
 
 
 
 
 # 2. evaluate result
 
-all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
-all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables  
-all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+all_final_tables_elo <- sim_output_elo$all_final_tables %>% rename(score = points)
+all_final_tables_elo <- add_run_rank_col(x = all_final_tables_elo)
+all_avg_tables_elo <- sim_output_elo$all_avg_tables
+all_avg_tables_elo <- add_run_rank_col(x = all_avg_tables_elo)
 
 # average table result
-average_table <- all_avg_tables[
-  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
-average_table %>% arrange(rank) %>% select(rank, everything()) %>% kable(col.names = c("Rank",
-                                                        "Club",
-                                                        "Score",
-                                                        "Run"
-                                                        ))
+average_table_elo <- all_avg_tables_elo[
+  (nrow(all_avg_tables_elo)-15):nrow(all_avg_tables_elo),] 
+average_table_elo <- average_table_elo %>% arrange(rank) %>% select(rank, everything(), -run) %>% rename(club_name_elo = club_name, score_elo = score)
 ```
 
 
@@ -223,12 +227,17 @@ average_table <- all_avg_tables[
   (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
  
 
-average_table %>% arrange(rank) %>% select(rank, everything()) %>% kable(col.names = c("Rank",
-                                                        "Club",
-                                                        "Score",
-                                                        "Run"
-                                                        ))
+average_table_poisson <- average_table %>% arrange(rank) %>% select(rank, everything(), -run)%>% rename(club_name_poisson = club_name, score_poisson = score)
+kable(inner_join(average_table_poisson,average_table_elo, by = "rank"),
+      caption = "Simulated Final Score Table"
+                    ) %>%
+  add_header_above(c(" " = 1, "Poisson Distribution" = 2, "Elo Rating" = 2 )) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position"),full_width = F)
+
 ```
+
+
+
 
 # Conclusion
 
