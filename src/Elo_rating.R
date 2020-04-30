@@ -46,13 +46,13 @@ sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
 
 all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
 all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables  %>% select(Group.1, points) %>%rename(score = points,club_name = Group.1 ) 
+all_avg_tables <- sim_output$all_avg_tables  
 all_avg_tables <- add_run_rank_col(x = all_avg_tables)
 
 # average table result
 average_table <- all_avg_tables[
-  (nrow(all_avg_tables)-15):nrow(all_avg_tables),]
-print(average_table)
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+average_table %>% arrange(rank) %>% print()
 #View(average_table)
 
 

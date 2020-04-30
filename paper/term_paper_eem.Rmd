@@ -1,5 +1,5 @@
 ---
-title: 'What if they had played?'
+title: '"Stay home" and let the simulation play'
 author: 'Nils Paffen, David Schulze'
 subtitle: "Predicting the Outcome Kreisliga A Reklinghausen Season 2019-2020"
 type: "Working Paper"
@@ -9,6 +9,8 @@ studid: "3071594 (Nils Paffen)"
 supervisor: "Prof. Dr. Christoph Hanck"
 secondsupervisor: "NA"
 estdegree_emester: "Summer Term 2020"
+header-includes:
+   - \usepackage{dcolumn}
 output:
   pdf_document:
     keep_tex: yes
@@ -28,8 +30,13 @@ classoption: a4paper
 ---
 
 
-```{r , include=FALSE}
-
+```{r setup, include=FALSE}
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+library(knitr)
+library(tidyverse)
+require(stargazer)
+require(kableExtra)
+source(here::here("src/functions.R"))
 ## load data or something for preparation
 
 ```
@@ -57,8 +64,9 @@ Finally the literature contains references to using betting markets as a benchma
 
 
 # Data
-For the simulation study we decided to use data from the amateur football league of the Kreisliga A Kreis Recklinghausen class A1 in Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in one home and one away game each. In this season the association has decided to cancel all matches from 15.03.2020. Due to the well known Corona crisis the association has decided to cancel all matches from 15.03.2020. After all, 20 matchdays have already been played until this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the table. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector.  The match results of the website itself cannot be directly read out. They are masked ,so they are made unreadable when viewing the HTML file and are only evaluated afterwards using a javascript and transferred to the CSS of the site.  The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, such as pattern matching, the game result can be reconstructed.  The data record was then divided into completed and unplayed games. The latter amount to 89 in this season, which were simulated with the methods of the following chapters.
+For the simulation study we decided to use data from the amateur football league of the Kreisliga A Kreis Recklinghausen class A1 in Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in one home and one away game each. Due to the well known Corona crisis the association has decided to cancel all matches from 15.03.2020. After all, 20 matchdays have already been played until this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the table. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector.  The match results of the website itself cannot be directly read out. They are masked ,so they are made unreadable when viewing the HTML file and are only evaluated afterwards using a javascript and transferred to the CSS of the site.  The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, such as pattern matching, the game result can be reconstructed.  The data record was then divided into completed and unplayed games. The latter amount to 89 in this season, which were simulated with the methods of the following chapters.
 
+Give a short overview of the actual standing (ranking table after matchday 20)
 
 (David: Describe calculating the values needed for the models.)
 
@@ -67,6 +75,100 @@ For the simulation study we decided to use data from the amateur football league
 # Predictive Models
 
 To predict the outcome of the cancelled games, we calculate the candidate rankings and use them to simulate the end of the 2019/2020 season. Specifically we calculate the EloRankings.net Ranking, the FIFA Women's Ranking, the points model and a version of the Total Team Average incorporating additional information. We discard the classic FIFA Men's Ranking, since it was shown to perform worse than the other candidates and was discarded by the FIFA Men's World Rankings as well in 2018.
+
+Our second model is based on the rating algorithm of \hyperref{eloratings.net}{eloratings.net/about}. The anonymous site operator formulates the rating, representative for the strength of a team, as follows : 
+\begin{align}
+R_n = R_0 + K \times (W - W_e).
+\end{align}
+Here R_n is defined as the new rating and R_o is the old rating. The weighting factor for each match is defined by the type of 
+tournament in which the match takes place and also controls for friendly matches, which is given to the lowest weight of 20. While matches in world championships and other major international tournaments are given weights between 40 and 60, the rest falls into the category "all other tournaments" which are given a weighting factor of 30. Following this example, we also set K to 30 for matches already played in the Kreisliga A.  The weighting factor K is adjusted again based on the goal difference of the result. Thus, K is increased by $\dfrac{K}{2}$ if the match was won with two goals, by $dfrac{3}{4}\times K$ if the match was won with three goals and by $\dfrac{3}{4} + \dfrac{(N-3)}{8} \times K$, where N defines the goal difference of the match if the match was won with four or more goals.  W is the result of the match. 0 for a loss, 0.5 for a draw and 1 for a win. W_e is the probability of winning defined by the following formula : 
+\begin{align}
+W_e = 1/(10^{(-dr/400)}+1)
+\end{align}
+where dr is defined as the rating difference and the home team receives a bonus of 100 points. This bonus is considered to be a psychological advantage resulting from the fact that the game is played in the home stadium(see, e.g., @Pollard2008). 
+
+Our third model uses the poisson distribution to simulate the match result with the probability of a goal in every minute of a match. The probability matrix where the game result is drawn from is a $n \times n$ matrix where each cell indicates the proability of that specific match result. While the rows indicates the goals of the home team, the column indicates the goals of the away team. For example the cell of the first row and in the first column indicates the likelihood that the both teams socre $0$ goals. The poisson probability function of our model can be expressed as :
+\begin{align}
+P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
+\end{align}
+ where the lambda represents the average number of goals
+First we estimate the following model from the matches already played:
+\begin{align}
+goals = home + team + opponent . 
+\end{align}
+Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team, team representing the home team, and opponent, team representing the opponent team.  
+
+
+
+```{r , echo=FALSE, results = "asis"}
+d <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
+d <- 
+  bind_rows(
+    tibble(
+      goals = d$goals_team_home,
+      team = d$club_name_home,
+      opponent=d$club_name_away,
+      home=1),
+    tibble(
+      goals=d$goals_team_away,
+      team=d$club_name_away,
+      opponent=d$club_name_home,
+      home=0))
+
+# create a fake model
+# note that team needs to include all of your factors
+fake <- lm(goals ~ home + team , d)
+# rename the coefficients
+names(fake$coefficients) <- gsub("team","",names(fake$coefficients))
+
+
+# 
+m <- glm(goals ~ home + team +opponent, family=poisson(link=log),data=d)
+m.s <- summary(m)
+
+## write a function that fixes the names in the glm output
+f <- function(x){
+  names(x) <- gsub("team|opponent","", names(x))
+  return(x)
+}
+
+stargazer(fake,fake,fake,
+          # coefficients
+          coef = list(
+            f( m.s$coefficients[grepl("Intercept|home", rownames(m.s$coefficients)), 1]),
+            f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 1]),
+            f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 1])
+          ),
+          # standard errors
+          se = list(
+            f( m.s$coefficients[grepl("Intercept|home", rownames(m.s$coefficients)), 2]),
+            f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 2]),
+            f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 2])
+          ),
+          title  = "Regression ouput of the Poisson Model"  ,
+          column.labels = c("control","team", "opponent"),
+          # calculate pvalue using supplied coeff and se
+          t.auto = T,
+          dep.var.caption  = "Dependet variable = goals",
+          out = "stargazer_data.html",
+          omit.stat=c("all"),
+          type = "latex",
+          single.row = TRUE,
+          order = c("Constant", "home"),
+          align = TRUE,
+          column.sep.width = "-30pt",
+          font.size = "small"
+          )
+
+```
+
+
+In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", both as home and away club, has a strong negative and a strong positive influence, both highly significant, on goals, i.e. the number of goals. Since the club is in the last place in the current table, as mentioned in the Data section, we expected that
+it would be easier to score goals if they played against the team on the last place of the seasons soccer league table rather than the team on the first place. On the other hand it will be harder for this last placed team to score goals even if they are the home team. 
+
+
+ 
+
 
 Following Correa et al. -@correa, we then run the simulation by drawing the results of each game from a binomial distribution. For each game and team, the probability of winning is dividing the ranking points awarded each team by their and their competitors sum of points.
 
@@ -81,6 +183,58 @@ While the independent Poisson distributions already allowed for a better fit and
 
 
 # Results
+For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. 
+
+
+
+
+```{r echo=FALSE, results = "asis"}
+sim_output_elo <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
+
+
+
+
+# 2. evaluate result
+
+all_final_tables_elo <- sim_output_elo$all_final_tables %>% rename(score = points)
+all_final_tables_elo <- add_run_rank_col(x = all_final_tables_elo)
+all_avg_tables_elo <- sim_output_elo$all_avg_tables
+all_avg_tables_elo <- add_run_rank_col(x = all_avg_tables_elo)
+
+# average table result
+average_table_elo <- all_avg_tables_elo[
+  (nrow(all_avg_tables_elo)-15):nrow(all_avg_tables_elo),] 
+average_table_elo <- average_table_elo %>% arrange(rank) %>% select(rank, everything(), -run) %>% rename(club_name_elo = club_name, score_elo = score)
+```
+
+
+
+The simulation of the elo rating 
+```{r echo=FALSE}
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+
+# 2. evaluate result
+
+all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
+all_final_tables <- add_run_rank_col(x = all_final_tables)
+all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
+all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+
+# average table result
+average_table <- all_avg_tables[
+  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+ 
+
+average_table_poisson <- average_table %>% arrange(rank) %>% select(rank, everything(), -run)%>% rename(club_name_poisson = club_name, score_poisson = score)
+kable(inner_join(average_table_poisson,average_table_elo, by = "rank"),
+      caption = "Simulated Final Score Table"
+                    ) %>%
+  add_header_above(c(" " = 1, "Poisson Distribution" = 2, "Elo Rating" = 2 )) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position"),full_width = F)
+
+```
+
+
 
 
 # Conclusion
@@ -89,11 +243,6 @@ While the independent Poisson distributions already allowed for a better fit and
 \newpage
 
 \printbibliography
-
-
-
-
-
 
 
 
