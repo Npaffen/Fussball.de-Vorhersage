@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.4.1)  30 APR 2020 11:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.4.1)  1 MAY 2020 11:28
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
 LaTeX2e <2020-02-02> patch level 5
-L3 programming layer <2020-03-06>
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
+L3 programming layer <2020-03-06> ("C:\Users\Nils\AppData\Local\Programs\MiKTeX
+ 2.9\tex/latex/base\article.cls"
 Document Class: article 2019/12/20 v1.4l Standard LaTeX document class
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\size12.clo"
 File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
@@ -20,8 +20,7 @@ File: size12.clo 2019/12/20 v1.4l Standard LaTeX file (size option)
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen134
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\lmodern.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\lmodern.sty"
 Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -94,23 +93,20 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmath.sty
-"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsmath.
+sty"
 Package: amsmath 2020/01/20 v2.17e AMS math features
 \@mathmargin=\skip49
-
 For additional information on amsmath, use the `?' option.
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amstext.sty
 "
 Package: amstext 2000/06/29 v2.01 AMS text
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen.sty
-"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks16
 \ex@=\dimen148
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy.sty"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsbsy.s
+ty"
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen149
 ) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsmath\amsopn.st
@@ -154,21 +150,19 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \mathdisplay@stack=\toks20
 LaTeX Info: Redefining \[ on input line 2859.
 LaTeX Info: Redefining \] on input line 2860.
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifxetex.sty
-"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifxetex.s
+ty"
 Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\iftex.sty"
 Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifluatex.st
 y"
 Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fixltx2e.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\fixltx2e.sty
+"
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
 Applying: [2015/01/01] Old fixltx2e package on input line 46.
-
 
 Package fixltx2e Warning: fixltx2e is not required with releases after 2015
 (fixltx2e)                All fixes are now in the LaTeX kernel.
@@ -181,8 +175,8 @@ LaTeX Font Info:    Trying to load font information for T1+lmr on input line 11
 2.
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\t1lmr.fd"
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\inputenc.sty"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\inputenc.st
+y"
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks21
 \inpenc@posthook=\toks22
@@ -190,13 +184,12 @@ Package: inputenc 2018/08/11 v1.3c Input encoding file
 ty"
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\textcomp.sty"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\textcomp.sty"
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 ))
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\microtype
 .sty"
 Package: microtype 2019/11/18 v2.7d Micro-typographical refinements (RS)
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\keyval.sty
 "
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
@@ -226,7 +219,6 @@ File: microtype.cfg 2019/11/18 v2.7d microtype main configuration file (RS)
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry.s
 ty"
 Package: geometry 2020/01/02 v5.9 Page Geometry
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/iftex\ifvtex.sty"
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
@@ -244,8 +236,8 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@dimlist=\toks25
 
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/geometry\geometry.c
-fg"))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/float\float.sty"
+fg")) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/float\float.s
+ty"
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count196
 \float@exts=\toks26
@@ -309,11 +301,10 @@ Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/kvsetkeys\kvsetke
 ys.sty"
 Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/logreq\logreq.sty"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/logreq\logreq.st
+y"
 Package: logreq 2010/08/04 v1.0 xml request logger
 \lrq@indent=\count270
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/logreq\logreq.def"
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 )) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\ifthen.sty"
@@ -379,7 +370,6 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 \c@mincompwidth=\count314
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/biblatex\blx-dm.def
 "
 File: blx-dm.def 2019/12/01 v3.14 biblatex localization (PK/MW)
@@ -569,7 +559,6 @@ Package: graphicx 2019/11/30 v1.2a Enhanced LaTeX Graphics (DPC,SPQR)
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\graphics.s
 ty"
 Package: graphics 2019/11/30 v1.4a Standard LaTeX Graphics (DPC,SPQR)
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\trig.sty"
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
@@ -597,23 +586,20 @@ Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/pdfescape\pdfesca
 pe.sty"
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hycolor\hycolor.sty
-"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hycolor\hycolor.s
+ty"
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
 )
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/letltxmacro\letltxm
 acro.sty"
 Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/auxhook\auxhook.sty
-"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/auxhook\auxhook.s
+ty"
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 )
 \@linkdim=\dimen168
 \Hy@linkcounter=\count406
 \Hy@pagecounter=\count407
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\pd1enc.def
 "
 File: pd1enc.def 2020/01/14 v7.00d Hyperref: PDFDocEncoding definition (HO)
@@ -630,7 +616,6 @@ Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
 \Hy@SavedSpaceFactor=\count408
 Package hyperref Info: Option `unicode' set `true' on input line 4421.
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/hyperref\puenc.def"
 File: puenc.def 2020/01/14 v7.00d Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -647,7 +632,6 @@ Package hyperref Info: Bookmarks ON on input line 4800.
 \c@Hy@tempcnt=\count409
 LaTeX Info: Redefining \url on input line 5159.
 \XeTeXLinkMargin=\dimen169
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/bitset\bitset.sty
 "
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -706,7 +690,6 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 Package hyperref Info: Option `breaklinks' set `true' on input line 72.
 
-
 Package hyperref Warning: Option `bookmarks' has already been used,
 (hyperref)                setting the option has no effect on input line 72.
 
@@ -720,7 +703,7 @@ Package: titling 2009/09/04 v2.1d maketitle typesetting
 ) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\dcolumn.sty
 "
 Package: dcolumn 2014/10/28 v1.06 decimal alignment package (DPC)
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\array.sty"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\array.sty"
 Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \col@sep=\dimen172
 \ar@mcellbox=\box49
@@ -729,9 +712,8 @@ Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \extratabsurround=\skip79
 \backup@length=\skip80
 \ar@cellbox=\box50
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\longtable.sty
-"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\longtable.
+sty"
 Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
 \LTleft=\skip81
 \LTright=\skip82
@@ -756,9 +738,8 @@ Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@cntb=\count421
 \multirow@dima=\skip86
 \bigstrutjot=\dimen175
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/wrapfig\wrapfig.sty
-"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/wrapfig\wrapfig.s
+ty"
 \wrapoverhang=\dimen176
 \WF@size=\dimen177
 \c@WF@wrappedlines=\count422
@@ -769,7 +750,6 @@ Package: wrapfig 2003/01/31  v 3.6
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/colortbl\colortbl.s
 ty"
 Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\color.sty"
 Package: color 2019/11/23 v1.2a Standard LaTeX Color (DPC)
 
@@ -785,7 +765,6 @@ Package color Info: Driver file: pdftex.def on input line 147.
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/pdflscape\pdflscape
 .sty"
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics\lscape.sty
 "
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
@@ -833,7 +812,6 @@ Package: threeparttable 2003/06/13  v 3.0
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/threeparttablex\thr
 eeparttablex.sty"
 Package: threeparttablex 2013/07/23 v0.3 by daleif
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/environ\environ.sty
 "
 Package: environ 2014/05/04 v0.3 A new way to define environments
@@ -843,8 +821,7 @@ es.sty"
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 ))
 \TPTL@width=\skip89
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ulem\ulem.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/ulem\ulem.sty"
 \UL@box=\box62
 \UL@hyphenbox=\box63
 \UL@skip=\skip90
@@ -862,8 +839,8 @@ Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
 \rotheadsize=\dimen192
 \c@nlinenum=\count431
 \TeXr@lab=\toks36
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolor.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xcolor\xcolor.sty
+"
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/graphics-cfg\color.
@@ -890,8 +867,8 @@ Package: setspace 2011/12/19 v6.7a set line spacing
 ty"
 Package: iflang 2018/01/21 v1.7 Checks for the current language (HO)
 Package iflang Info: Naming convention for patterns: babel.
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/genmisc\nth.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/genmisc\nth.sty
+"
 Package: nth 2002/02/27
 ) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\babel.sty
 "
@@ -915,7 +892,6 @@ phy)
 nb.ldf"
 Language: ngermanb 2018/12/08 v2.11 German support for babel (post-1996 orthogr
 aphy)
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/babel\babel.def"
 File: babel.def 2020/03/22 3.42 Babel common definitions
 \babel@savecnt=\count432
@@ -937,16 +913,13 @@ Package babel Info: \l@australian = using hyphenrules for ukenglish
 (babel)             (\language76) on input line 105.
 Package babel Info: \l@newzealand = using hyphenrules for ukenglish
 (babel)             (\language76) on input line 108.
-))
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/acronym\acronym.sty
-"
+)) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/acronym\acronym.
+sty"
 Package: acronym 2020/03/13 v1.46 Support for acronyms (Tobias Oetiker)
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/bigfoot\suffix.sty
-"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/bigfoot\suffix.sty"
 Package: suffix 2006/07/15 1.5a Variant command support
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xstring\xstring.sty
-"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/xstring\xstring.s
+ty"
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/generic/xstring\xstring.t
 ex"
 \integerpart=\count434
@@ -961,8 +934,8 @@ ge.sty"
 Package: changepage 2009/10/20 v1.0c check page and change page layout
 \c@cp@cntr=\count436
 \cp@tempcnt=\count437
-)
-("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\multicol.sty"
+) ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/tools\multicol.st
+y"
 Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
 \c@tracingmulticols=\count438
 \mult@box=\box65
@@ -1042,8 +1015,7 @@ Package csquotes Info: Redefining alias 'default' -> 'english'.
 File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 \l__kernel_color_stack_int=\count448
 \l__pdf_internal_box=\box111
-)
-No file term_paper_eem.aux.
+) (term_paper_eem.aux)
 \openout1 = `term_paper_eem.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 141.
@@ -1197,9 +1169,16 @@ Package biblatex Info: Automatic encoding selection.
 \openout3 = `term_paper_eem.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'term_paper_eem.bbl' not found.
+Package biblatex Info: ... file 'term_paper_eem.bbl' found.
+(term_paper_eem.bbl
 
-No file term_paper_eem.bbl.
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                boshnakov2016
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
 Package biblatex Info: Reference section=0 on input line 141.
 Package biblatex Info: Reference segment=0 on input line 141.
 
@@ -1244,6 +1223,7 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 141.
 LaTeX Info: Redefining \pageref on input line 141.
 LaTeX Info: Redefining \nameref on input line 141.
+(term_paper_eem.out) (term_paper_eem.out)
 \@outlinefile=\write4
 \openout4 = `term_paper_eem.out'.
 
@@ -1259,19 +1239,16 @@ File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
 53.
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omllmm.fd"
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
 153.
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omslmsy.fd"
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
 153.
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\omxlmex.fd"
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -1283,7 +1260,6 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 153.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 153
 .
-
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
@@ -1293,14 +1269,14 @@ File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+msb on input line 153
 .
- ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
+("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 ("C:\Users\Nils\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\mt-msb.cf
 g"
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-<Includes/duelogo_en.png, id=3, 230.8625pt x 89.33376pt>
+<Includes/duelogo_en.png, id=39, 230.8625pt x 89.33376pt>
 File: Includes/duelogo_en.png Graphic file (type png)
 <use Includes/duelogo_en.png>
 Package pdftex.def Info: Includes/duelogo_en.png  used on input line 157.
@@ -1356,118 +1332,61 @@ uelogo_en.png>]
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-
-
-Package hyperref Warning: old toc file detected, not used; run LaTeX again.
-
+(term_paper_eem.toc)
 \tf@toc=\write5
 \openout5 = `term_paper_eem.toc'.
 
 [1
 
-]
-
-Package hyperref Warning: old lof file detected, not used; run LaTeX again.
-
+] (term_paper_eem.lof)
 \tf@lof=\write6
 \openout6 = `term_paper_eem.lof'.
 
-
-Package hyperref Warning: old lot file detected, not used; run LaTeX again.
-
+(term_paper_eem.lot)
 \tf@lot=\write7
 \openout7 = `term_paper_eem.lot'.
 
-[2]
-
-LaTeX Warning: Citation 'correa' on page 1 undefined on input line 327.
-
-
-LaTeX Warning: Citation 'lasek2013' on page 1 undefined on input line 330.
-
-
-LaTeX Warning: Citation 'eloratings' on page 1 undefined on input line 338.
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
+[2]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) h
+as been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.343 
        [1
 
-]
-
-LaTeX Warning: Citation 'fupa' on page 2 undefined on input line 344.
-
-
-LaTeX Warning: Citation 'baseball' on page 2 undefined on input line 355.
-
-
-LaTeX Warning: Citation 'albert2007' on page 2 undefined on input line 359.
-
-[2] [3]
-
-LaTeX Warning: Citation 'Pollard2008' on page 4 undefined on input line 458.
-
+] [2] [3]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 487.
+(Font)              <10.95> on input line 488.
 
-Overfull \hbox (36.11925pt too wide) in paragraph at lines 487--518
+Overfull \hbox (36.11925pt too wide) in paragraph at lines 488--519
  [][] 
  []
 
-[4] [5]
-
-LaTeX Warning: Citation 'correa' on page 6 undefined on input line 530.
-
-
-LaTeX Warning: Citation 'correa' on page 6 undefined on input line 536.
-
-
-LaTeX Warning: Citation 'karlis2003' on page 6 undefined on input line 545.
-
-
-LaTeX Warning: Citation 'boshnakov2016' on page 6 undefined on input line 549.
-
-[6] [7]
-
-LaTeX Warning: Empty bibliography on input line 614.
-
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 618.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 618.
+[4] [5] [6] [7]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 630.
+[8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 630.
 (term_paper_eem.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 618.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 618.
-
-
-Package rerunfilecheck Warning: File `term_paper_eem.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `term_paper_eem.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  9E0CA749EF660EB50DF5B7EC0A1C0367;961.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 630.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 630.
+Package rerunfilecheck Info: File `term_paper_eem.out' has not changed.
+(rerunfilecheck)             Checksum: 9E0CA749EF660EB50DF5B7EC0A1C0367;961.
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                term_paper_eem
-(biblatex)                and rerun LaTeX afterwards.
+Package biblatex Warning: Please rerun LaTeX.
+(biblatex)                Page breaks have changed.
 
 Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
 \openout1 = `term_paper_eem.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23482 strings out of 480897
- 386724 string characters out of 2898683
- 1235233 words of memory out of 3000000
- 38838 multiletter control sequences out of 15000+200000
- 580954 words of font info for 96 fonts, out of 3000000 for 9000
+ 23575 strings out of 480897
+ 389077 string characters out of 2898683
+ 1243217 words of memory out of 3000000
+ 38890 multiletter control sequences out of 15000+200000
+ 586134 words of font info for 105 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  58i,17n,63p,821b,6737s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc
@@ -1484,11 +1403,12 @@ ublic/lm/lmr10.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
 e1/public/lm/lmr17.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/t
 ype1/public/lm/lmr8.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/
 type1/public/lm/lmri10.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fon
-ts/type1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/
-fonts/type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (10 pages, 219656 bytes).
+ts/type1/public/lm/lmri12.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/
+fonts/type1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2
+.9/fonts/type1/public/lm/lmsy8.pfb>
+Output written on term_paper_eem.pdf (11 pages, 253540 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
- 32 named destinations out of 1000 (max. 500000)
- 12300 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 209 PDF objects out of 1000 (max. 8388607)
+ 42 named destinations out of 1000 (max. 500000)
+ 14420 words of extra memory for PDF output out of 17280 (max. 10000000)
 
