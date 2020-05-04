@@ -467,18 +467,19 @@ cell of the first row and in the first column indicates the likelihood
 that the both teams socre \(0\) goals. The poisson probability function
 of our model can be expressed as : \begin{align}
 P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
-\end{align} where the lambda represents the average number of goals
-First we estimate the following model from the matches already played:
+\end{align} where the lambda represents the average number of goals.
+First, we estimate the following model from the matches already played:
 \begin{align}
 goals = home + team + opponent . 
 \end{align} Where goals represents the number of goals scored by a team
 in a game, home presents a dummy variable that is 1 for the home team
-and 0 for the away team, team representing the home team, and opponent,
-team representing the opponent team.
+and 0 for the away team,it serves to illustrate the home team bonus,
+team representing the home team, and opponent representing the opponent
+team.
 
 \% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard
-University. E-mail: hlavac at fas.harvard.edu \% Date and time: Do, Apr
-30, 2020 - 11:28:23 \% Requires LaTeX packages: dcolumn
+University. E-mail: hlavac at fas.harvard.edu \% Date and time: Fr, Mai
+01, 2020 - 11:27:48 \% Requires LaTeX packages: dcolumn
 
 \begin{table}[!htbp] \centering 
   \caption{Regression ouput of the Poisson Model} 
@@ -557,53 +558,64 @@ For the simulation study using the elo rating, as explained in the
 predictive models chapter,we used the average of all matches played in
 the current season resulting in a tie for the probability of a draw.
 Half of the percentage points are deducted from the home team's winning
-probability and half from the away team's winning probability.
+probability and half from the away team's winning probability. Then we
+draw from these three probabilities the game result, team home wins,
+team away wins or draw. We repeat this procedure for all games and
+evaluate the results with 3 points for the winning team, 1 point for
+both teams in case of a draw and 0 points for the losing team.
 
-The simulation of the elo rating
+In the poissonmodel we calculate for each match the goal probabilities
+of both teams as a probability matrix based on the model estimation as
+described in predictive models part.
+
+All simulations were repeated until the rate of change of the point
+average was 1\% or less. Aggregation to this point occurred after about
+2580 for the elo model and after about 1980 for the poisson model.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-3}Simulated Final Score Table}
+\caption{\label{tab:unnamed-chunk-4}Simulated Final Score Table}
 \centering
-\begin{tabular}[t]{r|l|r|l|r}
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{r|l|r|l|r|l|r}
 \hline
-\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Poisson Distribution} & \multicolumn{2}{c}{Elo Rating} \\
-\cline{2-3} \cline{4-5}
-rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo\\
+\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Poisson Distribution Model} & \multicolumn{2}{c|}{Elo Rating Model} & \multicolumn{2}{c}{Points Model} \\
+\cline{2-3} \cline{4-5} \cline{6-7}
+rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & club\_name\_points & score\_points\\
 \hline
-\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676\\
+\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676 & VfL Ramsdorf & 72.19792\\
 \hline
-2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429\\
+2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429 & TuS Gahlen & 65.04059\\
 \hline
-\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274\\
+\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274 & SV Schermbeck II & 63.51325\\
 \hline
-4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383\\
+4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383 & Fenerbahce I. Marl & 58.06307\\
 \hline
-\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454\\
+\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454 & 1. SC BW Wulfen & 57.22107\\
 \hline
-6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084\\
+6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084 & TSV Raesfeld & 55.75243\\
 \hline
-\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078\\
+\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078 & TuS Velen & 45.37873\\
 \hline
-8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701\\
+8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701 & SV Lembeck & 44.14961\\
 \hline
-\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500\\
+\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500 & SC Marl-Hamm & 43.87890\\
 \hline
-10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838\\
+10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838 & BVH Dorsten & 42.64140\\
 \hline
-\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449\\
+\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449 & FC RW Dorsten & 37.59242\\
 \hline
-12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101\\
+12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101 & Westfalia Gemen II & 32.82422\\
 \hline
-\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275\\
+\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275 & SC Reken II & 27.60483\\
 \hline
-14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207\\
+14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207 & TuS 05 Sinsen II & 21.27809\\
 \hline
-\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512\\
+\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512 & Adler Weseke II & 18.88125\\
 \hline
-16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446\\
+16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446 & SV Altendorf-Ulfkotte & 13.98222\\
 \hline
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \hypertarget{conclusion}{%
