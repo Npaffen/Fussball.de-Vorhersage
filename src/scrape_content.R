@@ -7,11 +7,12 @@ library(glue)
 # if dates is not supplied, then ... passes args to the make_dates()
 # function, which are [ year, month, from_day, to_day, all_dates (logical),
 # respectively ]. Please refer to `make_dates.R`.
-seasons <-  "1920"
+seasons <-  "1819"
 
-seasonsID <- "027II28DH8000009VS5489B3VS3GHJJU"
+seasonsID <- "023VNLHG8000000CVS54898DVVG1IBJM"
+              
 source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
-md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .x, seasonID = .y)) %>%
+md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .x, seasonID = .y)) %>%
   unlist()
 
   # Download season table content ----------------------------------------------
@@ -26,11 +27,11 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
            wins = as.numeric(wins),
            ties = as.numeric(ties),
            loss = as.numeric(loss))
-  saveRDS(database_season, here::here("/data/database_season_1920.rds"))
+  saveRDS(database_season, here::here("/data/database_season_1819.rds"))
   
   #Download match results 
     source("src/get_match_results.R")
-    database_matcresults <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
+    database_match_results <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
     
     #Some games cant be scraped due to a missing node but results are still there. Added them manually
     database_match_results <- database_match_results %>% 
@@ -45,7 +46,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_url_md_season(season = .
     database_match_results <- database_match_results %>%
       setdiff(x = ., y = database_mr[duplicated(database_mr[,c("club_name_home", "club_name_away")]),])
       
-    saveRDS(database_match_results, here::here("/data/database_match_results_1920.rds"))
+    saveRDS(database_match_results, here::here("/data/database_match_results_1819.rds"))
     
     
 #Download missing matches. Need to insert only urls of missing matchdays
