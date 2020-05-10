@@ -4,3 +4,8 @@
 .Ruserdata
 .log
 .tex
+.bcf
+.lov
+.log
+.lot
+.run.xml

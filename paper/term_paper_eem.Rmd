@@ -147,9 +147,10 @@ stargazer(fake,fake,fake,
           ),
           title  = "Regression ouput of the Poisson Model"  ,
           column.labels = c("control","team", "opponent"),
+          colnames = FALSE,
           # calculate pvalue using supplied coeff and se
           t.auto = T,
-          dep.var.caption  = "Dependet variable = goals",
+          #dep.var.caption  = "Dependend variable = goals",
           out = "stargazer_data.html",
           omit.stat=c("all"),
           type = "latex",
@@ -157,7 +158,8 @@ stargazer(fake,fake,fake,
           order = c("Constant", "home"),
           align = TRUE,
           column.sep.width = "-30pt",
-          font.size = "small"
+          font.size = "small",
+          style = "aer"
           )
 
 ```
