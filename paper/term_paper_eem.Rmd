@@ -91,12 +91,12 @@ Our third model uses the poisson distribution to simulate the match result with 
 \begin{align}
 P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
 \end{align}
- where the lambda represents the average number of goals
-First we estimate the following model from the matches already played:
+ where the lambda represents the average number of goals.
+First, we estimate the following model from the matches already played:
 \begin{align}
 goals = home + team + opponent . 
 \end{align}
-Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team, team representing the home team, and opponent, team representing the opponent team.  
+Where goals represents the number of goals scored by a team in a game, home presents a dummy variable that is 1 for the home team and 0 for the away team,it serves to illustrate the home team bonus, team representing the home team, and opponent representing the opponent team.  
 
 
 
@@ -161,7 +161,7 @@ stargazer(fake,fake,fake,
           font.size = "small",
           style = "aer"
           )
-
+#Template table layout?
 ```
 
 
@@ -185,7 +185,13 @@ While the independent Poisson distributions already allowed for a better fit and
 
 
 # Results
-For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. 
+For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. Then we draw from these three probabilities the game result, team home wins, team away wins or draw. We repeat this procedure for all games and evaluate the results with 3 points for the winning team, 1 point for both teams in case of a draw and 0 points for the losing team. 
+
+In the poissonmodel we calculate for each match the goal probabilities of both teams as a probability matrix based on the model estimation as described in predictive models part. 
+
+All simulations were repeated until the rate of change of the point average was 1% or less. Aggregation to this point occurred after about 2580 for the elo model and after about 1980 for the poisson model. 
+
+
 
 
 
@@ -209,30 +215,49 @@ average_table_elo <- all_avg_tables_elo[
 average_table_elo <- average_table_elo %>% arrange(rank) %>% select(rank, everything(), -run) %>% rename(club_name_elo = club_name, score_elo = score)
 ```
 
-
-
-The simulation of the elo rating 
 ```{r echo=FALSE}
-sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+sim_output_point <- readRDS(paste0(getwd(), "/data/point_simulation.rds"))
+# 2. evaluate result
+all_final_tables_point <- sim_output_point$all_final_tables
+all_final_tables_point <- add_run_rank_col(x = all_final_tables_point)
+all_avg_tables_point <- sim_output_point$all_avg_tables
+all_avg_tables_point <- add_run_rank_col(x = all_avg_tables_point)
+
+# average table result
+average_table_point <- all_avg_tables_point[
+  (nrow(all_avg_tables_point)-15):nrow(all_avg_tables_point),] 
+ 
+
+average_table_point <- average_table_point %>% arrange(rank) %>% select(rank, club_name, score)%>% rename(club_name_points = club_name, score_points = score)
+```
+
+
+
+```{r echo=FALSE}
+sim_output_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
 
 # 2. evaluate result
 
-all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
-all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
-all_avg_tables <- add_run_rank_col(x = all_avg_tables)
+all_final_tables_poisson <- sim_output_poisson$all_final_tables %>% rename(score = points)
+all_final_tables_poisson <- add_run_rank_col(x = all_final_tables_poisson)
+all_avg_tables_poisson <- sim_output_poisson$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
+all_avg_tables_poisson <- add_run_rank_col(x = all_avg_tables_poisson)
 
 # average table result
-average_table <- all_avg_tables[
-  (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
+average_table_poisson <- all_avg_tables_poisson[
+  (nrow(all_avg_tables_poisson)-15):nrow(all_avg_tables_poisson),] 
  
 
-average_table_poisson <- average_table %>% arrange(rank) %>% select(rank, everything(), -run)%>% rename(club_name_poisson = club_name, score_poisson = score)
-kable(inner_join(average_table_poisson,average_table_elo, by = "rank"),
+average_table_poisson <- average_table_poisson %>% arrange(rank) %>% select(rank, everything(), -run)%>% rename(club_name_poisson = club_name, score_poisson = score)
+all_results <- inner_join(average_table_poisson,average_table_elo, by = "rank") %>%
+        inner_join(average_table_point, by = "rank")
+kable(all_results,
       caption = "Simulated Final Score Table"
                     ) %>%
-  add_header_above(c(" " = 1, "Poisson Distribution" = 2, "Elo Rating" = 2 )) %>%
-  kable_styling(latex_options = c("striped", "HOLD_position"),full_width = F)
+  add_header_above(c(" " = 1, "Poisson Distribution Model" = 2, "Elo Rating Model" = 2, "Points Model" = 2 )) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),full_width = F)
+
+  
 
 ```
 

@@ -59,6 +59,18 @@ get_results <- function(href_list, md_url_season ){
     ) 
  
   }else if (page %>%
+            html_nodes("span:nth-child(4)") %>% .[1] %>% 
+            gsub(x = . , pattern = '<span>\\s|\\s</span>', replacement = "") =="U"){ # Spiel wurde uneideutig gewertet
+    df <- list(
+      club_name_home = get_club_name_home(page),
+      club_name_away = get_club_name_away(page),
+      
+      goals_team_a = NA,
+      goals_team_b = NA
+    )
+    
+    message(paste("Please revist", href_list ))
+  }else if (page %>%
         html_nodes("sub") %>%
         html_text() %>%
         gsub(x = ., pattern = "\\s", replacement = "" )== "W"){ #Spiel wurde wiederholt
@@ -69,7 +81,8 @@ get_results <- function(href_list, md_url_season ){
         goals_team_a = NA,
         goals_team_b = NA
       )
-    }else { 
+      message(paste("Please revist", href_list ))
+    }  else { 
      
        df <- list(
         club_name_home = get_club_name_home(page),
