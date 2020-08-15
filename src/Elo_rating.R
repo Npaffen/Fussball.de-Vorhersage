@@ -1,10 +1,10 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/"))
+database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds"))
 
-missinggames <- read_rds(here::here("/data/database_missing_matches_1920.rds"))
+missinggames <- read_rds(here::here("/data/database_missing_matches_1819.rds"))
 
-database_season <- readRDS(here::here("/data/database_season_1920.rds"))
+database_season <- read_rds(here::here("/data/database_season_1819.rds"))
 
 source(here::here("src/functions_N.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
@@ -31,7 +31,7 @@ played_matchdays <- database_mr %>% filter(between(matchday,1,20))
   rating <- f_rating(played_matchdays)
 
 matchday30 <- database_season %>% filter(matchday == 30)
-
+#simulate the 
 if(0){
 N = 5000
 sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01 )

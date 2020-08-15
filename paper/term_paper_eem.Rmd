@@ -40,7 +40,7 @@ source(here::here("src/functions.R"))
 ## load data or something for preparation
 
 ```
-
+##The decision to quit all games later than 08th of march because of the pandemic was not revised while the infection rates relaxed during may and june in Germany. Combined with the unforseeble future of the COVID-19 situation we see a more fair and balanced decision making process by integrating statistical learning techniques, such as those, shown in this paper.
 # Introduction
 
 The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the Kreisliga Herren Klasse 2 in Recklinghausen finished around 150 games, before the rest were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the tournament on Sunday May 24, 2020. Given the distinct possibility that there won't be a chance to make up those games later, a burning question for many players and fans is naturally: What if they would have played those games? We attempt to use data on games already played from the website [fussball.de](http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G#!/section/matchplan) to answer this question, drawing on established forecasting methods from the literature.
