@@ -1,10 +1,10 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
+database_mr <- readRDS(here::here("/data/database_match_results_1718.rds"))[1:175,] 
 
-missinggames <- read_rds(here::here("/data/database_missing_matches_1920.rds"))
+missinggames <- read_rds(here::here("/data/database_match_results_1718.rds"))[176:268,1:4]
 
-database_season <- readRDS(here::here("/data/database_season_1920.rds"))  
+database_season <- readRDS(here::here("/data/database_season_1718.rds"))  
 
 source(here::here("src/functions_N.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
@@ -34,12 +34,12 @@ poisson_model <-
   glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
 summary(poisson_model)
 
-matchday30 <- database_season %>% filter(season == 1920, matchday == 30)
+matchday30 <- database_season %>% filter(season == '1718', matchday == 30)
 
 if(0){
 N <- 5000 # simulation runs
 sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 10, N, limit = 0.01)
-saveRDS(sim_output, paste0(getwd(), "/data/poisson_score_simulation.rds"))
+saveRDS(sim_output_poisson, paste0(getwd(), "/data/poisson_score_simulation_1718.rds"))
 }
 sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
 

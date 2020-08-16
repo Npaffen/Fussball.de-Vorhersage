@@ -62,4 +62,4 @@ real_results <- database_season %>% filter(matchday == 30) %>% select(season, ma
 
 (oof_rank_1718 <-sum((average_table$club_name == real_results$club_name))/nrow(real_results))
 
-
+table(c(real_results,average_table))

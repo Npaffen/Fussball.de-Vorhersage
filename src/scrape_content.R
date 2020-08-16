@@ -7,9 +7,9 @@ library(glue)
 # if dates is not supplied, then ... passes args to the make_dates()
 # function, which are [ year, month, from_day, to_day, all_dates (logical),
 # respectively ]. Please refer to `make_dates.R`.
-seasons <-  "1819"
+seasons <-  "1718"
 
-seasonsID <- "023VNLHG8000000CVS54898DVVG1IBJM"
+seasonsID <- "0209KP9SAC00000AVS54898DVUVCCN5J"
               
 source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
 md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .x, seasonID = .y)) %>%
@@ -27,7 +27,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
            wins = as.numeric(wins),
            ties = as.numeric(ties),
            loss = as.numeric(loss))
-  saveRDS(database_season, here::here("/data/database_season_1819.rds"))
+  saveRDS(database_season, here::here("/data/database_season_1718.rds"))
   
   #Download match results 
     source("src/get_match_results.R")
@@ -46,7 +46,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
     database_match_results <- database_match_results %>%
       setdiff(x = ., y = database_mr[duplicated(database_mr[,c("club_name_home", "club_name_away")]),])
       
-    saveRDS(database_match_results, here::here("/data/database_match_results_1819.rds"))
+    saveRDS(database_match_results, here::here("/data/database_match_results_1718.rds"))
     
     
 #Download missing matches. Need to insert only urls of missing matchdays
