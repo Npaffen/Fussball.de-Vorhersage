@@ -14,6 +14,10 @@ f_extract_match_results <- function(md_url_season) {
         as.integer()*2-2,
       by = 4)
   
+  #Prüfe ob ein Team spielfrei hat und lösche dieses Element aus attr_href
+  nomatch_checker <- page %>% html_nodes(' .no-border') %>% html_text() %>% grep(pattern = 'spielfrei')
+  
+  if(identical(nomatch_checker, integer(0)) == F ){attr_href <- attr_href[!attr_href %in% attr_href[nomatch_checker/2]]}
   
   href_list <- map(attr_href, ~html_nodes(page, ".column-detail") %>%
                      .[[.x]] %>%
@@ -43,7 +47,7 @@ f_extract_match_results <- function(md_url_season) {
   
 get_results <- function(href_list, md_url_season ){
   Sys.sleep(runif(1, 5L, 10L))
-  page <- read_html(href_list)
+  page <- read_html(href_list[1])
 
   if ( page %>%
        html_nodes(".info-text") %>% 
@@ -61,6 +65,18 @@ get_results <- function(href_list, md_url_season ){
   }else if (page %>%
             html_nodes("span:nth-child(4)") %>% .[1] %>% 
             gsub(x = . , pattern = '<span>\\s|\\s</span>', replacement = "") =="U"){ # Spiel wurde uneideutig gewertet
+    df <- list(
+      club_name_home = get_club_name_home(page),
+      club_name_away = get_club_name_away(page),
+      
+      goals_team_a = NA,
+      goals_team_b = NA
+    )
+    
+    message(paste("Please revist", href_list ))
+  }else if (page %>%
+            html_nodes("sub") %>%
+            html_text() %>% identical(character(0)) == T){ #Kein Ergebnis für das Spiel vorhanden
     df <- list(
       club_name_home = get_club_name_home(page),
       club_name_away = get_club_name_away(page),

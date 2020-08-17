@@ -15,7 +15,8 @@ all_avg_tables <- add_run_rank_col(x = all_avg_tables)
 # average table result
 average_table <- all_avg_tables[
   (nrow(all_avg_tables)-15):nrow(all_avg_tables),] 
-average_table <- average_table %>% arrange(rank)
+average_table <- average_table %>%
+  arrange(rank)
 
 print(average_table)
 #View(average_table)
@@ -24,12 +25,23 @@ print(average_table)
 average_table$score <- floor(average_table$score)
 
 #load the real results
-real_results <- database_season %>% filter(matchday == 30) %>% select(season, matchday, rank, club_name, points)
+real_results <- database_season %>%
+  filter(matchday == 30) %>% 
+  select(season, matchday, rank, club_name, points)
+#calculate out of sample error für 18/19
+(oose_rank_1819 <- sum((average_table$club_name != real_results$club_name))/nrow(real_results))
 
-(oof_rank_1819 <- sum((average_table$club_name == real_results$club_name))/nrow(real_results))
+(oos_points_1819 <- sum((average_table$points != real_results$points))/nrow(real_results))
 
-(oof_points_1819 <- sum((average_table$points == real_results$points))/nrow(real_results))
+sim_compare <- average_table %>%
+  select(rank, club_name, score) %>%
+  rename(points_sim = score, rank_sim = rank)
 
+sim_vs_real <- real_results %>%
+  select(rank, club_name, points) %>% 
+  rename(points_real = points, rank_real = rank) %>% 
+  dplyr::inner_join(sim_compare,by =  'club_name') %>%
+  select(rank_real, rank_sim, everything())
 
 #Out of Sample Error 17/18
 
@@ -59,7 +71,7 @@ average_table$score <- floor(average_table$score)
 
 #load the real results
 real_results <- database_season %>% filter(matchday == 30) %>% select(season, matchday, rank, club_name, points)
+#calculate out of sample error für 17/18
+(oose_rank_1718 <-sum((average_table$club_name != real_results$club_name))/nrow(real_results))
 
-(oof_rank_1718 <-sum((average_table$club_name == real_results$club_name))/nrow(real_results))
 
-table(c(real_results,average_table))
