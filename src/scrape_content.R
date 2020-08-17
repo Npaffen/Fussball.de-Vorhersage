@@ -7,9 +7,9 @@ library(glue)
 # if dates is not supplied, then ... passes args to the make_dates()
 # function, which are [ year, month, from_day, to_day, all_dates (logical),
 # respectively ]. Please refer to `make_dates.R`.
-seasons <-  "1718"
+seasons <-  "1617"
 
-seasonsID <- "0209KP9SAC00000AVS54898DVUVCCN5J"
+seasonsID <- "01SNI60QL4000007VS54898EVT9SILN7"
               
 source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
 md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .x, seasonID = .y)) %>%
@@ -27,13 +27,13 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
            wins = as.numeric(wins),
            ties = as.numeric(ties),
            loss = as.numeric(loss))
-  saveRDS(database_season, here::here("/data/database_season_1718.rds"))
+  saveRDS(database_season, here::here("/data/database_season_1617.rds"))
   
   #Download match results 
     source("src/get_match_results.R")
     database_match_results <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
     
-    #Some games cant be scraped due to a missing node but results are still there. Added them manually
+      #Some games cant be scraped due to a missing node but results are still there. Added them manually
     database_match_results <- database_match_results %>% 
       filter(is.na(goals_team_home) == T | is.na(goals_team_away) == T ) %>%
       mutate(goals_team_home = c(2, 2, 0, 0, NA, NA)) %>%
@@ -46,7 +46,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
     database_match_results <- database_match_results %>%
       setdiff(x = ., y = database_mr[duplicated(database_mr[,c("club_name_home", "club_name_away")]),])
       
-    saveRDS(database_match_results, here::here("/data/database_match_results_1718.rds"))
+    saveRDS(database_match_results, here::here("/data/database_match_results_1617.rds"))
     
     
 #Download missing matches. Need to insert only urls of missing matchdays
