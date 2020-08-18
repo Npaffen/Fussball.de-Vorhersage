@@ -294,17 +294,18 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
 ## add_rank_col(), adds run and rank column to all_tables output
 
 add_run_rank_col <- function(x = all_final_tables){
-  x$run <- rep(1:(length(x$score)/16), each = 16)
+  rank_count <- length(unique(x$club_name))
+  x$run <- rep(1:(length(x$score)/rank_count), each = rank_count)
   x$rank <- NA
-  for(i in 1:(length(x$score)/16)){
+  for(i in 1:(length(x$score)/rank_count)){
     tab <- x[x$run == i,]
     tab <- transform(tab, rank = rank(-score, ties.method = "first"))
     x[x$run == i,] <- tab
   }
   return(x)
 }
-
 ############################################################
+
 ## make_plot(), makes output plots
 
 make_plot <- function(x = all_final_tables,

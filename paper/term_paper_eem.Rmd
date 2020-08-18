@@ -68,6 +68,8 @@ Finally the literature contains references to using betting markets as a benchma
 # Data
 For the simulation study we decided to use data from the amateur football league of the Kreisliga A Kreis Recklinghausen class A1 in Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in one home and one away game each. Due to the Covid-19 pandemic, the association has decided to cancel all matches from March 15, 2020. After all, 20 matchdays have already been played until this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the table. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector.  The match results of the website itself cannot be directly read out. They are masked, so they are made unreadable when viewing the HTML file and are only evaluated afterwards using Javascript and transferred to the CSS of the site.  The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, the game result can be reconstructed.  The data record was then divided into completed and unplayed games. The latter amount to 89 in this season, which were simulated with the methods in the following chapters.
 
+For further analysis we decided to scrape the data of season 16/17, 17/18 and 18/19 aswell to perform out-of-sample error (OOSE) test statistics.  The latter will indicate the performance of the different methods. 
+
 Give a short overview of the actual standing (ranking table after matchday 20)
 
 
@@ -186,7 +188,7 @@ stargazer(fake,fake,fake,
 ```
 
 
-In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", both as home and away club, has a strong negative and a strong positive influence, both highly significant, on goals, i.e. the number of goals. Since the club is in the last place in the current table, as mentioned in the Data section, we expected that
+In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", both as home and away club, has a strong negative and a strong positive influence???, both highly significant, on goals, i.e. the number of goals. Since the club is in the last place in the current table, as mentioned in the Data section, we expected that
 it would be easier to score goals if they played against the team on the last place of the seasons soccer league table rather than the team on the first place. On the other hand it will be harder for this last placed team to score goals even if they are the home team. 
 
 
@@ -202,7 +204,9 @@ A few alternatives have been developed for forecasting football games. The poten
 While the independent Poisson distributions already allowed for a better fit and to model the outcome of draws, Boshnakov et al. -@boshnakov2016 used a Weibull count model to improve even on the bivariate Poisson model, allowing them even to outperform betting market in selected bets.
 
 
+# OOSE Test Statistics
 
+Making predictions of events that might never happen can fairly criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his qoute "All models are wrong" which is often extenden by "but some are usefull" we want to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a dataset a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we decided to split the dataset at the same point where the COVID-19 pandemic forced the  
 
 
 # Results
