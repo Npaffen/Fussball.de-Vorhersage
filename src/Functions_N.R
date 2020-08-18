@@ -166,7 +166,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
   return(sim_output)
 }
 #simulation of elo ratin model
-f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, limit ){
+f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, limit, season ){
   all_avg_tables <- data.frame(stringsAsFactors = FALSE)
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
   
@@ -175,7 +175,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
   matchday30_reset <- matchday30
   
   tie_prob <- database_season %>%
-    filter( season == 1920) %>%
+    filter( season == season) %>%
     select(ties) %>% 
     sum/length(database_season$ties)
   

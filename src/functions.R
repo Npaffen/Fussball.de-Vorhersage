@@ -28,17 +28,17 @@ add_run_rank_col <- function(x = all_final_tables){
 ############################################################
 ## find_games_played(), finds all games that were played
 
-find_games_played <- function(dbs_data, dbm_data){
+find_games_played <- function(dbs_data, dbm_data, season){
   games_played <- data.frame(club_name_home = as.character(),
                              club_name_away = as.character(),
                              stringsAsFactors = FALSE)
   for(i in unique(dbs_data$club_name)){
     a <- dbm_data %>%
-      filter(season == "1920", club_name_home == i) %>%
+      filter(season == season, club_name_home == i) %>%
       select(club_name_away) %>%
       unique()
     b <- dbm_data %>%
-      filter(season == "1920", club_name_away == i) %>%
+      filter(season == season, club_name_away == i) %>%
       select(club_name_home) %>%
       unique()
     if(nrow(a) != 0){

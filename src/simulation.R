@@ -15,9 +15,9 @@ require(purrr)
 source("src/functions.R")
 
 # read in data
-dbs<- readRDS(here::here("/data/database_season.rds"))
+dbs<- readRDS(here::here("/data/database_season_1617.rds"))
 dbs[,-c(1,5,9)] <- map(dbs[,-c(1,5,9)], as.numeric)
-dbm <- readRDS(here::here("/data/database_match_results_1920.rds"))
+dbm <- readRDS(here::here("/data/database_match_results_1617.rds"))[1:175,]
 dbm <- dbm[complete.cases(dbm),]
 dbm$matchday <- as.numeric(dbm$matchday)
 
@@ -31,7 +31,7 @@ for(j in unique(dbs$season)){
   }
 }
 dbs <- dbs0
-dbs1920 <- dbs[dbs$season == "1920",]
+dbs1920 <- dbs[dbs$season == "1617",]
 
 
 
@@ -39,7 +39,7 @@ dbs1920 <- dbs[dbs$season == "1920",]
 
 
 # - check games status
-games_played <- find_games_played(dbs_data = dbs1920, dbm_data = dbm)
+games_played <- find_games_played(dbs_data = dbs1920, dbm_data = dbm, season = '1617')
 all_games <- make_all_games(dbs_data = dbs1920, games_played)
 missing_games <- anti_join(all_games, games_played)
 #missing_games2 <- readRDS("data/database_missing_matches_1920.rds")
@@ -51,7 +51,7 @@ if(0){
   N <- 5000 # simulation runs
   sim_output <- run_points_sim(missing_games, dbs1920, win_prob_home,
                                sim_results, N, limit = 0.01)
-  saveRDS(sim_output, paste0(getwd(), "/data/point_simulation.rds"))
+  saveRDS(sim_output, paste0(getwd(), "/data/point_simulation_1617.rds"))
 }
 sim_output <- readRDS(paste0(getwd(), "/data/point_simulation.rds"))
 # simulated data
