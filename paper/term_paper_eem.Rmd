@@ -292,6 +292,14 @@ kable(all_results,
 # Conclusion
 The decision to quit all games later than 08th of march because of the pandemic was not revised while the infection rates relaxed during may and june in Germany. Combined with the unforseeble future of the COVID-19 situation we see a more fair and balanced decision making process by integrating statistical learning techniques, such as those, shown in this paper.
 
+
+TO DO:
+
+-clean up models section: use more original sources, Maher 1982?
+-calculate draw in poisson from diagonal?
+-add caveats: what other factors play a role, what alternative models are there? use sources
+-goal distribution?
+
 \newpage
 
 \printbibliography

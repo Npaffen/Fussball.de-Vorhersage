@@ -79,7 +79,8 @@ average_table <- all_avg_tables[
   (nrow(all_avg_tables)-15):nrow(all_avg_tables),]
 print(average_table)
 #View(average_table)
-
+points_model_result <- average_table
+save(points_model_result, file = "data/points_model_result.rds")
 
 
 ## 3. calculate plots

@@ -285,8 +285,10 @@
 
 \newpage
 \pagenumbering{arabic}
-\hypertarget{introduction}{%
-\section{Introduction}\label{introduction}}
+\#Maybe add some sport medical data from an actual research papger how
+\enquote{dangerous} in terms of \enquote{enhanced chances of \#infection
+during football games}. I thought I had heard of something like this but
+will update the section when \#I find the paper. \# \# Introduction
 
 The Covid-19 epidemic forced sports leagues in Germany to suspend
 championships that were already in full swing. For example, the
@@ -413,6 +415,11 @@ reconstructed. The data record was then divided into completed and
 unplayed games. The latter amount to 89 in this season, which were
 simulated with the methods in the following chapters.
 
+For further analysis we decided to scrape the data of season 16/17,
+17/18 and 18/19 aswell to perform out-of-sample error (OOSE) test
+statistics. The latter will indicate the performance of the different
+methods.
+
 Give a short overview of the actual standing (ranking table after
 matchday 20)
 
@@ -461,27 +468,27 @@ follows:
 R_n = R_0 + K \times (W - W_e).
 \end{align}
 
-Here, R\_n is defined as the new rating as an update of R\_o, which is
-the old rating. The weighting factor for each match is defined by the
-type of tournament in which the match takes place and also controls for
-friendly matches, which is given to the lowest weight of 20. While
-matches in world championships and other major international tournaments
-are given weights between 40 and 60, the rest falls into the category
-\enquote{all other tournaments} which are given a weighting factor of
-30. Following this example, we also set K to 30 for matches already
-played in the Kreisliga A. The weighting factor K is adjusted again
-based on the goal difference of the result. Thus, K is increased by
-\(\dfrac{K}{2}\) if the match was won with two goals, by
+Here, \(R_n\) is defined as the new rating as an update of \(R_0\),
+which is the old rating. The weighting factor for each match is defined
+by the type of tournament in which the match takes place and also
+controls for friendly matches, which is given to the lowest weight of
+20. While matches in world championships and other major international
+tournaments are given weights between 40 and 60, the rest falls into the
+category \enquote{all other tournaments} which are given a weighting
+factor of 30. Following this example, we also set K to 30 for matches
+already played in the Kreisliga A. The weighting factor K is adjusted
+again based on the goal difference of the result. Thus, K is increased
+by \(\dfrac{K}{2}\) if the match was won with two goals, by
 \(\dfrac{3}{4}\times K\) if the match was won with three goals and by
 \(\dfrac{3}{4} + \dfrac{(N-3)}{8} \times K\), where N defines the goal
 difference of the match if the match was won with four or more goals. W
 is the result of the match. 0 for a loss, 0.5 for a draw and 1 for a
-win. W\_e is the probability of winning defined by the following
+win. \(W_e\) is the probability of winning defined by the following
 formula:
 
 \begin{align}
 W_e = 1/(10^{(-dr/400)}+1)
-\end{align}
+\end{align},
 
 where dr is defined as the rating difference and the home team receives
 a bonus of 100 points. This bonus is considered to be a psychological
@@ -515,8 +522,8 @@ away team,it serves to illustrate the home team bonus, team representing
 the home team, and opponent representing the opponent team.
 
 \% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard
-University. E-mail: hlavac at fas.harvard.edu \% Date and time: So, Mai
-10, 2020 - 21:16:38 \% Requires LaTeX packages: dcolumn
+University. E-mail: hlavac at fas.harvard.edu \% Date and time: Fr, Aug
+21, 2020 - 12:06:12 \% Requires LaTeX packages: dcolumn
 
 \begin{table}[!htbp] \centering 
   \caption{Regression ouput of the Poisson Model} 
@@ -555,7 +562,7 @@ University. E-mail: hlavac at fas.harvard.edu \% Date and time: So, Mai
 
 In summary, the coefficients of the model show that the club
 \enquote{Altendorf-Ulfkotte}, both as home and away club, has a strong
-negative and a strong positive influence, both highly significant, on
+negative and a strong positive influence???, both highly significant, on
 goals, i.e.~the number of goals. Since the club is in the last place in
 the current table, as mentioned in the Data section, we expected that it
 would be easier to score goals if they played against the team on the
@@ -585,6 +592,20 @@ fit and to model the outcome of draws, Boshnakov et
 al.~\autocite*{boshnakov2016} used a Weibull count model to improve even
 on the bivariate Poisson model, allowing them even to outperform betting
 market in selected bets.
+
+\hypertarget{oose-test-statistics}{%
+\section{OOSE Test Statistics}\label{oose-test-statistics}}
+
+Making predictions of events that might never happen can fairly
+criticized by a simple question. How do you know that your results
+reflect reality as good as possible? Following George E. P. Box who is
+known for his qoute \enquote{All models are wrong} which is often
+extenden by \enquote{but some are usefull} we want to show that our
+models cover the latter. The out-of-sample error test statistic is one
+way to achieve this. One simply divides a dataset a small test data set
+and a larger training data set. For the season 16/17, 17/18 and 18/19 we
+decided to split the dataset at the same point where the COVID-19
+pandemic forced the
 
 \hypertarget{results}{%
 \section{Results}\label{results}}
@@ -655,6 +676,20 @@ rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & clu
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
+
+The decision to quit all games later than 08th of march because of the
+pandemic was not revised while the infection rates relaxed during may
+and june in Germany. Combined with the unforseeble future of the
+COVID-19 situation we see a more fair and balanced decision making
+process by integrating statistical learning techniques, such as those,
+shown in this paper.
+
+TO DO:
+
+-clean up models section: use more original sources, Maher 1982?
+-calculate draw in poisson from diagonal? -add caveats: what other
+factors play a role, what alternative models are there? use sources
+-goal distribution?
 
 \newpage
 
