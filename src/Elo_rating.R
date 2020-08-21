@@ -1,8 +1,8 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds"))
+database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds")) 
 
-missinggames <- read_rds(here::here("/data/database_missing_matches_1819.rds"))
+missinggames <- read_rds(here::here("/data/database_match_results_1819.rds"))
 
 database_season <- read_rds(here::here("/data/database_season_1819.rds"))
 
@@ -11,16 +11,6 @@ source(here::here("src/functions_N.R"))
 #Annahme : Zwei gleichstarke Mannschaften haben eine höhere Wahrscheinlichkeit unentschieden zu spielen als zwei unterschiedlich Starke.
 #Ableitung : Für gleichstarke Mannschaften Durchschnittswert für unterschiedlich Starke den Wert diskontieren 
 #Proportion zum Rankingunterschied. 
-
-
-
-
-
-
-
-
-
-
 
 
 played_matchdays <- database_mr %>% filter(between(matchday,1,20))
@@ -34,10 +24,11 @@ matchday30 <- database_season %>% filter(matchday == 30)
 #simulate the 
 if(0){
 N = 5000
-sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01 )
-saveRDS(sim_output, paste0(getwd(), "/data/elo_ties_simulation.rds"))
-}
-sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
+sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01, season = 1617 )
+
+saveRDS(sim_output, paste0(getwd(), "/data/elo_ties_simulation_1718.rds"))
+  }
+sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation_1718.rds"))
 
 
 

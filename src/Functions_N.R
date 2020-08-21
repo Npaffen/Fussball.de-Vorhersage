@@ -165,7 +165,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
   )
   return(sim_output)
 }
-#simulation of elo ratin model
+#simulation of elo rating model
 f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, limit, season ){
   all_avg_tables <- data.frame(stringsAsFactors = FALSE)
   all_final_tables <- data.frame(stringsAsFactors = FALSE)
@@ -283,6 +283,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
                                      " after ", N, " runs"))
   }
   all_avg_tables <- all_avg_tables %>%  select(Group.1 , points) %>% rename(club_name = Group.1, score = points)
+  
   sim_output <- list("all_final_tables" = all_final_tables,
                      "conv_plot" = conv_plot,
                      "all_avg_tables" = all_avg_tables
