@@ -35,10 +35,10 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
     
       #Some games cant be scraped due to a missing node but results are still there. Added them manually
     database_match_results <- database_match_results %>% 
-      filter(is.na(goals_team_home) == T | is.na(goals_team_away) == T ) %>%
-      mutate(goals_team_home = c(2, 2, 0, 0, NA, NA)) %>%
-      mutate(goals_team_away = c(0, 0, 2, 2, NA, NA)) %>% 
-      bind_rows(database_match_results) %>%
+      #filter(is.na(goals_team_home) == T | is.na(goals_team_away) == T ) %>%
+      #mutate(goals_team_home = c(2, 2, 0, 0, NA, NA)) %>%
+      #mutate(goals_team_away = c(0, 0, 2, 2, NA, NA)) %>% 
+      #bind_rows(database_match_results) %>%
       drop_na() %>%
       mutate(matchday = as.numeric(matchday),
              season = as.numeric(season))

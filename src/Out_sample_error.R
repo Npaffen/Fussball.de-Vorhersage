@@ -15,7 +15,7 @@ source(here::here("src/functions_N.R"))
 oose <- function(season, sim_type = c('poisson_score', 'elo_ties', 'point')){
 database_season <- readRDS(here::here(paste0('data/database_season_',season,'.rds')))  
 
-
+if(exists('OOSE_DF') == F ) {OOSE_DF <- tibble(sim = c(1,2,3))}
 
 sim_output <- readRDS(paste0(getwd(),'/data/',sim_type,'_simulation_',season,'.rds'))
 
@@ -52,13 +52,22 @@ real_results <- database_season %>%
 #calculate out of sample error for 17/18
 oose <-  sum((average_table$club_name != real_results$club_name))/nrow(real_results)
 
+OOSE_DF <- OOSE_DF %>% 
+  if(filter(., sim))
+    mutate(simpo = oose) %>% rename(sim_type[1] = sim)
+
 return(oose)
 
 
 }
-season <- rep(c('1617', '1718', '1819'),3)
-sim_type <- rep(c('poisson_score', 'elo_ties', 'point'),each = 3)
 
-map2(season, sim_type, ~oose(.x, .y))
+season <- c('1617', '1718', '1819')
+sim_type <-c('poisson_score', 'elo_ties', 'point')
+season_map <- rep(season,3)
+sim_type_map <- rep(sim_type,each = 3)
 
+OOSE <- map2_df(season_map, sim_type_map, ~oose(.x, .y)) %>% 
+  unlist() 
+
+OOSE_DF <- tibble(a = OOSE[1:3], b = OOSE[4:6], c = OOSE[7:9] ) %>% setNames(sim_type)
 
