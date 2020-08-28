@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.6.24)  21 AUG 2020 12:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.6.24)  28 AUG 2020 13:54
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
@@ -868,32 +868,32 @@ File: l3backend-pdfmode.def 2020-03-12 L3 backend support: PDF mode
 ) (term_paper_eem.aux)
 \openout1 = `term_paper_eem.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 141.
-LaTeX Font Info:    ... okay on input line 141.
-LaTeX Info: Redefining \microtypecontext on input line 141.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 142.
+LaTeX Font Info:    ... okay on input line 142.
+LaTeX Info: Redefining \microtypecontext on input line 142.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-LaTeX Info: Redefining \showhyphens on input line 141.
+LaTeX Info: Redefining \showhyphens on input line 142.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -995,8 +995,8 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'term_paper_eem.bbl' found.
 (term_paper_eem.bbl)
-Package biblatex Info: Reference section=0 on input line 141.
-Package biblatex Info: Reference segment=0 on input line 141.
+Package biblatex Info: Reference section=0 on input line 142.
+Package biblatex Info: Reference segment=0 on input line 142.
 ("C:\Program Files\MiKTeX 2.9\tex/context/base/mkii\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count449
@@ -1016,7 +1016,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
 )
 \AtBeginShipoutBox=\box113
-Package hyperref Info: Link coloring ON on input line 141.
+Package hyperref Info: Link coloring ON on input line 142.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/hyperref\nameref.sty"
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 ("C:\Program Files\MiKTeX 2.9\tex/latex/refcount\refcount.sty"
@@ -1026,75 +1026,75 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count455
 )
-LaTeX Info: Redefining \ref on input line 141.
-LaTeX Info: Redefining \pageref on input line 141.
-LaTeX Info: Redefining \nameref on input line 141.
+LaTeX Info: Redefining \ref on input line 142.
+LaTeX Info: Redefining \pageref on input line 142.
+LaTeX Info: Redefining \nameref on input line 142.
 (term_paper_eem.out) (term_paper_eem.out)
 \@outlinefile=\write4
 \openout4 = `term_paper_eem.out'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 150--153
+Underfull \hbox (badness 10000) in paragraph at lines 151--154
 
  []
 
 LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 1
-53.
+54.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\ot1lmr.fd"
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-53.
+54.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omllmm.fd"
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-153.
+154.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omslmsy.fd"
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-153.
+154.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\omxlmex.fd"
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 153.
+(Font)              <12> on input line 154.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 153.
+(Font)              <8> on input line 154.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 153.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 153
+(Font)              <6> on input line 154.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 154
 .
 ("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/microtype\mt-msa.cfg"
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 153
+LaTeX Font Info:    Trying to load font information for U+msb on input line 154
 .
 ("C:\Program Files\MiKTeX 2.9\tex/latex/amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) ("C:\Program Files\MiKTeX 2.9\tex/latex/microtype\mt-msb.cfg"
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-<Includes/duelogo_en.png, id=39, 230.8625pt x 89.33376pt>
+<Includes/duelogo_en.png, id=47, 230.8625pt x 89.33376pt>
 File: Includes/duelogo_en.png Graphic file (type png)
 <use Includes/duelogo_en.png>
-Package pdftex.def Info: Includes/duelogo_en.png  used on input line 157.
+Package pdftex.def Info: Includes/duelogo_en.png  used on input line 158.
 (pdftex.def)             Requested size: 142.26315pt x 55.04965pt.
 
-Overfull \hbox (2.61105pt too wide) in paragraph at lines 149--162
+Overfull \hbox (2.61105pt too wide) in paragraph at lines 150--163
 $[]$ $[]$ 
  []
 
 
-Overfull \hbox (2.61105pt too wide) in paragraph at lines 179--185
+Overfull \hbox (2.61105pt too wide) in paragraph at lines 181--187
 [] [] 
  []
 
 
-Overfull \hbox (2.61105pt too wide) in paragraph at lines 186--192
+Overfull \hbox (2.61105pt too wide) in paragraph at lines 188--194
 [] [] 
  []
 
@@ -1152,31 +1152,31 @@ duelogo_en.png>]
 as been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.341 T
-       he first candidate model is published by the anonymous website [1
+l.345 
+       [1
 
-] [2]
+] [2] [3]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 4
-35.
+62.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\ts1lmr.fd"
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [3] [4]
+) [4] [5]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 532.
+(Font)              <10.95> on input line 559.
 
-Overfull \hbox (36.11925pt too wide) in paragraph at lines 532--561
+Overfull \hbox (36.11925pt too wide) in paragraph at lines 559--588
  [][] 
  []
 
-[5] [6] [7] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 700.
-[9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 700.
+[6] [7] [8] (rank_corr.tex) (append_rank_corr.tex) [9]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 748.
+[10]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 748.
 (term_paper_eem.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 700.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 700.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 748.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 748.
 Package rerunfilecheck Info: File `term_paper_eem.out' has not changed.
-(rerunfilecheck)             Checksum: ECB5DEF0212824F4760D7190A4BAAE7C;1007.
+(rerunfilecheck)             Checksum: CC50A4E8BC6217BE2D60F7DDA05F5F38;1195.
 
 LaTeX Warning: There were undefined references.
 
@@ -1189,11 +1189,11 @@ Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23631 strings out of 480896
- 383656 string characters out of 2908245
- 1240404 words of memory out of 3000000
- 38932 multiletter control sequences out of 15000+200000
- 586949 words of font info for 110 fonts, out of 3000000 for 9000
+ 23669 strings out of 480896
+ 384554 string characters out of 2908245
+ 1239539 words of memory out of 3000000
+ 38950 multiletter control sequences out of 15000+200000
+ 587093 words of font info for 112 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  58i,17n,63p,821b,6737s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/M
@@ -1210,9 +1210,9 @@ public/lm/lmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmr8.pfb
 s/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Program Files/MiKTeX 2.9/font
 s/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm
 /lmsy8.pfb>
-Output written on term_paper_eem.pdf (12 pages, 259562 bytes).
+Output written on term_paper_eem.pdf (13 pages, 264632 bytes).
 PDF statistics:
- 221 PDF objects out of 1000 (max. 8388607)
- 45 named destinations out of 1000 (max. 500000)
- 14420 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 255 PDF objects out of 1000 (max. 8388607)
+ 55 named destinations out of 1000 (max. 500000)
+ 14436 words of extra memory for PDF output out of 17280 (max. 10000000)
 

@@ -1,7 +1,7 @@
 ---
-title: '"Stay home" and let the simulation play'
+title: 'Stay home and let the simulation play'
 author: 'Nils Paffen, David Schulze'
-subtitle: "Predicting the Outcome Kreisliga A Reklinghausen Season 2019-2020"
+subtitle: "Predicting Kreisliga football league outcomes with statistical simulations "
 type: "Working Paper"
 discipline: ""
 date: "today"
@@ -40,38 +40,50 @@ source(here::here("src/functions.R"))
 ## load data or something for preparation
 
 ```
-#Maybe add some sport medical data from an actual research papger how 'dangerous' in terms of 'enhanced chances of #infection during football games'. I thought I had heard of something like this but will update the section when
-#I find the paper.
-#
+
+
+
+# Abstract
+
+Publicly available data and a high public interest are contributing to the relevance and interest in forecasting football game results. We provide a short overview of the state of the literature and use data from the aborted Kreisliga A Recklinghausen season 2019-20 to predict the season’s outcome using three different statistical approaches. A measure of each team’s strength is calculated from past plays and used as weight in the simulation. For the football league’s organizers, using a prediction algorithm to find a season outcome might be fairer than either annulling the games played thus far or using the table as of now. Research has shown, that measures like the Elo rating system are better predictors of teams’ performance than for example league table points on their own. For this example, we find that gains from using advanced methods are marginal when evaluating them with past seasons’ data.
+
+
+
 # Introduction
 
-The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the Kreisliga Herren Klasse 2 in Recklinghausen finished around 150 games, before the rest were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the tournament on Sunday May 24, 2020. Given the distinct possibility that there won't be a chance to make up those games later, a burning question for many players and fans is naturally: What if they would have played those games? We attempt to use data on games already played from the website [fussball.de](http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G#!/section/matchplan) to answer this question, drawing on established forecasting methods from the literature.
+The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the Kreisliga Herren Klasse 2 in Recklinghausen finished around 150 games, before the rest were canceled starting from Sunday March12, 2020, leaving around 90 games left unplayed until the last planned day of the tournament on Sunday May 24, 2020. Given that there probably won’t be a chance to make up those games later, a burning question for many players and fans is naturally: What if they would have played those games? We attempt to use data on games already played from the website [fussball.de](http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G#!/section/matchplan) to answer this question, drawing on established forecasting methods from the literature.
+
+The league system in Germany features two rounds per season. Each club plays each other club twice: Once in each round, and once on each club’s home field. This means it’s easier to forecast when compared with the mode of tournaments the World Cup. There in the group stage, groups are determined by luck of the draw, a process known as “seeding”. Groups then play a so-called round-robin tournament, also known as all-play-all, were all group members play against each other, which corresponds to the mode in which the Kreisliga plays in each round. But the World Cup then continues with single-elimination, or a knock-out stage, which introduces even more random path dependencies that are not needed for forecasting the Kreisliga. This implies that the part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage remains highly relevant for the task at hand, since the game rules are otherwise identical.
+
+In the next part, we give an overview of models used and evaluated for the purpose of predicting football match outcomes. We introduce a small subset of models more in depth the third part. The fourth part contains the results from calculating a simulation based on these for the Kreisliga A Recklinghausen Herren Klasse 2. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
+
 
 
 # Literature
 
-Some difficulties with forecasting football matchess like that of e.g. the FIFA World Cup, are not relevant to the Kreisliga. The league system in Germany features two rounds per season. Each club plays each other club twice: Once in each round, and once on each club's home field. This reduces the uncertainty, when compared with the mode of the World Cup. There in the group stage, groups are determined by luck of the draw, a process known as 'seeding'. Groups then play a so called round-robin tournament, also known as all-play-all, were every every group member plays each other, which corresponds to the mode in which the Kreisliga plays. The World Cup then continues with single-elimination, or a knock-out stage, which introduces another even more random path dependencies that are not needed for forecasting the Kreisliga. This implies that part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage is highly relevant for the task at hand, since the game rules are identical.
+A natural starting point for forecasting match or season outcomes in football tournaments is using the FIFA points ranking method that is widely used to evaluate the strength of a team and updated after each game. For example, a recent study by Correa et al. -@correa uses FIFA points to forecast the results of the 2018 FIFA Men's World Cup. This approach has however generated criticism @mchale2007, especially that it does not include new information fast enough, and other methods have been proposed and evaluated. The benchmark study by Lasek et al. -@lasek2013 compares established and proposed rankings. They find that FIFA rankings perform slightly worse than alternative methods, especially a version of the Elo rating system originally proposed by Arpad Elo for the United States Chess Federation to rate competitive chess players that was adapted for football championships by the authors of the website EloRatings.net -@eloratings. 
 
-A natural starting point for forecasting match or season outcomes in football tournaments is using the FIFA points ranking method that is used canonically to evaluate the strength of a team and updated after each game. For example, a recent study by Correa et al. -@correa uses FIFA points to forecast the results of the 2018 FIFA Men's World Cup. This approach has however generated criticism and other methods have been proposed and evaluated. The benchmark study by Laseck et al. -@lasek2013 compares established and proposed rankings. They find that FIFA rankings used to perform slightly worse than alternative methods, especially two versions of the Elo rating system originally proposed by Arpad Elo for the United States Chess Federation to rate competitive chess players. We will consider using the FIFA points method or these two alternative candidates.
+Other studies show the effective prediction power of FIFA rankings, e.g. @suzuki2008. Leitner et al. -@leitner2010 find that bookmakers odds are more predictive than FIFA rankings. In our case we don’t expect betting markets to be deep enough to make this a feasible approach, although it would be an interesting reference point. We do however adopt their use of Spearman’s rank correlation between simulated and real final tournament rankings to evaluate models’ performance and complement it with Kendall’s tau. Lasek et al. -@lasek2013 evaluate using rating points, which are less relevant for our use case than the absolute rankings, which determine whether a team advances, stays or drops out of a league.
 
-The first candidate model is published by the anonymous website EloRatings.net -@eloratings, and is especially adapted for the use in ranking football teams. The second one is the FIFA Women's World Rankings, which has been in use since 2003. It is worth noting that the FIFA Men's World Rankings have been adapted in 2018 to also be based on a modification of the Elo ranking.
+We consider three models for our calculation: First, a benchmark model based on the table points of each team at the time when the league was aborted. Second, an Elo rating system, and third a simple model based on the Poisson distribution.
 
-The website FuPa.net -@fupa also publishes detailed statistics as well as a so called "Power-Ranking" to evaluate the "Formkurve", a rough measure of very recent performance. Because it is only reflective of very recent games, it is not useful for long term forecasting. Another raw measure would be to calculate the probability of winning by dividing team's current points (victories are 3, draws are 2) by the total of their and their opponent's points, we can call this the "points model".
+The benchmark model calculates the probability of winning a match by dividing a team's current points (victories are 3, draws are 2) by the total of their and their opponent's points, we can call this the "points model". This model does not include the possibility of a draw. The probability is not updated with after each simulated game, because this does not generate new information about a team’s strength. 
 
-All these models just use weighted game results or point scores. Another approach would be to use more data, as in Berbée et al. -@baseball. While this concerns baseball, the principle is not dependent on the rules of the game, but it is based on the influence of individuals' and team's statistics on game outcomes. This is an application of the model proposed by Albert and Bennet -@albert2007. They use the fact that wins and losses appear to be normally distributed in the long run, so chance and skill should both play a role. Team ability is then calculated as the deviation from the average winning probability over time. Very generally, available statistics are then evaluated to find those that matter the most for team performance, measured in runs per game, which would be goals in football. Those candidate factors are then weighted by regressing them on the team performance. The resulting index is then used to calculate a winning probability and this used then to simulate the season outcome by using weighted coin-flips.
+The second model is based on a version of the Elo rating system published anonymously on the website EloRatings.net -@eloratings. The algorithm was originally developed for ranking chess-players. As an “earned” rating system @lasek2013 a team’s rating is iteratively updated according to the outcome of single matches and depending on the expected outcome with regard to the opponent’s rating. This version was especially adapted for the use in ranking football teams. Glickman -@glickman1995 offers a comprehensive discussion of the Elo rating system. 
 
-While there is not as much individual player data in football on the level of our analysis, the team average is still something that can be calculated. Also, more information on the games, such as location at home or away, could be candidate factors for performance. For example, one team might benefit more from playing at home than it hurts by being away, receiving a net benefit from location, or the other way around. While these data are certainly interesting, we must be aware of the danger of overfitting the model.
+The third model is a very simple implementation of a Poisson distribution that approximates a probability distribution of goals in each game with a fixed parameter to adjust for the home advantage. This approach follows the literature influenced by @maher1982 and others. Generally, these models include different parameters to allow for team-specific strengths when playing home or away, and while defending or attacking. Parameters for e.g. random effects can be added, which we omit here for simplicity. For a general discussion see @karlis2003. Many extensions of this model as well as model selection algorithms are possible.
 
-Finally the literature contains references to using betting markets as a benchmark, as they perform relatively well as predictors. For the Kreisliga however, we don't expect betting markets to be deep enough to reach this level of accuracy. Otherwise, they would also be an interesting reference point.
+For a more recent review of advances in the literature and a new approach based on the Weinbull distribution we refer to @boshnakov2017. They use an evaluation based on calibration curves as well as the payoff from betting strategies and find that their model improves on previous models. 
+
 
 
 # Data
+
 For the simulation study we decided to use data from the amateur football league of the Kreisliga A Kreis Recklinghausen class A1 in Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in one home and one away game each. Due to the Covid-19 pandemic, the association has decided to cancel all matches from March 15, 2020. After all, 20 matchdays have already been played until this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the table. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector.  The match results of the website itself cannot be directly read out. They are masked, so they are made unreadable when viewing the HTML file and are only evaluated afterwards using Javascript and transferred to the CSS of the site.  The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, the game result can be reconstructed.  The data record was then divided into completed and unplayed games. The latter amount to 89 in this season, which were simulated with the methods in the following chapters.
 
 For further analysis we decided to scrape the data of season 16/17, 17/18 and 18/19 aswell to perform out-of-sample error (OOSE) test statistics.  The latter will indicate the performance of the different methods. 
 
 Give a short overview of the actual standing (ranking table after matchday 20)
-
 
 
 
@@ -191,10 +203,6 @@ stargazer(fake,fake,fake,
 In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", both as home and away club, has a strong negative and a strong positive influence???, both highly significant, on goals, i.e. the number of goals. Since the club is in the last place in the current table, as mentioned in the Data section, we expected that
 it would be easier to score goals if they played against the team on the last place of the seasons soccer league table rather than the team on the first place. On the other hand it will be harder for this last placed team to score goals even if they are the home team. 
 
-
- 
-
-
 Following Correa et al. -@correa, we then run the simulation by drawing the results of each game from a binomial distribution. For each game and team, the probability of winning is dividing the ranking points awarded each team by their and their competitors sum of points.
 
 Running this simulation repeatedly should indicate the distribution and expected average of outcomes. Correa et al. -@correa execute 200,000 runs, but because of the relatively low complexity of the Kreisliga's format compared to the World Cup, especially because there are no eleminiation rounds, we expect to need less repetitions.
@@ -204,20 +212,14 @@ A few alternatives have been developed for forecasting football games. The poten
 While the independent Poisson distributions already allowed for a better fit and to model the outcome of draws, Boshnakov et al. -@boshnakov2016 used a Weibull count model to improve even on the bivariate Poisson model, allowing them even to outperform betting market in selected bets.
 
 
-# OOSE Test Statistics
-
-Making predictions of events that might never happen can fairly criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his qoute "All models are wrong" which is often extenden by "but some are usefull" we want to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a dataset a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we decided to split the dataset at the same point where the COVID-19 pandemic forced the  
-
 
 # Results
+
 For the simulation study using the elo rating, as explained in the predictive models chapter,we used the average of all matches played in the current season resulting in a tie for the probability of a draw. Half of the percentage points are deducted from the home team's winning probability and half from the away team's winning probability. Then we draw from these three probabilities the game result, team home wins, team away wins or draw. We repeat this procedure for all games and evaluate the results with 3 points for the winning team, 1 point for both teams in case of a draw and 0 points for the losing team. 
 
 In the poissonmodel we calculate for each match the goal probabilities of both teams as a probability matrix based on the model estimation as described in predictive models part. 
 
 All simulations were repeated until the rate of change of the point average was 1% or less. Aggregation to this point occurred after about 2580 for the elo model and after about 1980 for the poisson model. 
-
-
-
 
 
 
@@ -288,6 +290,19 @@ kable(all_results,
 
 
 
+# OOSE Test Statistics
+
+Making predictions of events that might never happen can fairly criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his qoute "All models are wrong" which is often extenden by "but some are usefull" we want to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a dataset a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we decided to split the dataset at the same point where the COVID-19 pandemic forced the  
+
+Following @leitner2010, we evaluate the models’ performance using the rank correlation between their predicted and the real ranking tables for the three past years’ seasons (2016, 2017 and 2018). To increase the relevance for our use case, we use as much training data as was available for this year’s aborted season (2019-20). We find that the Elo ranking system improves on the baseline model, which in turn performs better than the simple Poisson model. The fact that the points model achieves a 1.00 correlation in the 2017-18 season however makes these results doubtful, since the points model converges to the table as it was a the point of interruption. A perfect correlation with the final table can thus only occur if there is no change in the ranking after that date.
+
+Generally, the high correlation between the predicted and the actual table outcomes leads us to believe that adopting the results from each method would provide a fair improvement over anulling the 2019-20 season.
+
+\input{rank_corr.tex}
+
+\input{append_rank_corr.tex}
+
+
 
 # Conclusion
 The decision to quit all games later than 08th of march because of the pandemic was not revised while the infection rates relaxed during may and june in Germany. Combined with the unforseeble future of the COVID-19 situation we see a more fair and balanced decision making process by integrating statistical learning techniques, such as those, shown in this paper.
@@ -295,7 +310,6 @@ The decision to quit all games later than 08th of march because of the pandemic 
 
 TO DO:
 
--clean up models section: use more original sources, Maher 1982?
 -calculate draw in poisson from diagonal?
 -add caveats: what other factors play a role, what alternative models are there? use sources
 -goal distribution?

@@ -1,5 +1,5 @@
 ## Simulate results of the 19/20 season for Kreisliga Recklinghausen
-# starting with the coin flip simulation and the table point method
+# starting with the coin flip simulation and the points benchmark method
 
 ## 0. Preparation
 ## 1. simulation
