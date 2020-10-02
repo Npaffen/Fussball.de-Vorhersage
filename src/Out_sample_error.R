@@ -3,15 +3,12 @@
 require(dplyr)
 require(purrr)
 
-#Out of Sample Error Poisson 18/19
-database_season <- readRDS(here::here("/data/database_season_1819.rds"))  
-
 source(here::here("src/functions_N.R"))
 
 
 
 
-#Out of Sample Error point 16/17
+#Out of Sample Error 
 oose <- function(season, sim_type = c('poisson_score', 'elo_ties', 'point')){
 database_season <- readRDS(here::here(paste0('data/database_season_',season,'.rds')))  
 
@@ -52,9 +49,6 @@ real_results <- database_season %>%
 #calculate out of sample error for 17/18
 oose <-  sum((average_table$club_name != real_results$club_name))/nrow(real_results)
 
-OOSE_DF <- OOSE_DF %>% 
-  if(filter(., sim))
-    mutate(simpo = oose) %>% rename(sim_type[1] = sim)
 
 return(oose)
 
