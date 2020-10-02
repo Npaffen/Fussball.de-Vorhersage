@@ -71,6 +71,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
   clubs <- matchday30$club_name
   matchday30_reset <- matchday30
   conv <- numeric()
+  all_scores <-tibble(Goals_team_home = 0, Goals_team_away = 0)
   for(i in 1:N){
     Goals_team_away_u <- 0
     Goals_team_home_u <- 0
@@ -117,6 +118,9 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
                              select(Goal_diff_away) %>% 
                              sum()) %>%
       unlist 
+    #all_scores <- all_scores %>%
+     # inner_join(missinggames %>% select(Goals_team_away, Goals_team_away)
+   # )
     
     final_table <- matchday30 %>%
       mutate( points_new =  points_update,
@@ -133,6 +137,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
       by = list(all_final_tables$club_name[1:(length(clubs)*(i-1))]),
       FUN = "mean"
     )
+    
     average_table2 <- aggregate(
       all_final_tables[,-1],
       by = list(all_final_tables$club_name),
@@ -161,7 +166,8 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
   all_avg_tables <- rename(all_avg_tables, club_name = Group.1)
   sim_output <- list("all_final_tables" = all_final_tables,
                      "conv_plot" = conv_plot,
-                     "all_avg_tables" = all_avg_tables
+                     "all_avg_tables" = all_avg_tables#,
+                     #"all_scores" = all_scores
   )
   return(sim_output)
 }
