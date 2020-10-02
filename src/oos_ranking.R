@@ -1,5 +1,5 @@
 
-## calculate the oos ranking score by comparing simulation results and real
+## calculate the rank correlation between simulated and real table results
 
 
 # for each season
@@ -12,7 +12,7 @@ ranking_results <- setNames(data.frame(matrix(ncol = 4, nrow = 0)),
 
 
 
-
+# calculate correlation values for each simulation
 for(j in c("elo ranking", "points", "poisson")){
 
     for(i in seasons){
@@ -28,7 +28,7 @@ for(j in c("elo ranking", "points", "poisson")){
     
     # load simulated data
     if(j == "elo ranking"){
-      data_sim <- readRDS(paste0("data/elo_ties_simulation._", i, "rds"))
+      data_sim <- readRDS(paste0("data/elo_ties_simulation_", i, ".rds"))
     } else if(j == "points"){
       data_sim <- readRDS(paste0("data/point_simulation_", i, ".rds"))
     } else {
@@ -37,11 +37,12 @@ for(j in c("elo ranking", "points", "poisson")){
     } 
     rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
     compare <- merge(rank_real, rank_sim, by = "club_name")
+    names(compare)[2:3] <- c("points.x", "points.y")
     
     # compute correlation
-    results$spearmans_rho <- cor.test(compare$score.x, compare$score.y, method = "spearman")$estimate
-    results$kendalls_tau <- cor.test(compare$score.x, compare$score.y, method = "kendall")$estimate
-
+    results$spearmans_rho <- cor.test(compare$points.x, compare$points.y, method = "spearman")$estimate
+    results$kendalls_tau <- cor.test(compare$points.x, compare$points.y, method = "kendall")$estimate
+    
     # save results
     ranking_results <- rbind(ranking_results, results)
     
@@ -49,4 +50,23 @@ for(j in c("elo ranking", "points", "poisson")){
   }
 }
 
-stargazer::stargazer(ranking_results)
+# summarize results over method
+sum_output <- dplyr::summarize(dplyr::group_by(ranking_results, method),
+                 spearmans_rho = mean(spearmans_rho),
+                 kendalls_tau = mean(kendalls_tau)
+                 )
+
+# make latex tables
+output <- capture.output(print(xtable::xtable(sum_output,
+                                              caption = "Average rank correlation coefficients for simulation and actual data"),
+                               include.rownames = FALSE
+                               )
+                         )
+append.output <- capture.output(print(xtable::xtable(ranking_results,
+                                              caption = "Rank correlation coefficients for simulation and actual data"),
+                               include.rownames = FALSE
+                               )
+                         )
+cat(paste(output, collapse = "\n"), "\n", file="paper/rank_corr.tex", append=FALSE)
+cat(paste(append.output, collapse = "\n"), "\n", file="paper/append_rank_corr.tex", append=FALSE)
+

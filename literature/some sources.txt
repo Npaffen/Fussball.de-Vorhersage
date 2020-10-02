@@ -1,5 +1,5 @@
 the website
-http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1718-westfalen/-/staffel/0209KP9SAC00000AVS54898DVUVCCN5J-G#!/
+s
 
 Int. J. Applied Pattern Recognition, Vol. 1, No. 1, 2013 27
 The predictive power of ranking systems in association football
@@ -16,3 +16,5 @@ https://ir.uiowa.edu/cgi/viewcontent.cgi?article=1436&context=honors_theses
 
 https://en.wikipedia.org/wiki/FIFA_World_Rankings
 https://en.wikipedia.org/wiki/World_Football_Elo_Ratings
+
+https://dashee87.github.io/football/python/predicting-football-results-with-statistical-modelling/
