@@ -48,15 +48,13 @@ source(here::here("src/functions.R"))
 Publicly available data and public attention are contributing to the relevance and interest in forecasting football game results. We provide a short overview of the state of the literature and use data from the aborted German local men's league season 2019-20 to predict the season’s outcome using three different statistical approaches. A measure of each team’s strength is calculated from past plays and used as weight in the simulation. For the football league’s organizers, using a prediction algorithm to find a season outcome might be fairer than either annulling the games played thus far or using the table as of now, ignoring the missing games. Research has shown, that measures like the Elo rating system are better predictors of teams’ performance than for example league table points on their own. For this data set, we find that gains from using advanced methods are marginal when evaluating them with past seasons’ data. Simulation results are evaluated using an out of sample error calculated from previous seasons.
 
 
-
 # Introduction
 
-The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before the rest were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the tournament on Sunday May 24, 2020. Given that there was a high chance these games were not made up later (which they indeed were not (?)), a burning question for many players and fans was naturally: What would the outcome of the season have been? We use data on games already played from the website [fussball.de](http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G#!/section/matchplan) to answer this question, drawing on established forecasting methods from the literature.
+The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before the rest were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the tournament on Sunday May 24, 2020. There was a high probability that the games would not be made up for later, which proved to be true, a burning question for many players and fans was naturally: What would the outcome of the season have been? We use data on games already played from the website [fussball.de](http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G#!/section/matchplan) to answer this question, drawing on established forecasting methods from the literature.
 
-The league system in Germany features two rounds per season. Each club plays each other club twice: Once in each round, and once on each club’s home field. This means it’s easier to forecast when compared with the mode of tournaments the World Cup. There in the group stage, groups are determined by luck of the draw, a process known as “seeding”. Groups then play a so-called round-robin tournament, also known as all-play-all, were all group members play against each other, which corresponds to the mode in which the Kreisliga plays in each round. But the World Cup then continues with single-elimination, or a knock-out stage, which introduces even more random path dependencies that are not needed for forecasting the Kreisliga. This implies that the part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage remains highly relevant for the task at hand, since the game rules are otherwise identical.
+The league system in Germany implies that everyone plays a set against every opponent: Once on their home field and once on the opponents field for each league participant. This means it’s easier to forecast when compared with the mode of tournaments the World Cup. There in the group stage, groups are determined by chance, a process known as “seeding”. Groups then play can be sorted. But the World Cup then continues with single-elimination, or a knock-out stage, which introduces even more random path dependencies that are not needed for forecasting the Kreisliga. This implies that the part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage remains highly relevant for the task at hand, since the game rules are otherwise identical.
 
-In the next part, we give an overview of models used and evaluated for the purpose of predicting football match outcomes. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
-
++In the next part, we give an overview of models used and evaluated for the purpose of predicting football match outcomes. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
 
 
 # Literature
@@ -85,13 +83,14 @@ The match results of the website itself cannot be directly read out. They are ma
 
 For further analysis we decided to scrape the data of season 16/17, 17/18 and 18/19 as well to perform out-of-sample error (OOSE) test statistics.  The latter will indicate the performance of the different methods. 
 
+
 Give a short overview of the actual standing (ranking table after matchday 20)
 
 
 
 # Predictive Models
-
 To predict the outcome of the cancelled games, we calculate the candidate rankings and use them to simulate the end of the 2019/2020 season by way of calculating a winning probability for each missing game. Specifically we calculate
+
 
 \begin{itemize}
 \item the points model,
