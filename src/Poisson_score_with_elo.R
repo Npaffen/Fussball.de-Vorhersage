@@ -1,8 +1,8 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(here::here( "/data/database_match_results_1718.rds")) %>% filter(between(matchday,1,20))
+database_mr <- read_rds(here::here( "/data/database_match_results_1718.rds"))[1:175,] 
 
-missinggames <- read_rds(here::here("/data/database_match_results_1718.rds")) %>% filter(matchday >= 21) %>% .[1:4]
+missinggames <- read_rds(here::here("/data/database_match_results_1718.rds"))[176:268,1:4]
 
 database_season <- read_rds(here::here("/data/database_season_1718.rds"))
 
@@ -41,13 +41,13 @@ N <- 5000 # simulation runs
 sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 10, N, limit = 0.01)
 saveRDS(sim_output_poisson, paste0(getwd(), "/data/poisson_score_simulation_1718.rds"))
 }
-sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1718.rds"))
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
 
 # 2. evaluate result
-sim_output$all_final_tables$points
+
 all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
 all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points )
+all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
 all_avg_tables <- add_run_rank_col(x = all_avg_tables)
 
 # average table result

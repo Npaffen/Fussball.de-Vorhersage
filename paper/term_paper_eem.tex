@@ -103,7 +103,7 @@ simulations}
   \postdate{\par}
   \date{today}
 
-\usepackage{dcolumn, xcolor}
+\usepackage{dcolumn}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -117,6 +117,7 @@ simulations}
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
+\usepackage{xcolor}
 
 %% linespread settings
 
@@ -149,7 +150,7 @@ simulations}
   \noindent\begin{minipage}{0.6\textwidth}
 	  \IfLanguageName{english}{University of Duisburg-Essen}{Universität Duisburg-Essen}\\
 	  \IfLanguageName{english}{Faculty of Business Administration and Economics}{Fakultät für Wirtschaftswissensschaften}\\
-	  \IfLanguageName{english}{Chair of Economics}{Lehrstuhl für Wirtschaftswissenschaften}\\
+	  \IfLanguageName{english}{Chair of Economeics}{Lehrstuhl für Wirtschaftswissenschaften}\\
   \end{minipage}
 	\begin{minipage}{0.4\textwidth}
 	  \begin{flushright}
@@ -289,57 +290,56 @@ simulations}\\
 \hypertarget{abstract}{%
 \section{Abstract}\label{abstract}}
 
-Publicly available data and public attention are contributing to the
-relevance and interest in forecasting football game results. We provide
-a short overview of the state of the literature and use data from the
-aborted German local men's league season 2019-20 to predict the season's
-outcome using three different statistical approaches. A measure of each
-team's strength is calculated from past plays and used as weight in the
-simulation. For the football league's organizers, using a prediction
-algorithm to find a season outcome might be fairer than either annulling
-the games played thus far or using the table as of now, ignoring the
-missing games. Research has shown, that measures like the Elo rating
-system are better predictors of teams' performance than for example
-league table points on their own. For this data set, we find that gains
-from using advanced methods are marginal when evaluating them with past
-seasons' data. Simulation results are evaluated using an out of sample
-error calculated from previous seasons.
+Publicly available data and a high public interest are contributing to
+the relevance and interest in forecasting football game results. We
+provide a short overview of the state of the literature and use data
+from the aborted Kreisliga A Recklinghausen season 2019-20 to predict
+the season's outcome using three different statistical approaches. A
+measure of each team's strength is calculated from past plays and used
+as weight in the simulation. For the football league's organizers, using
+a prediction algorithm to find a season outcome might be fairer than
+either annulling the games played thus far or using the table as of now.
+Research has shown, that measures like the Elo rating system are better
+predictors of teams' performance than for example league table points on
+their own. For this example, we find that gains from using advanced
+methods are marginal when evaluating them with past seasons' data.
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
 The Covid-19 epidemic forced sports leagues in Germany to suspend
-championships that were already in full swing. For example, the local
-men's league Recklinghausen class A1 finished around 150 games, before
-the rest were canceled starting from Sunday March 12, 2020, leaving
-around 90 games left unplayed until the last planned day of the
-tournament on Sunday May 24, 2020. There was a high probability that the
-games would not be made up for later, which proved to be true, a burning
-question for many players and fans was naturally: What would the outcome
-of the season have been? We use data on games already played from the
-website
+championships that were already in full swing. For example, the
+Kreisliga Herren Klasse 2 in Recklinghausen finished around 150 games,
+before the rest were canceled starting from Sunday March12, 2020,
+leaving around 90 games left unplayed until the last planned day of the
+tournament on Sunday May 24, 2020. Given that there probably won't be a
+chance to make up those games later, a burning question for many players
+and fans is naturally: What if they would have played those games? We
+attempt to use data on games already played from the website
 \href{http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G\#!/section/matchplan}{fussball.de}
 to answer this question, drawing on established forecasting methods from
 the literature.
 
-The league system in Germany implies that everyone plays a set against
-every opponent: Once on their home field and once on the opponents field
-for each league participant. This means it's easier to forecast when
-compared with the mode of tournaments the World Cup. There in the group
-stage, groups are determined by chance, a process known as
-\enquote{seeding}. Groups then play can be sorted. But the World Cup
-then continues with single-elimination, or a knock-out stage, which
-introduces even more random path dependencies that are not needed for
-forecasting the Kreisliga. This implies that the part of the existing
-literature on forecasting results in the FIFA World Cup concerning the
-group stage remains highly relevant for the task at hand, since the game
-rules are otherwise identical.
+The league system in Germany features two rounds per season. Each club
+plays each other club twice: Once in each round, and once on each club's
+home field. This means it's easier to forecast when compared with the
+mode of tournaments the World Cup. There in the group stage, groups are
+determined by luck of the draw, a process known as \enquote{seeding}.
+Groups then play a so-called round-robin tournament, also known as
+all-play-all, were all group members play against each other, which
+corresponds to the mode in which the Kreisliga plays in each round. But
+the World Cup then continues with single-elimination, or a knock-out
+stage, which introduces even more random path dependencies that are not
+needed for forecasting the Kreisliga. This implies that the part of the
+existing literature on forecasting results in the FIFA World Cup
+concerning the group stage remains highly relevant for the task at hand,
+since the game rules are otherwise identical.
 
 In the next part, we give an overview of models used and evaluated for
 the purpose of predicting football match outcomes. We introduce a small
-subset of models in more detail in the third part. The fourth part
-contains the results from calculating a simulation based on these for
-the local men's league Recklinghausen class A1. We also present some
+subset of models more in depth the third part. The fourth part contains
+the results from calculating a simulation based on these for the
+Kreisliga A Recklinghausen Herren Klasse 2. We also present some
 comparative statistics of the model performance and draw some
 conclusions in the last segment.
 
@@ -352,8 +352,8 @@ widely used to evaluate the strength of a team and updated after each
 game. For example, a recent study by Correa et al.~\autocite*{correa}
 uses FIFA points to forecast the results of the 2018 FIFA Men's World
 Cup. This approach has however generated criticism
-\textcite{mchale2007}, especially because it does not update based on
-new information fast enough, and other methods have been proposed and
+\textcite{mchale2007}, especially that it does not include new
+information fast enough, and other methods have been proposed and
 evaluated. The benchmark study by Lasek et al.~\autocite*{lasek2013}
 compares established and proposed rankings. They find that FIFA rankings
 perform slightly worse than alternative methods, especially a version of
@@ -385,20 +385,16 @@ total of their and their opponent's points, we can call this the
 \enquote{points model}. This model does not include the possibility of a
 draw. The probability is not updated with after each simulated game,
 because this does not generate new information about a team's strength.
-Averaging the results over enough simulations, this approach will
-converge to the current table ranking, so it is in fact just a weighted
-randomization of the current table.
 
 The second model is based on a version of the Elo rating system
 published anonymously on the website EloRatings.net
 \autocite*{eloratings}. The algorithm was originally developed for
 ranking chess-players. As an \enquote{earned} rating system
-(\textcite{lasek2013}) a team's rating is iteratively updated according
-to the outcome of single matches and depending on the expected outcome
-with regard to the opponent's rating. This version was especially
-adapted for the use in ranking football teams. Glickman
-\autocite*{glickman1995} offers a comprehensive discussion of the Elo
-rating system.
+\textcite{lasek2013} a team's rating is iteratively updated according to
+the outcome of single matches and depending on the expected outcome with
+regard to the opponent's rating. This version was especially adapted for
+the use in ranking football teams. Glickman \autocite*{glickman1995}
+offers a comprehensive discussion of the Elo rating system.
 
 The third model is a very simple implementation of a Poisson
 distribution that approximates a probability distribution of goals in
@@ -415,15 +411,15 @@ For a more recent review of advances in the literature and a new
 approach based on the Weinbull distribution we refer to
 \textcite{boshnakov2017}. They use an evaluation based on calibration
 curves as well as the payoff from betting strategies and find that their
-model improves on previous models and can yield positive betting
-returns.
+model improves on previous models.
 
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-For the simulation study we decided to use data from the local men's
-league Recklinghausen class A1 in Westphalia for the 2019/2020 season.
-16 clubs will play against each other on a total of 30 match days in one
+For the simulation study we decided to use data from the amateur
+football league of the Kreisliga A Kreis Recklinghausen class A1 in
+Westphalia, further called Kreisliga A1, for the 2019/2020 season. 16
+clubs will play against each other on a total of 30 match days in one
 home and one away game each. Due to the Covid-19 pandemic, the
 association has decided to cancel all matches from March 15, 2020. After
 all, 20 matchdays have already been played until this point in time
@@ -434,22 +430,20 @@ websites using scraping scripts can be complicated, as website operators
 have an interest in protecting their data from such automated queries.
 \enquote{Fussball.de} is a website of the DFB (German Football
 Association) which acts as a collection point for match results and
-news, especially in the amateur sector.
-
-The match results of the website itself cannot be directly read out.
-They are masked, so they are made unreadable when viewing the HTML file
-and are only evaluated afterwards using Javascript and transferred to
-the CSS of the site. The site also offers a match report, which
-graphically represents a temporal course of the match. This is broken
-down in the HTML code, in contrast to the match results, unmasked, and
-shows the course of the match in text form. With the help of regular
-expression operations, the game result can be reconstructed. The data
-record was then divided into completed and un-played games. The latter
-amount to 89 in this season, which were simulated with the methods in
-the following chapters.
+news, especially in the amateur sector. The match results of the website
+itself cannot be directly read out. They are masked, so they are made
+unreadable when viewing the HTML file and are only evaluated afterwards
+using Javascript and transferred to the CSS of the site. The site also
+offers a match report, which graphically represents a temporal course of
+the match. This is broken down in the HTML code, in contrast to the
+match results, unmasked, and shows the course of the match in text form.
+With the help of regular expression operations, the game result can be
+reconstructed. The data record was then divided into completed and
+unplayed games. The latter amount to 89 in this season, which were
+simulated with the methods in the following chapters.
 
 For further analysis we decided to scrape the data of season 16/17,
-17/18 and 18/19 as well to perform out-of-sample error (OOSE) test
+17/18 and 18/19 aswell to perform out-of-sample error (OOSE) test
 statistics. The latter will indicate the performance of the different
 methods.
 
@@ -461,18 +455,17 @@ matchday 20)
 
 To predict the outcome of the cancelled games, we calculate the
 candidate rankings and use them to simulate the end of the 2019/2020
-season by way of calculating a winning probability for each missing
-game. Specifically we calculate
+season, usually by way of calculating a winning probability for each
+missing game. Specifically we calculate
 
 \begin{itemize}
 \item the points model,
 \item the EloRankings.net model, 
-\item a Poisson model
+\item a poisson model
 \end{itemize}
 
 The first model is just a simple baseline model that calculates the
-probability of a team \emph{A} winning a game againsta team B using the
-formula
+probability of a team A winning a game againsta team B using the formula
 
 \begin{align}
 P(A wins) = \frac{table points_A}{{table points}_A + {table points}_B},
@@ -484,16 +477,14 @@ draws valued at one point. This value also governs the ranking and
 ultimate placement of the teams in the league. Two questions arise from
 this approach. Firstly, should the table points be updated after each
 simulated game? We argue no, because this would not include new
-information about the relative strength of the teams and just increase
-the variance of the result.
-
-Secondly, the average over many simulated runs will converge to the
-initial table when the season was interrupted. This will defeat the
-purpose of running a simulaion in the first place, because it does not
-yield any new information, and we could have just used the table as it
-were. Using this way of simulation is however preferable to an
-unweighted coin toss, because that would unfairly favor below average
-teams.
+information about the relative strength of the teams and just increaes
+the variance of the result. Secondly, we expect an average over many
+simulated runs to converge to the initial table when the season was
+interrupted. This would then defeat the purpose of running a simulaion
+in the first place, because it does not add any new information, and we
+could have just used the table as it were. Using this way of simulation
+is however preferable to an unweighted coin toss, because that would
+unfairly favor below average teams.
 
 Our second model is based on the rating algorithm from
 \href{eloratings.net/about}{eloratings.net}. The anonymous site operator
@@ -523,31 +514,23 @@ win. \(W_e\) is the probability of winning defined by the following
 formula:
 
 \begin{align}
-W_e = 1/(10^{(-dr/400)}+1),
-\end{align}
+W_e = 1/(10^{(-dr/400)}+1)
+\end{align},
 
-where \emph{dr} is defined as the rating difference and the home team
-receives a bonus of 100 points. This bonus is considered to be a
-psychological advantage resulting from the fact that the game is played
-in the home stadium(see, e.g., \textcite{Pollard2008}).
+where dr is defined as the rating difference and the home team receives
+a bonus of 100 points. This bonus is considered to be a psychological
+advantage resulting from the fact that the game is played in the home
+stadium(see, e.g., \textcite{Pollard2008}).
 
-To simulate the outcome of the league with the points and Elo ranking
-method, we follow Correa et al.~\autocite*{correa} and draw the results
-of each game from a binomial distribution. For each game and team, the
-probability of winning is dividing the ranking points awarded each team
-by their and their competitors sum of points.
-
-Our third model uses the Poisson distribution to simulate the match
+Our third model uses the poisson distribution to simulate the match
 result with the probability of a goal in every minute of a match. The
-probability matrix from which the game result is drawn is a
-\(n \times n\) matrix where each cell indicates the probability of that
+probability matrix where the game result is drawn from is a
+\(n \times n\) matrix where each cell indicates the proability of that
 specific match result. While the rows indicates the goals of the home
 team, the column indicates the goals of the away team. For example the
 cell of the first row and in the first column indicates the likelihood
-that the both teams score \(0\) goals. The maximum number of goals
-\emph{n} can be set high enough to cover all possible outcomes. We set
-it to 10 in our simulation. The poisson probability function of our
-model can be expressed as:
+that the both teams socre \(0\) goals. The poisson probability function
+of our model can be expressed as:
 
 \begin{align}
 P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
@@ -557,16 +540,20 @@ where the lambda represents the average number of goals. First, we
 estimate the following model from the matches already played:
 
 \begin{align}
-goals \sim f(home, team, opponent)
+goals = home + team + opponent . 
 \end{align}
 
-Where \emph{goals} represents the number of goals scored by a team in a
-game, \emph{home} is a dummy variable that equals 1 if the team plays on
-it's home pitch, and \emph{team} and \emph{opponent} represent dummies
-for each team respectively.
+Where goals represents the number of goals scored by a team in a game,
+home presents a dummy variable that is 1 for the home team and 0 for the
+away team,it serves to illustrate the home team bonus, team representing
+the home team, and opponent representing the opponent team.
+
+\% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard
+University. E-mail: hlavac at fas.harvard.edu \% Date and time: Fr, Aug
+28, 2020 - 13:52:46 \% Requires LaTeX packages: dcolumn
 
 \begin{table}[!htbp] \centering 
-  \caption{Regression output of the Poisson model} 
+  \caption{Regression ouput of the Poisson Model} 
   \label{} 
 \small 
 \begin{tabular}{@{\extracolsep{-30pt}}lD{.}{.}{-3} D{.}{.}{-3} D{.}{.}{-3} } 
@@ -577,7 +564,7 @@ for each team respectively.
 \\[-1.8ex] & \multicolumn{1}{c}{(1)} & \multicolumn{1}{c}{(2)} & \multicolumn{1}{c}{(3)}\\ 
 \hline \\[-1.8ex] 
  Constant & 0.752^{***}$ $(0.228) &  &  \\ 
-  homey & 0.241^{***}$ $(0.076) &  &  \\ 
+  home & 0.241^{***}$ $(0.076) &  &  \\ 
   Adler Weseke II &  & -1.047^{***}$ $(0.249) & 0.595^{***}$ $(0.218) \\ 
   BVH Dorsten &  & -0.289$ $(0.199) & 0.051$ $(0.250) \\ 
   FC RW Dorsten &  & -0.877^{***}$ $(0.232) & 0.178$ $(0.237) \\ 
@@ -601,22 +588,25 @@ for each team respectively.
 \end{table}
 
 In summary, the coefficients of the model show that the club
-\enquote{Altendorf-Ulfkotte}, is least likely to score a goal (low team
-estimate) and teams playing against them have the highest chance to
-score (high opponent estimate), with both estimates being highly
-significant. Since the club is in the last place in the current table,
-as mentioned in the Data section, this is the expected result.
-Conversely, we observe the opposite for the current table leader
-\enquote{VfL Ramsdorf}. For the simulation the result is drawn from the
-Poisson distribution, and the score probabilities are based on the
-estimated parameters.
+\enquote{Altendorf-Ulfkotte}, both as home and away club, has a strong
+negative and a strong positive influence???, both highly significant, on
+goals, i.e.~the number of goals. Since the club is in the last place in
+the current table, as mentioned in the Data section, we expected that it
+would be easier to score goals if they played against the team on the
+last place of the seasons soccer league table rather than the team on
+the first place. On the other hand it will be harder for this last
+placed team to score goals even if they are the home team.
 
-Running the simulation for each method repeatedly should indicate the
-distribution and expected average of outcomes, after the averages
-converge. Correa et al.~\autocite*{correa} execute 200,000 runs, but
-because the league in question is less complex than the World Cup they
-analyze, especially because there are no eliminiation rounds, we expect
-to need less repetitions.
+Following Correa et al.~\autocite*{correa}, we then run the simulation
+by drawing the results of each game from a binomial distribution. For
+each game and team, the probability of winning is dividing the ranking
+points awarded each team by their and their competitors sum of points.
+
+Running this simulation repeatedly should indicate the distribution and
+expected average of outcomes. Correa et al.~\autocite*{correa} execute
+200,000 runs, but because of the relatively low complexity of the
+Kreisliga's format compared to the World Cup, especially because there
+are no eleminiation rounds, we expect to need less repetitions.
 
 A few alternatives have been developed for forecasting football games.
 The potential of using independent Poisson distributions to match the
@@ -662,35 +652,35 @@ average was 1\% or less. Aggregation to this point occurred after about
 \cline{2-3} \cline{4-5} \cline{6-7}
 rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & club\_name\_points & score\_points\\
 \hline
-\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{63.46088} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{64.34676} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{72.19792}\\
+\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676 & VfL Ramsdorf & 72.19792\\
 \hline
 2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429 & TuS Gahlen & 65.04059\\
 \hline
-\cellcolor{gray!6}{3} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{56.68854} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{57.74274} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{63.51325}\\
+\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274 & SV Schermbeck II & 63.51325\\
 \hline
 4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383 & Fenerbahce I. Marl & 58.06307\\
 \hline
-\cellcolor{gray!6}{5} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{49.74609} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{50.88454} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{57.22107}\\
+\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454 & 1. SC BW Wulfen & 57.22107\\
 \hline
 6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084 & TSV Raesfeld & 55.75243\\
 \hline
-\cellcolor{gray!6}{7} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{40.56790} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{41.79078} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{45.37873}\\
+\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078 & TuS Velen & 45.37873\\
 \hline
 8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701 & SV Lembeck & 44.14961\\
 \hline
-\cellcolor{gray!6}{9} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{38.56991} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{39.89500} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{43.87890}\\
+\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500 & SC Marl-Hamm & 43.87890\\
 \hline
 10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838 & BVH Dorsten & 42.64140\\
 \hline
-\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{34.61080} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{35.82449} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{37.59242}\\
+\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449 & FC RW Dorsten & 37.59242\\
 \hline
 12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101 & Westfalia Gemen II & 32.82422\\
 \hline
-\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.79455} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{29.11275} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.60483}\\
+\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275 & SC Reken II & 27.60483\\
 \hline
 14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207 & TuS 05 Sinsen II & 21.27809\\
 \hline
-\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{21.69107} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{22.59512} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{18.88125}\\
+\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512 & Adler Weseke II & 18.88125\\
 \hline
 16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446 & SV Altendorf-Ulfkotte & 13.98222\\
 \hline
@@ -745,10 +735,9 @@ shown in this paper.
 
 TO DO:
 
--add caveats: what other factors play a role? -goal distribution,
-qq-plot -include reference to Blog by David Sheehan:
-\url{https://dashee87.github.io/data\%20science/football/r/predicting-football-results-with-statistical-modelling/}
--rerun oose
+-calculate draw in poisson from diagonal? -add caveats: what other
+factors play a role, what alternative models are there? use sources
+-goal distribution?
 
 \newpage
 
