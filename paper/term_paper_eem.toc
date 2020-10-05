@@ -20,6 +20,6 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {6}Results}{8}{section.6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7}OOSE Test Statistics}{9}{section.7}%
+\contentsline {section}{\numberline {7}OOSE Test Statistics}{8}{section.7}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {8}Conclusion}{9}{section.8}%
+\contentsline {section}{\numberline {8}Conclusion}{10}{section.8}%

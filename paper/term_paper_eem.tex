@@ -94,8 +94,7 @@
   \title{Stay home and let the simulation play}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-\subtitle{Predicting Kreisliga football league outcomes with statistical
-simulations}
+\subtitle{Predicting regional football league outcomes with statistical methods}
   \author{Nils Paffen, David Schulze}
   \preauthor{\centering\large\emph}
   \postauthor{\par}
@@ -103,7 +102,7 @@ simulations}
   \postdate{\par}
   \date{today}
 
-\usepackage{dcolumn}
+\usepackage{dcolumn, xcolor}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -117,7 +116,6 @@ simulations}
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
-\usepackage{xcolor}
 
 %% linespread settings
 
@@ -163,8 +161,7 @@ simulations}
   \begin{center}
   \huge{Stay home and let the simulation play}\\
   \vspace{.25cm}
-  \Large{Predicting Kreisliga football league outcomes with statistical
-simulations}\\
+  \Large{Predicting regional football league outcomes with statistical methods}\\
   \vspace{0.5cm}
   \large{Working Paper}\\
   \vspace{0.5cm}
@@ -292,19 +289,21 @@ simulations}\\
 
 Publicly available data and public attention are contributing to the
 relevance and interest in forecasting football game results. We provide
-a short overview of the state of the literature and use data from the
+a short overview on the state of the literature and use data from the
 aborted German local men's league season 2019-20 to predict the season's
 outcome using three different statistical approaches. A measure of each
-team's strength is calculated from past plays and used as weight in the
-simulation. For the football league's organizers, using a prediction
-algorithm to find a season outcome might be fairer than either annulling
-the games played thus far or using the table as of now, ignoring the
-missing games. Research has shown, that measures like the Elo rating
-system are better predictors of teams' performance than for example
-league table points on their own. For this data set, we find that gains
-from using advanced methods are marginal when evaluating them with past
-seasons' data. Simulation results are evaluated using an out of sample
-error calculated from previous seasons.
+team's strength is calculated from past games and used as quantifier in
+the simulation. It might be fairer for the league's organization to use
+a prediction algorithm to simulate that seasons end result than either
+annulling the games played thus far or using the table as of now,
+ignoring the missing games. Research has shown, that measures like the
+Elo rating system are better predictors of a team's performance than for
+example already recieved league table points on their own. For this data
+set, we find that gains from using advanced methods are marginal when
+evaluating them with past season's data. Simulation results are
+evaluated by comparing forecast results fitted by a partly seasonal
+dataset against the true results, also known as OOSE
+(Out-of-sample-error).
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -313,34 +312,32 @@ The Covid-19 epidemic forced sports leagues in Germany to suspend
 championships that were already in full swing. For example, the local
 men's league Recklinghausen class A1 finished around 150 games, before
 the rest were canceled starting from Sunday March 12, 2020, leaving
-around 90 games left unplayed until the last planned day of the
-tournament on Sunday May 24, 2020. Given that there was a high chance
-these games were not made up later (which they indeed were not (?)), a
-burning question for many players and fans was naturally: What would the
-outcome of the season have been? We use data on games already played
-from the website
+around 90 games left unplayed until the last planned day of the league
+on Sunday May 24, 2020. There was a high probability that the games
+could not be postponed to a later date., which turned out to be the
+case, it was natural for teams and fans alike to ask the following
+question: \enquote{What would the outcome of the season have been?} We
+use data on games already played from the website
 \href{http://www.fussball.de/spielplan/re-kl-a-2-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DS800000DVS5489B3VS3GHJJU-G\#!/section/matchplan}{fussball.de}
 to answer this question, drawing on established forecasting methods from
 the literature.
 
-The league system in Germany features two rounds per season. Each club
-plays each other club twice: Once in each round, and once on each club's
-home field. This means it's easier to forecast when compared with the
-mode of tournaments the World Cup. There in the group stage, groups are
-determined by luck of the draw, a process known as \enquote{seeding}.
-Groups then play a so-called round-robin tournament, also known as
-all-play-all, were all group members play against each other, which
-corresponds to the mode in which the Kreisliga plays in each round. But
-the World Cup then continues with single-elimination, or a knock-out
-stage, which introduces even more random path dependencies that are not
-needed for forecasting the Kreisliga. This implies that the part of the
-existing literature on forecasting results in the FIFA World Cup
-concerning the group stage remains highly relevant for the task at hand,
-since the game rules are otherwise identical.
+The league system in Germany implies that everyone plays a set against
+every opponent: The system colloquially known as Back and Forth means
+that they play in eachother stadiums once. This means it's easier to
+forecast than the tournament system of the World Cup. There in the group
+stage, groups are determined by chance, a process known as
+\enquote{seeding}. Groups then play can be sorted. But the World Cup
+then continues with single-elimination, or a knock-out stage, which
+introduces even more random path dependencies that are not needed for
+forecasting the Kreisliga. This implies that the part of the existing
+literature on forecasting results in the FIFA World Cup concerning the
+group stage remains highly relevant for the task at hand, since the game
+rules are otherwise identical.
 
-In the next part, we give an overview of models used and evaluated for
-the purpose of predicting football match outcomes. We introduce a small
-subset of models in more detail in the third part. The fourth part
+In the next section, we give an overview of models used and evaluated
+for the purpose of predicting football match outcomes. We introduce a
+small subset of models in more detail in the third part. The fourth part
 contains the results from calculating a simulation based on these for
 the local men's league Recklinghausen class A1. We also present some
 comparative statistics of the model performance and draw some
@@ -349,21 +346,20 @@ conclusions in the last segment.
 \hypertarget{literature}{%
 \section{Literature}\label{literature}}
 
-A natural starting point for forecasting match or season outcomes in
-football tournaments is using the FIFA points ranking method that is
+A natural starting point for the forecasting of match or season outcomes
+in football tournaments is using the FIFA points ranking method that is
 widely used to evaluate the strength of a team and updated after each
 game. For example, a recent study by Correa et al.~\autocite*{correa}
 uses FIFA points to forecast the results of the 2018 FIFA Men's World
 Cup. This approach has however generated criticism
 \textcite{mchale2007}, especially because it does not update based on
-new information fast enough, and other methods have been proposed and
-evaluated. The benchmark study by Lasek et al.~\autocite*{lasek2013}
-compares established and proposed rankings. They find that FIFA rankings
-perform slightly worse than alternative methods, especially a version of
-the Elo rating system originally proposed by Arpad Elo for the United
-States Chess Federation to rate competitive chess players that was
-adapted for football championships by the authors of the website
-EloRatings.net \autocite*{eloratings}.
+new information fast enough. The benchmark study by Lasek et
+al.~\autocite*{lasek2013} compares established and proposed rankings.
+They find that FIFA rankings perform slightly worse than alternative
+methods, especially a version of the Elo rating system originally
+proposed by Arpad Elo for the United States Chess Federation to rate
+competitive chess players that was adapted for football championships by
+the authors of the website EloRatings.net \autocite*{eloratings}.
 
 Other studies show the effective prediction power of FIFA rankings,
 e.g.~\textcite{suzuki2008}. Leitner et al.~\autocite*{leitner2010} find
@@ -386,8 +382,8 @@ The benchmark model calculates the probability of winning a match by
 dividing a team's current points (victories are 3, draws are 2) by the
 total of their and their opponent's points, we can call this the
 \enquote{points model}. This model does not include the possibility of a
-draw. The probability is not updated with after each simulated game,
-because this does not generate new information about a team's strength.
+draw. The probability is not updated after each simulated game, because
+this does not generate new information about a team's strength.
 Averaging the results over enough simulations, this approach will
 converge to the current table ranking, so it is in fact just a weighted
 randomization of the current table.
@@ -424,32 +420,32 @@ returns.
 \hypertarget{data}{%
 \section{Data}\label{data}}
 
-For the simulation study we decided to use data from the local men's
+For our simulation study we decided to use data from the local men's
 league Recklinghausen class A1 in Westphalia for the 2019/2020 season.
 16 clubs will play against each other on a total of 30 match days in one
 home and one away game each. Due to the Covid-19 pandemic, the
-association has decided to cancel all matches from March 15, 2020. After
-all, 20 matchdays have already been played until this point in time
-which corresponds to a database of 158 matches. As the first half of the
+association has decided to cancel all matches from March 15, 2020. 20
+matchdays have already been played until this point in time which
+corresponds to a database of 158 matches. As the first half of the
 season had already been completed, each team had already played at least
-once against each team in the table. The extraction of real data from
+once against each team in the league. The extraction of real data from
 websites using scraping scripts can be complicated, as website operators
 have an interest in protecting their data from such automated queries.
 \enquote{Fussball.de} is a website of the DFB (German Football
 Association) which acts as a collection point for match results and
 news, especially in the amateur sector.
 
-The match results of the website itself cannot be directly read out.
-They are masked, so they are made unreadable when viewing the HTML file
-and are only evaluated afterwards using Javascript and transferred to
-the CSS of the site. The site also offers a match report, which
-graphically represents a temporal course of the match. This is broken
-down in the HTML code, in contrast to the match results, unmasked, and
-shows the course of the match in text form. With the help of regular
-expression operations, the game result can be reconstructed. The data
-record was then divided into completed and un-played games. The latter
-amount to 89 in this season, which were simulated with the methods in
-the following chapters.
+The match results of the website itself cannot extracted directly. They
+are masked, so they are made unreadable when viewing the HTML file and
+are only evaluated afterwards using Javascript and transferred to the
+CSS of the site. The site also offers a match report, which graphically
+represents a temporal course of the match. This is broken down in the
+HTML code, in contrast to the match results, unmasked, and shows the
+course of the match in text form. With the help of regular expression
+operations, the game result can be reconstructed. The data record was
+then divided into completed and un-played games. The latter amount to 89
+in this season, which were simulated with the methods in the following
+chapters.
 
 For further analysis we decided to scrape the data of season 16/17,
 17/18 and 18/19 as well to perform out-of-sample error (OOSE) test
@@ -641,12 +637,12 @@ predictive models chapter,we used the average of all matches played in
 the current season resulting in a tie for the probability of a draw.
 Half of the percentage points are deducted from the home team's winning
 probability and half from the away team's winning probability. Then we
-draw from these three probabilities the game result, team home wins,
-team away wins or draw. We repeat this procedure for all games and
-evaluate the results with 3 points for the winning team, 1 point for
-both teams in case of a draw and 0 points for the losing team.
+drew from these three probabilities the game result, so either team home
+wins, team away wins or draw. We repeated this procedure for all games
+and evaluated the results with 3 points for the winning team, 1 point
+for both teams in case of a draw and 0 points for the losing team.
 
-In the poissonmodel we calculate for each match the goal probabilities
+In the poissonmodel we calculated for each match the goal probabilities
 of both teams as a probability matrix based on the model estimation as
 described in predictive models part.
 
@@ -665,35 +661,35 @@ average was 1\% or less. Aggregation to this point occurred after about
 \cline{2-3} \cline{4-5} \cline{6-7}
 rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & club\_name\_points & score\_points\\
 \hline
-\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676 & VfL Ramsdorf & 72.19792\\
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{63.46088} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{64.34676} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{72.19792}\\
 \hline
 2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429 & TuS Gahlen & 65.04059\\
 \hline
-\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274 & SV Schermbeck II & 63.51325\\
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{56.68854} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{57.74274} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{63.51325}\\
 \hline
 4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383 & Fenerbahce I. Marl & 58.06307\\
 \hline
-\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454 & 1. SC BW Wulfen & 57.22107\\
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{49.74609} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{50.88454} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{57.22107}\\
 \hline
 6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084 & TSV Raesfeld & 55.75243\\
 \hline
-\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078 & TuS Velen & 45.37873\\
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{40.56790} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{41.79078} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{45.37873}\\
 \hline
 8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701 & SV Lembeck & 44.14961\\
 \hline
-\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500 & SC Marl-Hamm & 43.87890\\
+\cellcolor{gray!6}{9} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{38.56991} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{39.89500} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{43.87890}\\
 \hline
 10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838 & BVH Dorsten & 42.64140\\
 \hline
-\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449 & FC RW Dorsten & 37.59242\\
+\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{34.61080} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{35.82449} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{37.59242}\\
 \hline
 12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101 & Westfalia Gemen II & 32.82422\\
 \hline
-\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275 & SC Reken II & 27.60483\\
+\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.79455} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{29.11275} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.60483}\\
 \hline
 14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207 & TuS 05 Sinsen II & 21.27809\\
 \hline
-\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512 & Adler Weseke II & 18.88125\\
+\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{21.69107} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{22.59512} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{18.88125}\\
 \hline
 16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446 & SV Altendorf-Ulfkotte & 13.98222\\
 \hline
@@ -703,11 +699,11 @@ rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & clu
 \hypertarget{oose-test-statistics}{%
 \section{OOSE Test Statistics}\label{oose-test-statistics}}
 
-Making predictions of events that might never happen can fairly
+Making predictions of events that might never happen can obviously
 criticized by a simple question. How do you know that your results
 reflect reality as good as possible? Following George E. P. Box who is
 known for his qoute \enquote{All models are wrong} which is often
-extenden by \enquote{but some are usefull} we want to show that our
+extenden by \enquote{but some are usefull} we wanted to show that our
 models cover the latter. The out-of-sample error test statistic is one
 way to achieve this. One simply divides a dataset a small test data set
 and a larger training data set. For the season 16/17, 17/18 and 18/19 we
@@ -717,10 +713,10 @@ pandemic forced the
 Following \textcite{leitner2010}, we evaluate the models' performance
 using the rank correlation between their predicted and the real ranking
 tables for the three past years' seasons (2016, 2017 and 2018). To
-increase the relevance for our use case, we use as much training data as
-was available for this year's aborted season (2019-20). We find that the
-Elo ranking system improves on the baseline model, which in turn
-performs better than the simple Poisson model. The fact that the points
+increase the relevance for our use case, we used as much training data
+as was available for this year's aborted season (2019-20). We find that
+the Elo ranking system improves on the baseline model, which in turn
+performed better than the simple Poisson model. The fact that the points
 model achieves a 1.00 correlation in the 2017-18 season however makes
 these results doubtful, since the points model converges to the table as
 it was a the point of interruption. A perfect correlation with the final
