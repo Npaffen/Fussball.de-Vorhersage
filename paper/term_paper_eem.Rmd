@@ -81,11 +81,22 @@ For our simulation study we decided to use data from the local men's league Reck
 
 The match results of the website itself cannot extracted directly. They are masked, so they are made unreadable when viewing the HTML file and are only evaluated afterwards using Javascript and transferred to the CSS of the site.  The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, the game result can be reconstructed.  The data record was then divided into completed and un-played games. The latter amount to 89 in this season, which were simulated with the methods in the following chapters.
 
+
+
+Table 1 shows the results after the 20th matchday of the local men's league Recklinghausen class A1 in Westphalia for the 2019/2020 season.  The column Goal Diff. describes how many goals a team scored subtracted by the amount of goals scored against them. Both numbers can be extracted from the former column Goal Relation, where the first number describes the amount of scored goals of a team. The club 'VfL Ramsdorf' is leading the league with 52 Points and a goal difference of 53. Followed by 'TuS Gahlen' which is 6 points short in the competition of the leagues first place. The other end of the table showed the club 'SV Altendorf Ulfkotte' on the last place with only 7 points and a goal difference of -84. Followed by 'Adler Weske II' which achieved 10 points and secured position 15 with a goal difference of -41. Especially the two first and the the two last positions in most football league were of special interest since thoses teams will be promoted to the next higher league, namely 'Bezirksliga' or  relegates to the next lower league, namely 'Kreisliga B'.Given these results we expected a high chance for the club 'VfL Ramsdorf' to secure a promotion spot while we expected a fight against relegation between 'TuS 05 Sinsen II', 'Adler Weske II' and 'SV Altendorf-Ulfkotte'.
+
+```{r , echo=FALSE, results = "asis"}
+season_overview <- readr::read_rds(stringr::str_c(here::here() , "data", "database_season_1920.rds", sep = "/")) 
+
+season_overview %>% filter(matchday == 20) %>% select(-season,-matchday) %>% select(rank,club_name,games,everything()) %>%
+  rename(Rank = rank, Games = games, Club = club_name, Wins = wins, Ties = ties, Loss = loss, "Goal Relation" = goal_relations, "Goal Diff." = goal_diff, Points = points )  %>% 
+  kable(caption = 'Results after Matchday 20 Season 19/20') %>%
+  kable_styling(full_width = F, latex_options =c('striped', 'hold_position', 'scale_down'), position = 'center' )
+```
+
+
+
 For further analysis we decided to scrape the data of season 16/17, 17/18 and 18/19 as well to perform out-of-sample error (OOSE) test statistics.  The latter will indicate the performance of the different methods. 
-
-
-Give a short overview of the actual standing (ranking table after matchday 20)
-
 
 
 # Predictive Models
@@ -294,7 +305,7 @@ kable(all_results,
 
 # OOSE Test Statistics
 
-Making predictions of events that might never happen can obviously criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his qoute "All models are wrong" which is often extenden by "but some are usefull" we wanted to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a dataset a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we decided to split the dataset at the same point where the COVID-19 pandemic forced the  
+Making predictions of events that might never happen can obviously criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his qoute "All models are wrong" which is often amended by "but some are usefull" we wanted to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a dataset a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we decided to split the dataset at the same point where the COVID-19 pandemic forced the  
 
 Following @leitner2010, we evaluate the models’ performance using the rank correlation between their predicted and the real ranking tables for the three past years’ seasons (2016, 2017 and 2018). To increase the relevance for our use case, we used as much training data as was available for this year’s aborted season (2019-20). We find that the Elo ranking system improves on the baseline model, which in turn performed better than the simple Poisson model. The fact that the points model achieves a 1.00 correlation in the 2017-18 season however makes these results doubtful, since the points model converges to the table as it was a the point of interruption. A perfect correlation with the final table can thus only occur if there is no change in the ranking after that date.
 
