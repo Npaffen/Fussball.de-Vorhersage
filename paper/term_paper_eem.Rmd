@@ -317,6 +317,7 @@ TO DO:
 -goal distribution, qq-plot
 -include reference to Blog by David Sheehan: https://dashee87.github.io/data%20science/football/r/predicting-football-results-with-statistical-modelling/
 -rerun oose
+-reformulate "deep markets" paragraph to make it clearer
 
 \newpage
 
