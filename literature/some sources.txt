@@ -1,5 +1,4 @@
-the website
-s
+https://www.dataquest.io/blog/tutorial-poisson-regression-in-r/
 
 Int. J. Applied Pattern Recognition, Vol. 1, No. 1, 2013 27
 The predictive power of ranking systems in association football
