@@ -1,10 +1,12 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(here::here( "/data/database_match_results_1718.rds"))[1:175,] 
+database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds"))%>% filter(between(matchday, 1, 20))
 
-missinggames <- read_rds(here::here("/data/database_match_results_1718.rds"))[176:268,1:4]
+database_season <- read_rds(here::here("/data/database_season_1819.rds"))
 
-database_season <- read_rds(here::here("/data/database_season_1718.rds"))
+missinggames <- read_rds(here::here("/data/database_match_results_1819.rds")) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
+
+
 
 source(here::here("src/functions_N.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
@@ -34,20 +36,24 @@ poisson_model <-
   glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
 summary(poisson_model)
 
-matchday30 <- database_season %>% filter(season == '1718', matchday == 30)
+
+if(database_season$season[1] == '1617'){
+matchday30 <- database_season %>% filter( matchday == 34) %>% filter(club_name != 'VfB Hüls II zg.')
+
+}else {matchday30 <- database_season %>% filter( matchday == 30)}
 
 if(0){
 N <- 5000 # simulation runs
-sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 10, N, limit = 0.01)
-saveRDS(sim_output_poisson, paste0(getwd(), "/data/poisson_score_simulation_1718.rds"))
+sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 15, N, limit = 0.01)
+saveRDS(sim_output_poisson, paste0(getwd(), "/data/poisson_score_simulation_1819_goals15.rds"))
 }
-sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_goals15.rds"))
 
 # 2. evaluate result
 
 all_final_tables <- sim_output$all_final_tables %>% rename(score = points)
 all_final_tables <- add_run_rank_col(x = all_final_tables)
-all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
+all_avg_tables <- sim_output$all_avg_tables%>%  rename(score = points)
 all_avg_tables <- add_run_rank_col(x = all_avg_tables)
 
 # average table result
@@ -56,9 +62,9 @@ average_table <- all_avg_tables[
 average_table <- average_table %>% arrange(rank)
 
 print(average_table)
-#View(average_table)
+  #View(average_table)
 
-
+if(lower)
 
 ## 3. calculate plots
 
@@ -101,4 +107,3 @@ make_plot(x = all_avg_tables, y = "rank",
 make_plot(x = all_avg_tables, y = "score",
           club_names, type = "line")
 
-    

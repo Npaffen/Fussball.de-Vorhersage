@@ -52,8 +52,20 @@ f_rating <- function(played_matchdays){
 }
 
 
-
 ###  creating score probabiblities
+f_simulate_score_prob_nbioim <- function(foot_model, homeTeam, awayTeam, max_goals=10){
+  home_goals_avg <- predict(foot_model,
+                            data.frame(home=1, team=homeTeam, 
+                                       opponent=awayTeam), type="response")
+  away_goals_avg <- predict(foot_model, 
+                            data.frame(home=0, team=awayTeam, 
+                                       opponent=homeTeam), type="response")
+  dnbinom(0:max_goals,size = home_goals_avg,) %o% dnbinom(0:max_goals,size = away_goals_avg,) 
+  #map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
+}
+
+
+###  creating score probabiblities for poisson
 f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
   home_goals_avg <- predict(foot_model,
                             data.frame(home=1, team=homeTeam, 
@@ -340,3 +352,17 @@ make_plot <- function(x = all_final_tables,
 
 
 
+Chi_sqr <- round(as.numeric(chisq.test(matrix(c(19,4,5,18),2,2),correct=F)$statistic),4)
+K <-round(sqrt(t/(t+sum(c(19,4,5,18)))),4)
+ round(t_2/sqrt(1/2),4)
+
+ 
+ testset <- c(rep(8/10,13),rep(11/10,7),rep(25/10,6),rep(33/10,6),rep(48/10,10))
+iqr <- as.numeric(quantile(testset,p=0.75,type=1))-as.numeric(quantile(testset,p=0.25,type=1))
+range <- 48/10 - 8/10
+box <- iqr/range
+
+var(testset)
+
+
+round((7*(11/10-8/10)^2+6*(25/10-8/10)^2+6*(33/10-8/10)^2+10*(48/10-8/10)^2)/(13+7+6+6+10),4)
