@@ -404,12 +404,12 @@ adapted for the use in ranking football teams. Glickman
 \autocite*{glickman1995} offers a comprehensive discussion of the Elo
 rating system.
 
-The third model is a very simple implementation of a Poisson
-distribution that approximates a probability distribution of goals in
-each game with a fixed parameter to adjust for the home advantage. This
-approach follows the literature influenced by \textcite{maher1982} and
-others. Generally, these models include different parameters to allow
-for team-specific strengths when playing home or away, and while
+The third model is a regression model that approximates the distribution
+of goals in each game to a Poisson or Negative Binomial distribution
+with an estimated constant parameter to adjust for the home advantage.
+This approach follows the literature influenced by \textcite{maher1982}
+and others. Generally, these models include different parameters to
+allow for team-specific strengths when playing home or away, and while
 defending or attacking. Parameters for e.g.~random effects can be added,
 which we omit here for simplicity. For a general discussion see
 \textcite{karlis2003}. Many extensions of this model as well as model
@@ -539,7 +539,7 @@ winning probability for each missing game. Specifically we implement
 \begin{itemize}
 \item the points model,
 \item the EloRankings.net model, 
-\item a Poisson model
+\item a Poisson/Negative Binomial regression model
 \end{itemize}
 
 The first model is just a simple baseline model that calculates the
@@ -563,8 +563,9 @@ Secondly, the average over many simulated runs will converge to the
 initial table from when the season was interrupted. This will defeat the
 purpose of running a simulation in the first place, because it does not
 yield any new information, and we could have just used the table as it
-was. This method is however preferable to an unweighted coin toss,
-because that would unfairly favor below average teams.
+was. In case a random draw is used to determine the result, this method
+is however preferable to an unweighted coin toss, because that would
+unfairly favor below-average teams.
 
 Our second model is based on the rating algorithm from
 \href{eloratings.net/about}{eloratings.net}. The anonymous site operator
@@ -572,26 +573,28 @@ formulates the rating, representative of the strength of a team, as
 follows:
 
 \begin{align}
-R_n = R_0 + K \times (W - W_e).
+R_n = R_0 + K * (W - W_e)\\
+K \in \left( K_0 * 1.5, K_0 * 0.75, 3/4 + K_0 * \frac{N-3}{8} \right)
 \end{align}
 
 Here, the new rating \(R_n\) is defined as an update of \(R_0\), which
-is the old rating. The weighting factor for each match is defined by the
-type of tournament in which the match takes place and also controls for
-friendly matches, which is given to the lowest weight of 20. While
-matches in world championships and other major international tournaments
-are given weights between 40 and 60, the rest falls into the category
-\enquote{all other tournaments} which are given a weighting factor of
-30. Following this example, we also set \emph{K} to 30 for matches
-already played in the local league. The weighting factor \emph{K} is
-adjusted again based on the goal difference of the result. Thus,
-\emph{K} is increased by \(\dfrac{K}{2}\) if the match was won with two
-goals, by \(\dfrac{3}{4}\times K\) if the match was won with three goals
-and by \(\dfrac{3}{4} + \dfrac{(N-3)}{8} \times K\), where \emph{N}
-defines the goal difference of the match if the match was won with four
-or more goals. \emph{W} is the result of the match. 0 for a loss, 0.5
-for a draw and 1 for a win. \(W_e\) is the probability of winning
-defined by the following formula:
+is the old rating. The weighting factor \emph{K} for each match is
+defined by \(K_0\), the type of tournament in which the match takes
+place and also controls for friendly matches, which is given to the
+lowest weight of 20. While matches in world championships and other
+major international tournaments are given weights between 40 and 60, the
+rest falls into the category \enquote{all other tournaments} which are
+given a weighting factor of 30. Following this example, we also set
+\(K_0\) to 30 for matches already played in the local league. The
+weighting factor \emph{K} modifies the effect that the goal difference
+of the result has on the new ranking. Thus, \emph{K} is increased by
+\(\dfrac{K}{2}\) if the match was won with two goals, by
+\(\dfrac{3}{4}* K\) if the match was won with three goals and by
+\(\dfrac{3}{4} + \dfrac{(N-3)}{8} * K\), where \emph{N} defines the goal
+difference of the match if the match was won with four or more goals.
+\emph{W} is the result of the match. 0 for a loss, 0.5 for a draw and 1
+for a win. \(W_e\) is the probability of winning defined by the
+following formula:
 
 \begin{align}
 W_e = 1/(10^{(-dr/400)}+1),
@@ -609,13 +612,13 @@ equal to the winning probability obtained from each method.
 
 Our third model uses the Poisson distribution to simulate match results
 as the number of goals scored in each match. The probability matrix from
-which the game result is drawn is a \(n \times n\) matrix where each
-cell indicates the probability of that specific match result. While the
-rows indicates the goals of the home team, the column indicates the
-goals of the away team. For example the cell of the first row and in the
-first column indicates the likelihood that the both teams score \(0\)
-goals. The maximum number of goals \emph{n} can be set high enough to
-cover the range of possible outcomes. We set it to 10 in our simulation
+which the game result is drawn is a \(n * n\) matrix where each cell
+indicates the probability of that specific match result. While the rows
+indicates the goals of the home team, the column indicates the goals of
+the away team. For example the cell of the first row and in the first
+column indicates the likelihood that the both teams score \(0\) goals.
+The maximum number of goals \emph{n} can be set high enough to cover the
+range of possible outcomes. We set it to 10 in our simulation
 (Alternative: Because the highest number of goals scored since 2016 in
 one game was 14, we set \emph{n} equal to 15). The Poisson probability
 mass function of our model can be expressed as:
@@ -629,15 +632,15 @@ estimate a log-linear Poisson regression model using data from the
 matches already played:
 
 \begin{align}
-log(goals by team) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team + \sum_{j}^{T} \beta_j opponent
+log(\text{\emph{goals by team}}) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team + \sum_{j}^{T} \beta_j opponent
 \end{align}
 
-Here \emph{goals} represents the number of goals scored by the team in a
-certain game. The dummy variable \emph{home} equals 1 if the team plays
-on it's home pitch, and \emph{team} and \emph{opponent} represent
-dummies for each team out of a total of \emph{T} teams respectively. So
-each game is represented twice: Once from the defending home team and
-once from the opponents view. Because it is a model in
+Here \emph{goals by team} represents the number of goals scored by the
+team in a certain game. The dummy variable \emph{home} equals 1 if the
+team plays on it's home pitch, and \emph{team} and \emph{opponent}
+represent dummies for each team out of a total of \emph{T} teams
+respectively. So each game is represented twice: Once from the defending
+home team and once from the opponents view. Because it is a model in
 log-transformation, the exponential of the parameters \(\beta_i\) and
 \(\beta_j\) then represent the change in expected number of goals scored
 by the home team. The exponential of the constant specifies the the
@@ -658,13 +661,6 @@ overdispersion (the variance is larger than the mean). A test from the
 data very well (p = 0.00) The residual deviance (388.56) is much larger
 than the degrees of freedom (284), so later we also estimate the model
 with a negative binomial distribution.
-
-\begin{verbatim}
- res.deviance  df            p
-\end{verbatim}
-
-{[}1,{]} 388.5606 284 3.616488e-05 res.deviance df p {[}1,{]} 354.4949
-284 0.002795196
 
 \begin{table}[!htbp] \centering 
   \caption{Regression output of the Quasi-Poisson model} 
@@ -701,9 +697,9 @@ with a negative binomial distribution.
 \end{tabular} 
 \end{table}
 
-Note here that \enquote{1. SC BW Wulfen} is chosen as the base, so it's
-parameter is zero and all other parameters are calculated in deviation
-from it.
+Note here that \enquote{1. SC BW Wulfen} is chosen as the base, so its
+parameter is set to zero and all other parameters are calculated in
+deviation from it.
 
 !!! Check if below is still accurate after re-running the model !!!
 
@@ -724,7 +720,8 @@ The results from the estimation with a negative binomial distribution
 are very similar. However, the residual difference is lower (354.50
 compared to 388.56 before), indicating a better fit. The goodness-of-fit
 test still rejects the model (p = 0.00). The estimation results can be
-found in the Appendix.
+found in the Appendix. ( XXX maybe put BN as main simulation and Poisson
+in appendix, if fit is indeed better XXX )
 
 Running the simulation for each method repeatedly should indicate the
 distribution and expected average of outcomes, after the averages

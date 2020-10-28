@@ -1,6 +1,6 @@
 
 ## calculate the rank correlation between simulated and real table results
-
+require(ggplot2)
 
 # for each season
 seasons <- c("1617", "1718", "1819")
@@ -46,9 +46,15 @@ for(j in c("elo ranking", "points", "poisson")){
     # save results
     ranking_results <- rbind(ranking_results, results)
     
-    print(paste0(i, j))
+    print(paste(i, j))
   }
 }
+
+# plot oos performance over seasons
+out <- ggplot(ranking_results)
+out + geom_col(aes(season, kendalls_tau, fill = method), position = "dodge")
+out + geom_col(aes(season, spearmans_rho, fill = method), position = "dodge")
+
 
 # summarize results over method
 sum_output <- dplyr::summarize(dplyr::group_by(ranking_results, method),
