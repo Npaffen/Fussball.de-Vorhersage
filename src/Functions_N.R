@@ -53,17 +53,69 @@ f_rating <- function(played_matchdays){
 
 
 ###  creating score probabiblities
-f_simulate_score_prob_nbioim <- function(foot_model, homeTeam, awayTeam, max_goals=10){
-  home_goals_avg <- predict(foot_model,
-                            data.frame(home=1, team=homeTeam, 
-                                       opponent=awayTeam), type="response")
-  away_goals_avg <- predict(foot_model, 
-                            data.frame(home=0, team=awayTeam, 
-                                       opponent=homeTeam), type="response")
-  dnbinom(0:max_goals,size = home_goals_avg,) %o% dnbinom(0:max_goals,size = away_goals_avg,) 
+f_simulate_score_prob_poisson <- function(foot_model, homeTeam, awayTeam){
+  
+  
+  home_goals_avg <- map2_df(.x = homeTeam, .y = awayTeam,~predict(foot_model,
+                            data.frame(home=1, team=.x, 
+                                       opponent=.y), type="response") %>% floor
+  )
+  away_goals_avg <- map2_df(.x = homeTeam, .y = awayTeam,~predict(foot_model, 
+                            data.frame(home=0, team=.y, 
+                                       opponent=.x), type="response") %>% floor
+  )
+  goals <- data.frame(home = home_goals_avg$`1`, away = away_goals_avg$`1`)
+  return(goals)
   #map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
 }
 
+
+
+table_update <- function(missinggames, matchday30){
+  clubs <- matchday30$club_name
+  missinggames <- missinggames %>%
+    mutate(points_team_home = case_when(Goals_team_home > Goals_team_away ~3, Goals_team_home == Goals_team_away ~ 1, TRUE ~ 0),
+           points_team_away = case_when(Goals_team_home > Goals_team_away ~0, Goals_team_home == Goals_team_away ~ 1, TRUE ~ 3),
+           Goal_diff_home = Goals_team_home - Goals_team_away,
+           Goal_diff_away = Goals_team_away - Goals_team_home
+           )
+  
+  points_update <- map(clubs, ~ missinggames %>%
+                         filter(club_name_home == .x ) %>%
+                         select(points_team_home) %>%
+                         sum()+ missinggames %>% 
+                         filter(club_name_away == .x ) %>%
+                         select(points_team_away) %>% 
+                         sum()) %>%
+    unlist 
+  
+  
+  
+  goal_diff_update <- map(clubs, ~ missinggames %>%
+                            filter(club_name_home == .x ) %>%
+                            select(Goal_diff_home) %>%
+                            sum()+ missinggames %>% 
+                            filter(club_name_away == .x ) %>%
+                            select(Goal_diff_away) %>% 
+                            sum()) %>%
+    unlist 
+  #all_scores <- all_scores %>%
+  # inner_join(missinggames %>% select(Goals_team_away, Goals_team_away)
+  # )
+  
+  final_table <- matchday30 %>%
+    mutate( points_new =  points_update,
+            points = points + points_new,
+            goal_diff_new = goal_diff_update,
+            goal_diff = goal_diff + goal_diff_new) %>%
+    select(club_name, points, goal_diff) %>%
+    arrange(desc(points), desc(goal_diff)) %>%
+    mutate(rank = 1:length(club_name)) %>%
+    select(rank, everything())
+  
+  return(final_table)
+  
+}
 
 ###  creating score probabiblities for poisson
 f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
@@ -76,6 +128,8 @@ f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
   dpois(0:max_goals, home_goals_avg) %o% dpois(0:max_goals, away_goals_avg) 
   #map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
 }
+
+
 #simulate poisson score prob model
 f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goals = 10, N, limit ){
   all_avg_tables <- data.frame(stringsAsFactors = FALSE)
@@ -352,17 +406,4 @@ make_plot <- function(x = all_final_tables,
 
 
 
-Chi_sqr <- round(as.numeric(chisq.test(matrix(c(19,4,5,18),2,2),correct=F)$statistic),4)
-K <-round(sqrt(t/(t+sum(c(19,4,5,18)))),4)
- round(t_2/sqrt(1/2),4)
 
- 
- testset <- c(rep(8/10,13),rep(11/10,7),rep(25/10,6),rep(33/10,6),rep(48/10,10))
-iqr <- as.numeric(quantile(testset,p=0.75,type=1))-as.numeric(quantile(testset,p=0.25,type=1))
-range <- 48/10 - 8/10
-box <- iqr/range
-
-var(testset)
-
-
-round((7*(11/10-8/10)^2+6*(25/10-8/10)^2+6*(33/10-8/10)^2+10*(48/10-8/10)^2)/(13+7+6+6+10),4)
