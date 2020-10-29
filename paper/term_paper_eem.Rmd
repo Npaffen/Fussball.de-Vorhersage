@@ -69,7 +69,7 @@ The benchmark model calculates the probability of winning a match by dividing a 
 
 The second model is based on a version of the Elo rating system published anonymously on the website EloRatings.net -@eloratings. The algorithm was originally developed for ranking chess players. As an “earned” rating system (@lasek2013) a team’s rating is updated iteratively according to the outcome of single matches and depending on the expected outcome with regard to the opponent’s rating. This version was especially adapted for the use in ranking football teams. Glickman -@glickman1995 offers a comprehensive discussion of the Elo rating system. 
 
-The third model is a very simple implementation of a Poisson distribution that approximates a probability distribution of goals in each game with a fixed parameter to adjust for the home advantage. This approach follows the literature influenced by @maher1982 and others. Generally, these models include different parameters to allow for team-specific strengths when playing home or away, and while defending or attacking. Parameters for e.g. random effects can be added, which we omit here for simplicity. For a general discussion see @karlis2003. Many extensions of this model as well as model selection algorithms are possible.
+The third model is a regression model that approximates the distribution of goals in each game to a Poisson or Negative Binomial distribution with an estimated constant parameter to adjust for the home advantage. This approach follows the literature influenced by @maher1982 and others. Generally, these models include different parameters to allow for team-specific strengths when playing home or away, and while defending or attacking. Parameters for e.g. random effects can be added, which we omit here for simplicity. For a general discussion see @karlis2003. Many extensions of this model as well as model selection algorithms are possible.
 
 For a more recent review of advances in the literature and a new approach based on the Weinbull distribution we refer to @boshnakov2017. They use an evaluation based on calibration curves as well as the payoff from betting strategies and find that their model improves on previous models and can yield positive betting returns. 
 
@@ -105,7 +105,7 @@ To predict the outcome of the canceled games, we determine each team's relative 
 \begin{itemize}
 \item the points model,
 \item the EloRankings.net model, 
-\item a Poisson model
+\item a Poisson/Negative Binomial regression model
 \end{itemize}
 
 The first model is just a simple baseline model that calculates the probability of a team _A_ winning a game against team B using the formula
@@ -116,15 +116,16 @@ P(A wins) = \frac{table points_A}{{table points}_A + {table points}_B},
 
 where _table points_ corresponds to the number of games won at the current state of the season valued at three points plus the number of draws valued at one point. This value also governs the ranking and ultimate placement of the teams in the league. Two questions arise from this approach. Firstly, should the table points be updated after each simulated game? We argue no, because this would not include new information about the relative strength of the teams and just increase the variance of the result.
 
-Secondly, the average over many simulated runs will converge to the initial table from when the season was interrupted. This will defeat the purpose of running a simulation in the first place, because it does not yield any new information, and we could have just used the table as it was. This method is however preferable to an unweighted coin toss, because that would unfairly favor below average teams.
+Secondly, the average over many simulated runs will converge to the initial table from when the season was interrupted. This will defeat the purpose of running a simulation in the first place, because it does not yield any new information, and we could have just used the table as it was. In case a random draw is used to determine the result, this method is however preferable to an unweighted coin toss, because that would unfairly favor below-average teams.
 
 Our second model is based on the rating algorithm from [eloratings.net](eloratings.net/about). The anonymous site operator formulates the rating, representative of the strength of a team, as follows: 
 
 \begin{align}
-R_n = R_0 + K \times (W - W_e).
+R_n = R_0 + K * (W - W_e)\\
+K \in \left( K_0 * 1.5, K_0 * 0.75, 3/4 + K_0 * \frac{N-3}{8} \right)
 \end{align}
 
-Here, the new rating $R_n$ is defined as an update of $R_0$, which is the old rating. The weighting factor for each match is defined by the type of tournament in which the match takes place and also controls for friendly matches, which is given to the lowest weight of 20. While matches in world championships and other major international tournaments are given weights between 40 and 60, the rest falls into the category "all other tournaments" which are given a weighting factor of 30. Following this example, we also set _K_ to 30 for matches already played in the local league. The weighting factor _K_ is adjusted again based on the goal difference of the result. Thus, _K_ is increased by $\dfrac{K}{2}$ if the match was won with two goals, by $\dfrac{3}{4}\times K$ if the match was won with three goals and by $\dfrac{3}{4} + \dfrac{(N-3)}{8} \times K$, where _N_ defines the goal difference of the match if the match was won with four or more goals. _W_ is the result of the match. 0 for a loss, 0.5 for a draw and 1 for a win. $W_e$ is the probability of winning defined by the following formula:
+Here, the new rating $R_n$ is defined as an update of $R_0$, which is the old rating. The weighting factor _K_ for each match is defined by $K_0$, the type of tournament in which the match takes place and also controls for friendly matches, which is given to the lowest weight of 20. While matches in world championships and other major international tournaments are given weights between 40 and 60, the rest falls into the category "all other tournaments" which are given a weighting factor of 30. Following this example, we also set $K_0$ to 30 for matches already played in the local league. The weighting factor _K_ modifies the effect that the goal difference of the result has on the new ranking. Thus, _K_ is increased by $\dfrac{K}{2}$ if the match was won with two goals, by $\dfrac{3}{4}* K$ if the match was won with three goals and by $\dfrac{3}{4} + \dfrac{(N-3)}{8} * K$, where _N_ defines the goal difference of the match if the match was won with four or more goals. _W_ is the result of the match. 0 for a loss, 0.5 for a draw and 1 for a win. $W_e$ is the probability of winning defined by the following formula:
 
 \begin{align}
 W_e = 1/(10^{(-dr/400)}+1),
@@ -134,7 +135,7 @@ where _dr_ is defined as the rating difference and the home team receives an arb
 
 To simulate the outcome of the league with the points and Elo ranking method, we follow Correa et al. -@correa and draw the results of each game from a Bernoulli distribution with the parameter _p_ equal to the winning probability obtained from each method. 
 
-Our third model uses the Poisson distribution to simulate match results as the number of goals scored in each match. The probability matrix from which the game result is drawn is a $n \times n$ matrix where each cell indicates the probability of that specific match result. While the rows indicates the goals of the home team, the column indicates the goals of the away team. For example the cell of the first row and in the first column indicates the likelihood that the both teams score $0$ goals. The maximum number of goals _n_ can be set high enough to cover the range of possible outcomes. We set it to 10 in our simulation (Alternative: Because the highest number of goals scored since 2016 in one game was 14, we set _n_ equal to 15). The Poisson probability mass function of our model can be expressed as:
+Our third model uses the Poisson distribution to simulate match results as the number of goals scored in each match. The probability matrix from which the game result is drawn is a $n * n$ matrix where each cell indicates the probability of that specific match result. While the rows indicates the goals of the home team, the column indicates the goals of the away team. For example the cell of the first row and in the first column indicates the likelihood that the both teams score $0$ goals. The maximum number of goals _n_ can be set high enough to cover the range of possible outcomes. We set it to 10 in our simulation (Alternative: Because the highest number of goals scored since 2016 in one game was 14, we set _n_ equal to 15). The Poisson probability mass function of our model can be expressed as:
 
 \begin{align}
 P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
@@ -143,10 +144,10 @@ P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
 where $\lambda$ represents the average number of goals. First, we estimate a log-linear Poisson regression model using data from the matches already played:
 
 \begin{align}
-log(goals by team) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team + \sum_{j}^{T} \beta_j opponent
+log(\text{\emph{goals by team}}) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team + \sum_{j}^{T} \beta_j opponent
 \end{align}
 
-Here _goals_ represents the number of goals scored by the team in a certain game. The dummy variable _home_ equals 1 if the team plays on it's home pitch, and _team_ and _opponent_ represent dummies for each team out of a total of _T_ teams respectively. So each game is represented twice: Once from the defending home team and once from the opponents view. Because it is a model in log-transformation, the exponential of the parameters $\beta_i$ and $\beta_j$ then represent the change in expected number of goals scored by the home team. The exponential of the constant specifies the the overall expected value of goals if a team plays away, and $e^{\beta_1}$ is the expected effect of the home field advantage. This could be seen as an advantage over the Elo model, because we do not fix this effect in advance.
+Here _goals by team_ represents the number of goals scored by the team in a certain game. The dummy variable _home_ equals 1 if the team plays on it's home pitch, and _team_ and _opponent_ represent dummies for each team out of a total of _T_ teams respectively. So each game is represented twice: Once from the defending home team and once from the opponents view. Because it is a model in log-transformation, the exponential of the parameters $\beta_i$ and $\beta_j$ then represent the change in expected number of goals scored by the home team. The exponential of the constant specifies the the overall expected value of goals if a team plays away, and $e^{\beta_1}$ is the expected effect of the home field advantage. This could be seen as an advantage over the Elo model, because we do not fix this effect in advance.
 
 To estimate the model, we use the _glm_ function from the R _stats_ package. With the option _family = quasipoisson(link=log)_, a Quasi-Maximum Likelihood Estimation of the log-transformation is calculated. The reason for choosing a Quasi-Poisson distribution is that this adjusts the standard-errors for overdispersion (the variance is larger than the mean). A test from the _AER_ package finds low significance for overdispersion (estimate: 1.12907 with p = 0.064). Pearson's Chi-Squared goodness-of-fit test (_pchisq_ from _stats_) finds that the model does not fit the data very well (p = 0.00) The residual deviance (388.56) is much larger than the degrees of freedom (284), so later we also estimate the model with a negative binomial distribution. 
 
