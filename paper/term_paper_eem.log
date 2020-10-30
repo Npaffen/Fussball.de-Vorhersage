@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  30 OCT 2020 13:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  30 OCT 2020 14:24
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
@@ -1378,7 +1378,7 @@ Overfull \hbox (36.11925pt too wide) in paragraph at lines 656--685
  [][] 
  []
 
-[8] [9] (rank_corr.tex) (append_rank_corr.tex) [10] [11] [12]
+[8] [9] [10] (rank_corr.tex) (append_rank_corr.tex) [11] [12]
 Overfull \hbox (36.11925pt too wide) in paragraph at lines 854--883
  [][] 
  []
@@ -1434,7 +1434,7 @@ fonts/type1/public/lm/lmr8.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9
 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/Nils/AppData/Local/Programs/MiKT
 eX 2.9/fonts/type1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/M
 iKTeX 2.9/fonts/type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (16 pages, 300101 bytes).
+Output written on term_paper_eem.pdf (16 pages, 300365 bytes).
 PDF statistics:
  289 PDF objects out of 1000 (max. 8388607)
  62 named destinations out of 1000 (max. 500000)

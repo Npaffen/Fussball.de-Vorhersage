@@ -520,7 +520,7 @@ different methods.
 
 To predict the outcome of the canceled games, we determine each team's
 relative strength using each of the three candidate models. Based on
-this we simulate the end of the 2019/2020 season by way of calculating a
+this we simulate the end of the 2019/2020 season by calculating a
 winning probability for each missing game. Specifically we implement
 
 \begin{itemize}
@@ -530,8 +530,8 @@ winning probability for each missing game. Specifically we implement
 \end{itemize}
 
 The first model is just a simple baseline model that calculates the
-probability of a team \emph{A} winning a game against team B using the
-formula
+probability of a team \emph{A} winning a game against team \emph{B}
+using the formula
 
 \begin{align}
 P(A wins) = \frac{table points_A}{{table points}_A + {table points}_B},
@@ -542,7 +542,7 @@ current state of the season valued at three points plus the number of
 draws valued at one point. This value also governs the ranking and
 ultimate placement of the teams in the league. Two questions arise from
 this approach. Firstly, should the table points be updated after each
-simulated game? We argue no, because this would not include new
+simulated game? We argue against tha, because this would not include new
 information about the relative strength of the teams and just increase
 the variance of the result.
 
@@ -559,10 +559,10 @@ Our second model is based on the rating algorithm from
 formulates the rating, representative of the strength of a team, as
 follows:
 
-\begin{align}
+\begin{gather}
 R_n = R_0 + K * (W - W_e)\\
 K \in \left( K_0 * 1.5, K_0 * 0.75, 3/4 + K_0 * \frac{N-3}{8} \right)
-\end{align}
+\end{gather}
 
 Here, the new rating \(R_n\) is defined as an update of \(R_0\), which
 is the old rating. The weighting factor \emph{K} for each match is
