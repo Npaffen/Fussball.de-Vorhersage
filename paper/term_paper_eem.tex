@@ -603,8 +603,8 @@ which the game result is drawn is a \(n * n\) matrix where each cell
 indicates the probability of that specific match result. While the rows
 indicates the goals of the home team, the column indicates the goals of
 the away team. For example the cell of the first row and in the first
-column indicates the likelihood that the both teams score \(0\) goals.
-The maximum number of goals \emph{n} can be set high enough to cover the
+column indicates the likelihood that both teams score \(0\) goals. The
+maximum number of goals \emph{n} can be set high enough to cover the
 range of possible outcomes. We set it to 10 in our simulation
 (Alternative: Because the highest number of goals scored since 2016 in
 one game was 14, we set \emph{n} equal to 15). The Poisson probability
@@ -630,11 +630,11 @@ respectively. So each game is represented twice: Once from the defending
 home team and once from the opponents view. Because it is a model in
 log-transformation, the exponential of the parameters \(\beta_i\) and
 \(\beta_j\) then represent the change in expected number of goals scored
-by the home team. The exponential of the constant specifies the the
-overall expected value of goals if a team plays away, and
-\(e^{\beta_1}\) is the expected effect of the home field advantage. This
-could be seen as an advantage over the Elo model, because we do not fix
-this effect in advance.
+by the home team. The exponential of the constant specifies the overall
+expected value of goals if a team plays away, and \(e^{\beta_1}\) is the
+expected effect of the home field advantage. This could be seen as an
+advantage over the Elo model, because we do not fix this effect in
+advance.
 
 To estimate the model, we use the \emph{glm} function from the R
 \emph{stats} package. With the option \emph{family =
@@ -644,10 +644,10 @@ Quasi-Poisson distribution is that this adjusts the standard-errors for
 overdispersion (the variance is larger than the mean). A test from the
 \emph{AER} package finds low significance for overdispersion (estimate:
 1.12907 with p = 0.064). Pearson's Chi-Squared goodness-of-fit test
-(\emph{pchisq} from \emph{stats}) finds that the model does not fit the
-data very well (p = 0.00) The residual deviance (388.56) is much larger
-than the degrees of freedom (284), so later we also estimate the model
-with a negative binomial distribution.
+finds that the model does not fit the data very well (p = 0.00) The
+residual deviance (388.56) is much larger than the degrees of freedom
+(284), so later we also estimate the model with a negative binomial
+distribution.
 
 \begin{table}[!htbp] \centering 
   \caption{Regression output of the Quasi-Poisson model} 
@@ -695,7 +695,7 @@ In summary, the coefficients of the model show that the club
 estimate) and teams playing against them have the highest chance to
 score (high opponent estimate), with both estimates being highly
 significant. Since the club is in the last place in the current table,
-as mentioned in the Data section, this is the expected result.
+as mentioned in the data section, this is the expected result.
 Conversely, we observe the opposite for the current table leader
 \enquote{VfL Ramsdorf}. For the simulation the result is drawn from the
 Poisson distribution, and the score probabilities are based on the
@@ -719,11 +719,11 @@ to need less repetitions.
 
 A few alternatives have been developed for forecasting football games.
 The potential of using independent Poisson distributions to match the
-empirical distribution of goals scored by a team has been improved on by
+empirical distribution of goals scored by a team has been improved by
 introducing correlation between the teams playing against one another in
 a bivariate Poisson distribution \textcite{karlis2003}.
 
-While the independent Poisson distributions alrea.y allowed for a better
+While the independent Poisson distributions already allowed for a better
 fit and to model the outcome of draws, Boshnakov et
 al.~\autocite*{boshnakov2016} used a Weibull count model to improve on
 the bivariate Poisson model, allowing them even to outperform betting
@@ -733,7 +733,7 @@ market in selected bets.
 \section{Results}\label{results}}
 
 For the simulation study using the Elo rating, as explained in the
-predictive models chapter,we used the average of all matches played in
+predictive models chapter, we used the average of all matches played in
 the current season resulting in a tie for the probability of a draw.
 Half of the percentage points are deducted from the home team's winning
 probability and half from the away team's winning probability. Then we
@@ -793,10 +793,10 @@ reflect reality as good as possible? Following George E. P. Box who is
 known for his qoute \enquote{All models are wrong} which is often
 amended by \enquote{but some are usefull} we wanted to show that our
 models cover the latter. The out-of-sample error test statistic is one
-way to achieve this. One simply divides a dataset a small test data set
-and a larger training data set. For the season 16/17, 17/18 and 18/19 we
-decided to split the dataset at the same point where the COVID-19
-pandemic forced the
+way to achieve this. One simply divides a dataset into a small test data
+set and a larger training data set. For the season 16/17, 17/18 and
+18/19 we decided to split the dataset at the same point where the
+COVID-19 pandemic forced the
 
 Following \textcite{leitner2010}, we evaluate the models' performance
 using the rank correlation between their predicted and the real ranking
@@ -807,7 +807,7 @@ the Elo ranking system improves on the baseline model, which in turn
 performed better than the simple Poisson model. The fact that the points
 model achieves a 1.00 correlation in the 2017-18 season however makes
 these results doubtful, since the points model converges to the table as
-it was a the point of interruption. A perfect correlation with the final
+it was a point of interruption. A perfect correlation with the final
 table can thus only occur if there is no change in the ranking after
 that date.
 

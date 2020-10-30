@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  30 OCT 2020 14:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  30 OCT 2020 15:44
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
@@ -1407,10 +1407,10 @@ Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  24428 strings out of 481165
- 410966 string characters out of 2902574
+ 410958 string characters out of 2902574
  1277227 words of memory out of 3000000
  39408 multiletter control sequences out of 15000+200000
- 602361 words of font info for 128 fonts, out of 3000000 for 9000
+ 602323 words of font info for 128 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  58i,17n,63p,805b,6835s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc
@@ -1434,7 +1434,7 @@ fonts/type1/public/lm/lmr8.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9
 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/Nils/AppData/Local/Programs/MiKT
 eX 2.9/fonts/type1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/M
 iKTeX 2.9/fonts/type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (16 pages, 300365 bytes).
+Output written on term_paper_eem.pdf (16 pages, 300320 bytes).
 PDF statistics:
  289 PDF objects out of 1000 (max. 8388607)
  62 named destinations out of 1000 (max. 500000)
