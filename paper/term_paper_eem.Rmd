@@ -50,11 +50,11 @@ Publicly available data and public attention are contributing to the interest in
 
 # Introduction
 
-The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before the rest were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the league on Sunday May 24, 2020. It was very likely at the time that the games could not be postponed to a later date, which turned out to be the case. So it was natural for players and fans alike to ask the question: "What would the outcome of the season have been?" We use data on games already played from the website [fussball.de](http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G#!/) to answer this question, drawing on established forecasting methods from the literature.
+The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before all further matches were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the league on Sunday May 24, 2020. It was very likely at the time that the games could not be postponed to a later date, which turned out to be the case. So it was natural for players and fans alike to ask the question: "What would the outcome of the season have been?" We use data on games already played from the website [fussball.de](http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G#!/) to answer this question, drawing on established forecasting methods from the literature.
 
 The league system in Germany is structured so that everyone plays two games against every opponent: The system colloquially known as 'Back and Forth' implies that each pair plays once at home and once away in the other team's stadium. This means it’s easier to forecast than the tournament system of the World Cup. There in the group stage, groups are determined by chance, a process known as “seeding”. Groups then play a so-called round-robin tournament, also known as all-play-all, were all group members play against each other, which corresponds to the mode in which the German local leagues play in each round. But the World Cup then continues with single-elimination, or a knock-out stage, which introduces random path dependencies that are not relevant for forecasting the Germany's local leagues. This implies that the part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage remains highly relevant for the task at hand, since the game rules are otherwise identical.
 
-In the next section, we give an overview of models used and evaluated for the purpose of predicting football match outcomes. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
+In the next section, we give an overview of models used and evaluated for the purpose of predicting football match outcomes in the past. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
 
 
 # Literature
@@ -77,19 +77,19 @@ For a more recent review of advances in the literature and a new approach based 
 
 # Data
 
-For our simulation study we decided to use data from the local men's league Recklinghausen class A1 in Westphalia for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in one home and one away game each. Due to the Covid-19 pandemic, the association has decided to cancel all matches from March 15, 2020. 20 match days have already been played up to this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the league. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector. In its terms and conditions [page](http://www.fussball.de/terms.and.conditions#!/), the DFB GmbH restricts the permanent storage of content from the website and commercial use. Therefore we can't store and or share the original data, but only the code we used to create them and the results that we derived from them.
+For our simulation study we decided to use data from the local men's league Recklinghausen class A1 in Westphalia for the 2019/2020 season. 16 clubs will play against each other on a total of 30 match days in the 'Back and Forth' system. Due to the Covid-19 pandemic, the association has decided to cancel all matches from March 15, 2020. 20 match days have already been played up to this point in time which corresponds to a database of 158 matches. As the first half of the season had already been completed, each team had already played at least once against each team in the league. The extraction of real data from websites using scraping scripts can be complicated, as website operators have an interest in protecting their data from such automated queries. "Fussball.de" is a website of the DFB (German Football Association) which acts as a collection point for match results and news, especially in the amateur sector. In its [terms and conditions page](http://www.fussball.de/terms.and.conditions#!/), the DFB GmbH restricts the permanent storage of content from the website and commercial use. Therefore we can't store and or share the original data, but only the code we used to create them and the results that we derived from them.
 
-The match results on the website itself cannot extracted directly. They are masked, so they are made unreadable when viewing the HTML file and are only evaluated afterwards using Javascript and transferred to the CSS of the site. The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, the game result can be reconstructed. The data record was then divided into completed and missing games. The latter amount to 89 in this season, which were simulated with the methods described in the following sections.
+The game results cannot be extracted directly from the website. They are masked, so they are made unreadable when viewing the HTML file and are only evaluated afterwards using javascript and transferred to the CSS of the site. The site also offers a match report, which graphically represents a temporal course of the match. This is broken down in the HTML code, in contrast to the match results, unmasked, and shows the course of the match in text form. With the help of regular expression operations, the game result can be reconstructed. The data record was then divided into completed and missing games. The latter amount to 89 in this season, which were simulated with the methods described in the following sections.
 
-Table 1 shows the results after the 20th match day of the local men's league Recklinghausen class A1 in Westphalia for the 2019/2020 season. The column _Goal Diff._ describes how many goals a team scored subtracted by the amount of goals scored against them. Both numbers can be extracted from the former column _Goal Relation_, where the first number describes the amount of scored goals of a team. The club 'VfL Ramsdorf' is leading the league with 52 Points and a goal difference of 53. Followed by 'TuS Gahlen' which is 6 points short in the competition for the league's first place. The other end of the table shows the club 'SV Altendorf Ulfkotte' on the last place with only 7 points and a goal difference of -84. It is preceded by 'Adler Weske II' which achieved 10 points and secured position 15 with a goal difference of -41. Especially the two first and the the two last positions in most football leagues are of special interest since those teams could be promoted from the present league called 'Kreisliga' to the next higher league called 'Bezirksliga' or relegated to the lower league called 'Kreisliga B'. Given these results, we expected a high chance for the club 'VfL Ramsdorf' to secure a promotion spot while we expected a fight against relegation between 'TuS 05 Sinsen II', 'Adler Weske II' and 'SV Altendorf-Ulfkotte'.
+Table 1 shows the results after the 20th match day of the local men's league Recklinghausen class A1 in Westphalia for the 2019/2020 season. The column _Goal Diff._ describes how many goals a team scored subtracted by the amount of goals scored against them. Both numbers can be extracted from the former column _Goal Relation_, where the first number describes the amount of scored goals of a team. The club 'VfL Ramsdorf' is leading the league with 52 Points and a goal difference of 53. Followed by 'TuS Gahlen' which is 6 points short in the competition for the league's first place. The other end of the table shows the club 'SV Altendorf Ulfkotte' on the last place with only 7 points and a goal difference of -84. It is preceded by 'Adler Weske II' which achieved 10 points and secured position 15 with a goal difference of -41. Especially the two first and the two last positions in most football leagues are of special interest since those teams could be promoted from the present league called 'Kreisliga' to the next higher league called 'Bezirksliga' or relegated to the lower league called 'Kreisliga B'. Given these results, we expected a high chance for the club 'VfL Ramsdorf' to secure a promotion spot while we expected a fight against relegation between 'TuS 05 Sinsen II', 'Adler Weske II' and 'SV Altendorf-Ulfkotte'.
 
 ```{r , echo=FALSE, results = "asis"}
 season_overview <- readr::read_rds(stringr::str_c(here::here() , "data", "database_season_1920.rds", sep = "/")) 
 
 season_overview %>% filter(matchday == 20) %>% dplyr::select(-season,-matchday) %>% dplyr::select(rank,club_name,games,everything()) %>%
   rename(Rank = rank, Games = games, Club = club_name, Wins = wins, Ties = ties, Loss = loss, "Goal Relation" = goal_relations, "Goal Diff." = goal_diff, Points = points )  %>% 
-  kable(caption = 'Results after Matchday 20 Season 19/20') %>%
-  kable_styling(full_width = F, latex_options =c('striped', 'hold_position', 'scale_down'), position = 'center' )
+  kable(caption = 'Results after Matchday 20 Season 19/20', booktabs = T) %>%
+  kable_styling(full_width = F, latex_options =c('striped', 'HOLD_position', 'scale_down'), position = 'center' )
 ```
 
 
@@ -304,25 +304,17 @@ average_table_point <- average_table_point %>% arrange(rank) %>% dplyr::select(r
 
 
 ```{r echo=FALSE}
-sim_output_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation.rds"))
+average_table_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_predict.rds")) %>% 
+  dplyr::select(rank, club_name, points) %>%
+  dplyr::rename(club_name_poisson = club_name, points_poisson = points)
+  
 
-# 2. evaluate result
 
-all_final_tables_poisson <- sim_output_poisson$all_final_tables %>% rename(score = points)
-all_final_tables_poisson <- add_run_rank_col(x = all_final_tables_poisson)
-all_avg_tables_poisson <- sim_output_poisson$all_avg_tables%>%  rename(score = points, club_name = Group.1 )
-all_avg_tables_poisson <- add_run_rank_col(x = all_avg_tables_poisson)
-
-# average table result
-average_table_poisson <- all_avg_tables_poisson[
-  (nrow(all_avg_tables_poisson)-15):nrow(all_avg_tables_poisson),] 
- 
-
-average_table_poisson <- average_table_poisson %>% arrange(rank) %>% dplyr::select(rank, everything(), -run)%>% rename(club_name_poisson = club_name, score_poisson = score)
 all_results <- inner_join(average_table_poisson,average_table_elo, by = "rank") %>%
         inner_join(average_table_point, by = "rank")
 kable(all_results,
-      caption = "Simulated Final Score Table"
+      caption = "Simulated Final Score Table",
+      booktabs = T
                     ) %>%
   add_header_above(c(" " = 1, "Poisson Distribution Model" = 2, "Elo Rating Model" = 2, "Points Model" = 2 )) %>%
   kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),full_width = F)

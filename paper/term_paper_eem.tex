@@ -116,7 +116,6 @@
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
-\usepackage{xcolor}
 
 %% linespread settings
 
@@ -312,11 +311,11 @@ previous seasons with their actual outcomes.
 The Covid-19 epidemic forced sports leagues in Germany to suspend
 championships that were already in full swing. For example, the local
 men's league Recklinghausen class A1 finished around 150 games, before
-the rest were canceled starting from Sunday March 12, 2020, leaving
-around 90 games left unplayed until the last planned day of the league
-on Sunday May 24, 2020. It was very likely at the time that the games
-could not be postponed to a later date, which turned out to be the case.
-So it was natural for players and fans alike to ask the question:
+all further matches were canceled starting from Sunday March 12, 2020,
+leaving around 90 games left unplayed until the last planned day of the
+league on Sunday May 24, 2020. It was very likely at the time that the
+games could not be postponed to a later date, which turned out to be the
+case. So it was natural for players and fans alike to ask the question:
 \enquote{What would the outcome of the season have been?} We use data on
 games already played from the website
 \href{http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G\#!/}{fussball.de}
@@ -341,12 +340,12 @@ remains highly relevant for the task at hand, since the game rules are
 otherwise identical.
 
 In the next section, we give an overview of models used and evaluated
-for the purpose of predicting football match outcomes. We introduce a
-small subset of models in more detail in the third part. The fourth part
-contains the results from calculating a simulation based on these for
-the local men's league Recklinghausen class A1. We also present some
-comparative statistics of the model performance and draw some
-conclusions in the last segment.
+for the purpose of predicting football match outcomes in the past. We
+introduce a small subset of models in more detail in the third part. The
+fourth part contains the results from calculating a simulation based on
+these for the local men's league Recklinghausen class A1. We also
+present some comparative statistics of the model performance and draw
+some conclusions in the last segment.
 
 \hypertarget{literature}{%
 \section{Literature}\label{literature}}
@@ -427,8 +426,8 @@ returns.
 
 For our simulation study we decided to use data from the local men's
 league Recklinghausen class A1 in Westphalia for the 2019/2020 season.
-16 clubs will play against each other on a total of 30 match days in one
-home and one away game each. Due to the Covid-19 pandemic, the
+16 clubs will play against each other on a total of 30 match days in the
+\enquote{Back and Forth} system. Due to the Covid-19 pandemic, the
 association has decided to cancel all matches from March 15, 2020. 20
 match days have already been played up to this point in time which
 corresponds to a database of 158 matches. As the first half of the
@@ -438,17 +437,17 @@ websites using scraping scripts can be complicated, as website operators
 have an interest in protecting their data from such automated queries.
 \enquote{Fussball.de} is a website of the DFB (German Football
 Association) which acts as a collection point for match results and
-news, especially in the amateur sector. In its terms and conditions
-\href{http://www.fussball.de/terms.and.conditions\#!/}{page}, the DFB
-GmbH restricts the permanent storage of content from the website and
-commercial use. Therefore we can't store and or share the original data,
-but only the code we used to create them and the results that we derived
-from them.
+news, especially in the amateur sector. In its
+\href{http://www.fussball.de/terms.and.conditions\#!/}{terms and
+conditions page}, the DFB GmbH restricts the permanent storage of
+content from the website and commercial use. Therefore we can't store
+and or share the original data, but only the code we used to create them
+and the results that we derived from them.
 
-The match results on the website itself cannot extracted directly. They
-are masked, so they are made unreadable when viewing the HTML file and
-are only evaluated afterwards using Javascript and transferred to the
-CSS of the site. The site also offers a match report, which graphically
+The game results cannot be extracted directly from the website. They are
+masked, so they are made unreadable when viewing the HTML file and are
+only evaluated afterwards using javascript and transferred to the CSS of
+the site. The site also offers a match report, which graphically
 represents a temporal course of the match. This is broken down in the
 HTML code, in contrast to the match results, unmasked, and shows the
 course of the match in text form. With the help of regular expression
@@ -469,9 +468,9 @@ short in the competition for the league's first place. The other end of
 the table shows the club \enquote{SV Altendorf Ulfkotte} on the last
 place with only 7 points and a goal difference of -84. It is preceded by
 \enquote{Adler Weske II} which achieved 10 points and secured position
-15 with a goal difference of -41. Especially the two first and the the
-two last positions in most football leagues are of special interest
-since those teams could be promoted from the present league called
+15 with a goal difference of -41. Especially the two first and the two
+last positions in most football leagues are of special interest since
+those teams could be promoted from the present league called
 \enquote{Kreisliga} to the next higher league called
 \enquote{Bezirksliga} or relegated to the lower league called
 \enquote{Kreisliga B}. Given these results, we expected a high chance
@@ -479,47 +478,35 @@ for the club \enquote{VfL Ramsdorf} to secure a promotion spot while we
 expected a fight against relegation between \enquote{TuS 05 Sinsen II},
 \enquote{Adler Weske II} and \enquote{SV Altendorf-Ulfkotte}.
 
-\begin{table}[!h]
+\begin{table}[H]
 
 \caption{\label{tab:unnamed-chunk-1}Results after Matchday 20 Season 19/20}
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}[t]{r|l|l|r|r|r|l|r|r}
-\hline
+\begin{tabular}[t]{rllrrrlrr}
+\toprule
 Rank & Club & Games & Wins & Ties & Loss & Goal Relation & Goal Diff. & Points\\
-\hline
-\rowcolor{gray!6}  1 & VfL Ramsdorf & 20 & 17 & 1 & 2 & 74 : 21 & 53 & 52\\
-\hline
+\midrule
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{17} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{74 : 21} & \cellcolor{gray!6}{53} & \cellcolor{gray!6}{52}\\
 2 & TuS Gahlen & 20 & 14 & 4 & 2 & 54 : 15 & 39 & 46\\
-\hline
-\rowcolor{gray!6}  3 & SV Schermbeck II & 20 & 14 & 3 & 3 & 60 : 24 & 36 & 45\\
-\hline
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{14} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{60 : 24} & \cellcolor{gray!6}{36} & \cellcolor{gray!6}{45}\\
 4 & Fenerbahce I. Marl & 20 & 13 & 2 & 5 & 41 : 36 & 5 & 41\\
-\hline
-\rowcolor{gray!6}  5 & TSV Raesfeld & 20 & 12 & 2 & 6 & 72 : 29 & 43 & 38\\
-\hline
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{TSV Raesfeld} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{72 : 29} & \cellcolor{gray!6}{43} & \cellcolor{gray!6}{38}\\
+\addlinespace
 6 & 1. SC BW Wulfen & 19 & 12 & 1 & 6 & 58 : 32 & 26 & 37\\
-\hline
-\rowcolor{gray!6}  7 & TuS Velen & 20 & 9 & 2 & 9 & 44 : 44 & 0 & 29\\
-\hline
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{44 : 44} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{29}\\
 8 & SC Marl-Hamm & 19 & 9 & 0 & 10 & 53 : 52 & 1 & 27\\
-\hline
-\rowcolor{gray!6}  9 & SV Lembeck & 20 & 8 & 3 & 9 & 49 : 48 & 1 & 27\\
-\hline
+\cellcolor{gray!6}{9} & \cellcolor{gray!6}{SV Lembeck} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{49 : 48} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{27}\\
 10 & BVH Dorsten & 19 & 8 & 2 & 9 & 46 : 33 & 13 & 26\\
-\hline
-\rowcolor{gray!6}  11 & FC RW Dorsten & 20 & 6 & 5 & 9 & 28 : 41 & -13 & 23\\
-\hline
+\addlinespace
+\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{28 : 41} & \cellcolor{gray!6}{-13} & \cellcolor{gray!6}{23}\\
 12 & Westfalia Gemen II & 20 & 6 & 2 & 12 & 38 : 60 & -22 & 20\\
-\hline
-\rowcolor{gray!6}  13 & SC Reken II & 19 & 4 & 3 & 12 & 41 : 61 & -20 & 15\\
-\hline
+\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{19} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{41 : 61} & \cellcolor{gray!6}{-20} & \cellcolor{gray!6}{15}\\
 14 & TuS 05 Sinsen II & 20 & 2 & 5 & 13 & 25 : 62 & -37 & 11\\
-\hline
-\rowcolor{gray!6}  15 & Adler Weseke II & 20 & 2 & 4 & 14 & 23 : 64 & -41 & 10\\
-\hline
+\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{14} & \cellcolor{gray!6}{23 : 64} & \cellcolor{gray!6}{-41} & \cellcolor{gray!6}{10}\\
+\addlinespace
 16 & SV Altendorf-Ulfkotte & 20 & 2 & 1 & 17 & 17 : 101 & -84 & 7\\
-\hline
+\bottomrule
 \end{tabular}}
 \end{table}
 
@@ -768,44 +755,32 @@ average was 1\% or less. Aggregation to this point occurred after about
 \caption{\label{tab:unnamed-chunk-5}Simulated Final Score Table}
 \centering
 \resizebox{\linewidth}{!}{
-\begin{tabular}[t]{r|l|r|l|r|l|r}
-\hline
-\multicolumn{1}{c|}{ } & \multicolumn{2}{c|}{Poisson Distribution Model} & \multicolumn{2}{c|}{Elo Rating Model} & \multicolumn{2}{c}{Points Model} \\
-\cline{2-3} \cline{4-5} \cline{6-7}
-rank & club\_name\_poisson & score\_poisson & club\_name\_elo & score\_elo & club\_name\_points & score\_points\\
-\hline
-\rowcolor{gray!6}  1 & VfL Ramsdorf & 63.46088 & VfL Ramsdorf & 64.34676 & VfL Ramsdorf & 72.19792\\
-\hline
-2 & TuS Gahlen & 57.54770 & TuS Gahlen & 58.74429 & TuS Gahlen & 65.04059\\
-\hline
-\rowcolor{gray!6}  3 & SV Schermbeck II & 56.68854 & SV Schermbeck II & 57.74274 & SV Schermbeck II & 63.51325\\
-\hline
-4 & Fenerbahce I. Marl & 52.45432 & Fenerbahce I. Marl & 53.52383 & Fenerbahce I. Marl & 58.06307\\
-\hline
-\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 49.74609 & 1. SC BW Wulfen & 50.88454 & 1. SC BW Wulfen & 57.22107\\
-\hline
-6 & TSV Raesfeld & 49.58253 & TSV Raesfeld & 50.64084 & TSV Raesfeld & 55.75243\\
-\hline
-\rowcolor{gray!6}  7 & TuS Velen & 40.56790 & TuS Velen & 41.79078 & TuS Velen & 45.37873\\
-\hline
-8 & SC Marl-Hamm & 39.67895 & SC Marl-Hamm & 40.90701 & SV Lembeck & 44.14961\\
-\hline
-\rowcolor{gray!6}  9 & BVH Dorsten & 38.56991 & BVH Dorsten & 39.89500 & SC Marl-Hamm & 43.87890\\
-\hline
-10 & SV Lembeck & 38.49319 & SV Lembeck & 39.56838 & BVH Dorsten & 42.64140\\
-\hline
-\rowcolor{gray!6}  11 & FC RW Dorsten & 34.61080 & FC RW Dorsten & 35.82449 & FC RW Dorsten & 37.59242\\
-\hline
-12 & Westfalia Gemen II & 31.46037 & Westfalia Gemen II & 32.40101 & Westfalia Gemen II & 32.82422\\
-\hline
-\rowcolor{gray!6}  13 & SC Reken II & 27.79455 & SC Reken II & 29.11275 & SC Reken II & 27.60483\\
-\hline
-14 & TuS 05 Sinsen II & 22.68854 & TuS 05 Sinsen II & 23.86207 & TuS 05 Sinsen II & 21.27809\\
-\hline
-\rowcolor{gray!6}  15 & Adler Weseke II & 21.69107 & Adler Weseke II & 22.59512 & Adler Weseke II & 18.88125\\
-\hline
-16 & SV Altendorf-Ulfkotte & 18.52751 & SV Altendorf-Ulfkotte & 19.50446 & SV Altendorf-Ulfkotte & 13.98222\\
-\hline
+\begin{tabular}[t]{rlrlrlr}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Poisson Distribution Model} & \multicolumn{2}{c}{Elo Rating Model} & \multicolumn{2}{c}{Points Model} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7}
+rank & club\_name\_poisson & points\_poisson & club\_name\_elo & score\_elo & club\_name\_points & score\_points\\
+\midrule
+\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{80} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{64.34676} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{72.19792}\\
+2 & TuS Gahlen & 72 & TuS Gahlen & 58.74429 & TuS Gahlen & 65.04059\\
+\cellcolor{gray!6}{3} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{67} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{57.74274} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{63.51325}\\
+4 & SV Schermbeck II & 65 & Fenerbahce I. Marl & 53.52383 & Fenerbahce I. Marl & 58.06307\\
+\cellcolor{gray!6}{5} & \cellcolor{gray!6}{TSV Raesfeld} & \cellcolor{gray!6}{62} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{50.88454} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{57.22107}\\
+\addlinespace
+6 & Fenerbahce I. Marl & 50 & TSV Raesfeld & 50.64084 & TSV Raesfeld & 55.75243\\
+\cellcolor{gray!6}{7} & \cellcolor{gray!6}{SV Lembeck} & \cellcolor{gray!6}{46} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{41.79078} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{45.37873}\\
+8 & BVH Dorsten & 44 & SC Marl-Hamm & 40.90701 & SV Lembeck & 44.14961\\
+\cellcolor{gray!6}{9} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{44} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{39.89500} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{43.87890}\\
+10 & TuS Velen & 41 & SV Lembeck & 39.56838 & BVH Dorsten & 42.64140\\
+\addlinespace
+\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{28} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{35.82449} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{37.59242}\\
+12 & Westfalia Gemen II & 27 & Westfalia Gemen II & 32.40101 & Westfalia Gemen II & 32.82422\\
+\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{25} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{29.11275} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.60483}\\
+14 & TuS 05 Sinsen II & 15 & TuS 05 Sinsen II & 23.86207 & TuS 05 Sinsen II & 21.27809\\
+\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{22.59512} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{18.88125}\\
+\addlinespace
+16 & SV Altendorf-Ulfkotte & 7 & SV Altendorf-Ulfkotte & 19.50446 & SV Altendorf-Ulfkotte & 13.98222\\
+\bottomrule
 \end{tabular}}
 \end{table}
 
