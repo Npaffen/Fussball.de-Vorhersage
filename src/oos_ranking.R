@@ -13,7 +13,7 @@ ranking_results <- setNames(data.frame(matrix(ncol = 4, nrow = 0)),
 
 
 # calculate correlation values for each simulation
-for(j in c("elo ranking", "points", "poisson")){
+for(j in c("elo ranking", "points", "poisson", "quasipoisson", "nbinom")){
 
     for(i in seasons){
 
@@ -29,15 +29,29 @@ for(j in c("elo ranking", "points", "poisson")){
     # load simulated data
     if(j == "elo ranking"){
       data_sim <- readRDS(paste0("data/elo_ties_simulation_", i, ".rds"))
+      rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
+      compare <- merge(rank_real, rank_sim, by = "club_name")
+      names(compare)[2:3] <- c("points.x", "points.y")
     } else if(j == "points"){
       data_sim <- readRDS(paste0("data/point_simulation_", i, ".rds"))
-    } else {
+      rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
+      compare <- merge(rank_real, rank_sim[,c("club_name","score")], by = "club_name")
+      names(compare)[2:3] <- c("points.x", "points.y")
+    } else if(j == "poisson"){
       data_sim <- readRDS(paste0("data/poisson_score_simulation_", i, ".rds"))
-      
-    } 
-    rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
-    compare <- merge(rank_real, rank_sim, by = "club_name")
-    names(compare)[2:3] <- c("points.x", "points.y")
+      rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
+      compare <- merge(rank_real, rank_sim[,1:2], by = "club_name")
+      names(compare)[2:3] <- c("points.x", "points.y")
+    } else if(j == "quasipoisson"){
+      data_sim <- readRDS(paste0("data/poisson_score_simulation_", i, ".rds"))
+      rank_sim <- dplyr::slice(data_sim$all_avg_tables, -1:-(dplyr::n()-17))
+      compare <- merge(rank_real, rank_sim[,1:2], by = "club_name")
+      names(compare)[2:3] <- c("points.x", "points.y")
+    } else {
+      data_sim <- readRDS(paste0("data/nbiom_score_simulation_", i, "_predict.rds"))
+      compare <- merge(rank_real, data_sim[,2:3], by = "club_name")
+      names(compare)[2:3] <- c("points.x", "points.y")
+    }
     
     # compute correlation
     results$spearmans_rho <- cor.test(compare$points.x, compare$points.y, method = "spearman")$estimate
@@ -49,6 +63,8 @@ for(j in c("elo ranking", "points", "poisson")){
     print(paste(i, j))
   }
 }
+
+saveRDS(ranking_results, file = paste0(getwd(), "/paper/plots/ranking_results.rds"))
 
 # plot oos performance over seasons
 out <- ggplot(ranking_results)
@@ -73,6 +89,6 @@ append.output <- capture.output(print(xtable::xtable(ranking_results,
                                include.rownames = FALSE
                                )
                          )
-cat(paste(output, collapse = "\n"), "\n", file="paper/rank_corr.tex", append=FALSE)
-cat(paste(append.output, collapse = "\n"), "\n", file="paper/append_rank_corr.tex", append=FALSE)
+cat(paste(output[3:17], collapse = "\n"), "\n", file="paper/rank_corr.tex", append=FALSE)
+cat(paste(append.output[3:27], collapse = "\n"), "\n", file="paper/append_rank_corr.tex", append=FALSE)
 

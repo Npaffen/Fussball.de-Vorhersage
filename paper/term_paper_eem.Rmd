@@ -36,6 +36,7 @@ library(knitr)
 library(tidyverse)
 require(stargazer)
 require(kableExtra)
+require(gridExtra)
 source(here::here("src/functions.R"))
 ## load data or something for preparation
 
@@ -142,11 +143,9 @@ where _dr_ is defined as the rating difference and the home team receives an arb
 
 To simulate the outcome of the league with the points and Elo ranking method, we follow Correa et al. -@correa and draw the results of each game from a Bernoulli distribution with the parameter _p_ equal to the winning probability obtained from each method.
 
-XXX CHECK ELO DRAWS XXX
+To account for draws when simulating the outcome with the Elo method, we use the share of draws in the current season as the likelihood of a draw. Half of this is deducted from the home team's winning probability and half from the away team's winning probability. If this puts any probability into negative, this amount is then added to the opposite probability. Then the game result is drawn from this distribution. We repeated this procedure for all games and evaluated the results with 3 points for the winning team, 1 point for both teams in case of a draw and 0 points for the losing team. 
 
-To account for draws when simulating the outcome with the Elo method, we use the share of draws in the current season as the likelihood of a draw. Half of this is deducted from the home team's winning probability and half from the away team's winning probability. Then the game result is drawn from these three probabilities. We repeated this procedure for all games and evaluated the results with 3 points for the winning team, 1 point for both teams in case of a draw and 0 points for the losing team. 
-
-Our third model uses regressions based on the Poisson and Negative Binomial distributions to predict match outcomes as the number of goals scored in each match. The probability matrix from which the game result is drawn is a $n \times n$ matrix where each cell indicates the probability of that specific match result. While the rows indicates the goals of the home team, the column indicates the goals of the away team. For example the cell of the first row and in the first column indicates the likelihood that both teams score $0$ goals. The maximum number of goals _n_ can be set high enough to cover the range of possible outcomes. Because the highest number of goals scored since 2016 in any one game was 14, we set _n_ equal to 15. The Poisson probability mass function of our model can be expressed as:
+Our third model uses regressions based on the Poisson and negative binomial distributions to predict match outcomes as the number of goals scored in each match. The probability matrix from which the game result is drawn is a $n \times n$ matrix where each cell indicates the probability of that specific match result. While the rows indicates the goals of the home team, the column indicates the goals of the away team. For example the cell of the first row and in the first column indicates the likelihood that both teams score $0$ goals. The maximum number of goals _n_ can be set high enough to cover the range of possible outcomes. Because the highest number of goals scored since 2016 in any one game was 14, we set _n_ equal to 15. The Poisson probability mass function of our model can be expressed as:
 
 \begin{align}
 P(x) = \dfrac{e^{-\lambda}\lambda^x}{x!}, \lambda > 0
@@ -160,9 +159,220 @@ log(\text{\emph{goals by team}}) \sim constant + \beta_1 home + \sum_{i}^{T} \be
 
 Here _goals by team_ represents the number of goals scored by the team in a certain game. The dummy variable _home_ equals 1 if the team plays on it's home pitch, and _team_ and _opponent_ represent dummies for each team out of a total of _T_ teams respectively. So each game is represented twice: Once from the defending home team and once from the opponents view. Because it is a model in log-transformation, the exponential of the parameters $\beta_i$ and $\beta_j$ then represent the change in expected number of goals scored by the home team. The exponential of the constant specifies the overall expected value of goals if a team plays away, and $e^{\beta_1}$ is the expected effect of the home field advantage. This could be seen as an improvement over the Elo model, because we do not fix this effect in advance.
 
-To estimate the model, we use the _glm_ function from the R _stats_ package. With the option _family = quasipoisson(link=log)_, a Quasi-Maximum Likelihood Estimation of the log-transformation is calculated. The reason for choosing a Quasi-Poisson distribution is that this adjusts the standard-errors for overdispersion (the variance is larger than the mean). A test from the _AER_ package finds low significance for overdispersion (estimate: 1.12907 with p = 0.064). Pearson's Chi-Squared goodness-of-fit test finds that the model does not fit the data very well (p = 0.00) The residual deviance (388.56) is much larger than the degrees of freedom (284), so later we also estimate the model with a negative binomial distribution. 
+To estimate the model, we use the _glm_ function from the R _stats_ package. With the option _family = quasipoisson(link=log)_, a Quasi-Maximum Likelihood Estimation of the log-transformation is calculated. The reason for choosing a Quasi-Poisson distribution is that this adjusts the standard-errors for overdispersion (the variance is larger than the mean). The resulting predictions do not change if one instead uses the standard Poisson distribution. A test from the _AER_ package finds low significance for overdispersion
+(estimate: 1.13, z = 1.5215, p-value = 0.064). Pearson's Chi-Squared goodness-of-fit test finds that the model does not fit the data very well (p = 0.00) The residual deviance (388.56) using the Poisson distribution is much larger than the degrees of freedom (284), so we estimate the model with a negative binomial distribution. We follow the method proposed in Cameron and Trivedi -@cameron2013.
+
+```{r , echo = FALSE, results = "asis", message = FALSE}
+d <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
+d <- bind_rows(
+  tibble(
+    goals = d$goals_team_home,
+    team = d$club_name_home,
+    opponent=d$club_name_away,
+    home= "y"),
+  tibble(
+    goals=d$goals_team_away,
+    team=d$club_name_away,
+    opponent=d$club_name_home,
+    home= "n")
+)
+
+# create a fake model
+# note that team needs to include all of your factors
+fake <- lm(goals ~ home + team , d)
+# rename the coefficients
+names(fake$coefficients) <- gsub("team","",names(fake$coefficients))
+
+# goodness-of-fit test function
+gfit <- function(model){
+  with(model, cbind(res.deviance = deviance, df = df.residual,
+  p = pchisq(deviance, df.residual, lower.tail=FALSE)))
+}
+
+# 
+m <- glm(goals ~ home + team + opponent, family = poisson(link=log), data = d)
+m.s <- summary(m)
+#gfit(m)
+
+# Test for overdispersion
+#library(AER)
+#dispersiontest(m)
+
+# overdispersion robust
+m <- glm(goals ~ home + team + opponent, family = quasipoisson(link=log), data = d)
+m.s <- summary(m)
+
+# alternative: negative binomial distribution
+library(MASS)
+nb = glm.nb(goals ~ home + team + opponent, link = "log", data = d)
+nb.s <- summary(nb)
+#gfit(nb)
+
+## write a function that fixes the names in the glm output
+f <- function(x){
+  names(x) <- gsub("team|opponent","", names(x))
+  return(x)
+}
+
+stargazer(fake,fake,fake, header = FALSE,
+          # coefficients
+          coef = list(
+            f( nb.s$coefficients[grepl("Intercept|home", rownames(nb.s$coefficients)), 1]),
+            f( nb.s$coefficients[grepl("team", rownames(nb.s$coefficients)), 1]),
+            f( nb.s$coefficients[grepl("opponent", rownames(nb.s$coefficients)), 1])
+          ),
+          # standard errors
+          se = list(
+            f( nb.s$coefficients[grepl("Intercept|home", rownames(nb.s$coefficients)), 2]),
+            f( nb.s$coefficients[grepl("team", rownames(nb.s$coefficients)), 2]),
+            f( nb.s$coefficients[grepl("opponent", rownames(nb.s$coefficients)), 2])
+          ),
+          title  = "19/20 Season Regression Output for the Negative Binomial Model"  ,
+          column.labels = c("control","team", "opponent"),
+          colnames = FALSE,
+          # calculate pvalue using supplied coeff and se
+          t.auto = T,
+          #dep.var.caption  = "Dependend variable = goals",
+          #out = "stargazer_data.html",
+          #omit.stat=c("all"),
+          type = "latex",
+          single.row = TRUE,
+          order = c("Constant", "home"),
+          align = TRUE,
+          column.sep.width = "-50pt",
+          font.size = "small",
+          style = "aer"
+          )
+#Template table layout?
+```
+
+Note here that "1. SC BW Wulfen" is chosen as the base and no dummy for it is included to avoid perfect multicollinearity. Its parameter is set to zero and all other parameters can be seen as the deviation from it. Also, for season 16/17 the team "VfB Hüls II zg." forfeit before the season started. Therefore all games were canceled and the team was assigned to the last place of the seasons table (place 18).
+
+In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", is least likely to score a goal (low team estimate) and teams playing against them have the highest chance to score (high opponent estimate), with both estimates being highly significant. Since the club is in the last place in the current table, as mentioned in the data section, this is the expected result. Conversely, we observe the something like the opposite for the current table leader "VfL Ramsdorf". For the simulation the result is drawn from the negative binomial and Poisson distributions, and the score probabilities are based on the estimated parameters.
+
+The results from the estimation with a Poisson distribution are very similar. However, the residual difference is higher (388.56 compared to 354.50), indicating a better fit. The goodness-of-fit test still rejects the model (p = 0.00). The estimation results for Poisson can be found in the Appendix. 
+
+Instead of simulating the result as with the first two methods, we can simply calculate the expected number of goals based on the regression estimate and sum up the expected final league table.
+
+We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of one season. As can be seen in the example plot for season 16/17, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. This is representative for all three preceding seasons, as can be seen by the other plots in the Appendix. This opens up the possibility of using a different distribution, which is not pursued further in this paper.
+
+```{r echo = FALSE}
+include_graphics(paste0(getwd(), "/paper/plots/poisson_actual_home_1617.png"))
+
+```
+
+A few alternatives have been developed for forecasting football games. The potential of using independent Poisson distributions to match the empirical distribution of goals scored by a team has been improved by introducing correlation between the teams playing against one another in a bivariate Poisson distribution @karlis2003.
+
+Boshnakov et al. -@boshnakov2016 use a Weibull count model to improve on the bivariate Poisson model, allowing them even to outperform betting market in selected bets. Further analysis could compare the predictive performance of models based on other distributions as well.
 
 
+
+# Results
+
+Simulation for the Elo model was repeated until the rate of change of the point average was 1% or less. Aggregation to this point occurred after about 2580 runs.
+
+Looking at the final predictions for the 19/20 season, a few observations stand out. First and foremost, the two relegation spots at the top and bottom end of the table stay the same in each simulation. In the middle field however, the models disagree and rate the teams there very close to each other. The points and Elo method predict more similarly, as well as (Quasi-)Poisson and the negative binomial model. The last two are almost identical. Only TuS Velen gains an extra point in (Quasi-)Poisson, which doesn't affect the ranking. Quasi- and standard Poisson results are identical.
+
+```{r echo=FALSE, results = "asis"}
+sim_output_elo <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
+
+# 2. evaluate result
+
+all_final_tables_elo <- sim_output_elo$all_final_tables %>% rename(score = points)
+all_final_tables_elo <- add_run_rank_col(x = all_final_tables_elo)
+all_avg_tables_elo <- sim_output_elo$all_avg_tables
+all_avg_tables_elo <- add_run_rank_col(x = all_avg_tables_elo)
+
+# average table result
+average_table_elo <- all_avg_tables_elo[
+  (nrow(all_avg_tables_elo)-15):nrow(all_avg_tables_elo),] 
+average_table_elo <- average_table_elo %>% arrange(rank) %>% dplyr::select(rank, everything(), -run) %>% rename(club_e = club_name, score_e = score)
+average_table_elo$score_e <- round(average_table_elo$score_e, 2)
+```
+
+```{r echo=FALSE}
+sim_output_point <- readRDS(paste0(getwd(), "/data/point_simulation.rds"))
+# 2. evaluate result
+all_final_tables_point <- sim_output_point$all_final_tables
+all_final_tables_point <- add_run_rank_col(x = all_final_tables_point)
+all_avg_tables_point <- sim_output_point$all_avg_tables
+all_avg_tables_point <- add_run_rank_col(x = all_avg_tables_point)
+
+# average table result
+average_table_point <- all_avg_tables_point[
+  (nrow(all_avg_tables_point)-15):nrow(all_avg_tables_point),] 
+average_table_point <- average_table_point %>% arrange(rank) %>% dplyr::select(rank, club_name, score) %>% rename(club_pnt = club_name, score_pnt = score)
+average_table_point$score_pnt <- round(average_table_point$score_pnt, 2)
+
+```
+
+```{r echo=FALSE}
+average_table_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_predict.rds")) %>% 
+  dplyr::select(rank, club_name, points) %>%
+  dplyr::rename(club_psn = club_name, score_psn = points)
+
+average_table_nbiom <- readRDS(paste0(getwd(), "/data/nbiom_score_simulation_1920_predict.rds")) %>% 
+  dplyr::select(rank, club_name, points) %>%
+  dplyr::rename(club_nbin = club_name, score_nbin = points)
+
+all_results <- inner_join(average_table_point,average_table_elo, by = "rank") %>%
+  inner_join(average_table_poisson, by = "rank") %>%
+  inner_join(average_table_nbiom, by = "rank")
+kable(all_results,
+      caption = "Simulated Final Score Table",
+      booktabs = T 
+) %>%
+  add_header_above(c(" " = 1, "Points Model" = 2, "Elo Rating Model" = 2, "(Quasi-)Poisson Model" = 2, "Neg.Binomial Model" = 2 )) %>%
+  kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),full_width = F)
+
+  
+
+```
+
+
+
+# OOSE Test Statistics
+
+Making predictions of events that might never happen can obviously be criticized with a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his quote "All models are wrong", which is often amended by "but some are useful", we want to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a data set into a small test data set and a larger training data set. For the seasons of 16/17, 17/18 and 18/19, we split the data sets after the number of games, after which the SARS-Cov2 pandemic forced the 19/20 season to abort. This way we increase the relevance for our use case.
+
+Following @leitner2010, we evaluate the models’ performance using the rank correlation between their predicted and the real ranking tables for the three past years’ seasons (2016, 2017 and 2018). We show both Kendall's tau and Spearman's rho rank correlation coefficients. Generally, no model performs best in all seasons. The Elo method however performs generally better than the regression models' predictions. Surprisingly, the benchmark points method performs best in two out of three seasons. 
+
+Because no model is cleafrly better then the others, and performance varies a lot between seasons, we see no clear evidence that one method should be preferred. A simulation based on these predictions would however be much fairer than a coin toss.
+
+\input{rank_corr.tex}
+
+```{r echo = FALSE}
+ranking_results <- readRDS(file = paste0(getwd(), "/paper/plots/ranking_results.rds"))
+ranking_results <- ranking_results[ranking_results$method!="poisson",]
+
+
+# plot oos performance over seasons
+out <- ggplot(ranking_results)
+grid.arrange(out +
+               geom_col(aes(season, kendalls_tau, fill = method), position = "dodge") +
+               theme(legend.position="bottom"),
+             out +
+               geom_col(aes(season, spearmans_rho, fill = method), position = "dodge") +
+               theme(legend.position="bottom"),
+             ncol=2)
+```
+
+
+
+# Conclusion
+
+The decision to quit all games later than 8th of March because of the pandemic was not revised while the infection rates relaxed during May and June in Germany. Combined with the unforeseeable future of the SARS-Cov2 pandemic, a more fair and balanced decision making process could include statistical learning techniques, such as those shown in this paper.
+
+We find that neither a simulation using a weighted coin toss based on the current league table (the points method), one based on the Elo ranking, or one based on regressions using (Quasi-)Poisson or negative binomial methods is superior. Therefore we cannot recommend one in particular.
+
+\newpage
+
+\printbibliography
+
+\newpage
+
+
+# Appendix
 
 ```{r , echo = FALSE, results = "asis", message = FALSE}
 d <- readr::read_rds(stringr::str_c(here::here() , "data", "database_match_results_1920.rds", sep = "/")) 
@@ -229,7 +439,7 @@ stargazer(fake,fake,fake, header = FALSE,
             f( m.s$coefficients[grepl("team", rownames(m.s$coefficients)), 2]),
             f( m.s$coefficients[grepl("opponent", rownames(m.s$coefficients)), 2])
           ),
-          title  = "Regression output of the Quasi-Poisson model"  ,
+          title  = "19/20 Season Regression Output for the Quasi-Poisson Model"  ,
           column.labels = c("control","team", "opponent"),
           colnames = FALSE,
           # calculate pvalue using supplied coeff and se
@@ -248,148 +458,8 @@ stargazer(fake,fake,fake, header = FALSE,
 #Template table layout?
 ```
 
-Note here that "1. SC BW Wulfen" is chosen as the base and no dummy for it is included to avoid perfect multicollinearity. Its parameter is set to zero and all other parameters can be seen as the deviation from it.
 
-!!! Check if below is still accurate after re-running the model !!!
-
-In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", is least likely to score a goal (low team estimate) and teams playing against them have the highest chance to score (high opponent estimate), with both estimates being highly significant. Since the club is in the last place in the current table, as mentioned in the data section, this is the expected result. Conversely, we observe the opposite for the current table leader "VfL Ramsdorf". For the simulation the result is drawn from the Poisson distribution, and the score probabilities are based on the estimated parameters.
-
-!!! Check if above is still accurate after re-running the model !!!
-
-The results from the estimation with a negative binomial distribution are very similar. However, the residual difference is lower (354.50 compared to 388.56 before), indicating a better fit. The goodness-of-fit test still rejects the model (p = 0.00). The estimation results can be found in the Appendix. 
-
-Instead of simulating the result as with the first two methods, we can simply calculate the expected number of goals based on the regression estimate and sum up the expected final league table.
-
-A few alternatives have been developed for forecasting football games. The potential of using independent Poisson distributions to match the empirical distribution of goals scored by a team has been improved by introducing correlation between the teams playing against one another in a bivariate Poisson distribution @karlis2003.
-
-Boshnakov et al. -@boshnakov2016 use a Weibull count model to improve on the bivariate Poisson model, allowing them even to outperform betting market in selected bets. Further analysis could compare the predictive performance of models based on other distributions as well.
-
-
-
-# Results
-
-Simulation for the Elo model was repeated until the rate of change of the point average was 1% or less. Aggregation to this point occurred after about 2580 runs.
-
-
-```{r echo=FALSE, results = "asis"}
-sim_output_elo <- readRDS(paste0(getwd(), "/data/elo_ties_simulation.rds"))
-
-
-
-
-# 2. evaluate result
-
-all_final_tables_elo <- sim_output_elo$all_final_tables %>% rename(score = points)
-all_final_tables_elo <- add_run_rank_col(x = all_final_tables_elo)
-all_avg_tables_elo <- sim_output_elo$all_avg_tables
-all_avg_tables_elo <- add_run_rank_col(x = all_avg_tables_elo)
-
-# average table result
-average_table_elo <- all_avg_tables_elo[
-  (nrow(all_avg_tables_elo)-15):nrow(all_avg_tables_elo),] 
-average_table_elo <- average_table_elo %>% arrange(rank) %>% dplyr::select(rank, everything(), -run) %>% rename(club_name_elo = club_name, score_elo = score)
-```
-
-```{r echo=FALSE}
-sim_output_point <- readRDS(paste0(getwd(), "/data/point_simulation.rds"))
-# 2. evaluate result
-all_final_tables_point <- sim_output_point$all_final_tables
-all_final_tables_point <- add_run_rank_col(x = all_final_tables_point)
-all_avg_tables_point <- sim_output_point$all_avg_tables
-all_avg_tables_point <- add_run_rank_col(x = all_avg_tables_point)
-
-# average table result
-average_table_point <- all_avg_tables_point[
-  (nrow(all_avg_tables_point)-15):nrow(all_avg_tables_point),] 
- 
-
-average_table_point <- average_table_point %>% arrange(rank) %>% dplyr::select(rank, club_name, score)%>% rename(club_name_points = club_name, score_points = score)
-```
-
-
-
-```{r echo=FALSE}
-average_table_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_predict.rds")) %>% 
-
-  dplyr::select(rank, club_name, points) %>%
-  dplyr::rename(club_name_poisson = club_name, points_poisson = points)
-  
-all_results <- inner_join(average_table_poisson,average_table_elo, by = "rank") %>%
-  inner_join(average_table_point, by = "rank")
-kable(all_results,
-      caption = "Simulated Final Score Table",
-      booktabs = T 
-) %>%
-  add_header_above(c(" " = 1, "Poisson Distribution Model" = 2, "Elo Rating Model" = 2, "Points Model" = 2 )) %>%
-  kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),full_width = F)
-
-  
-
-```
-
-
-
-# OOSE Test Statistics
-
-Making predictions of events that might never happen can obviously criticized by a simple question. How do you know that your results reflect reality as good as possible? Following George E. P. Box who is known for his quote "All models are wrong" which is often amended by "but some are useful", we want to show that our models cover the latter. The out-of-sample error test statistic is one way to achieve this. One simply divides a data set into a small test data set and a larger training data set. For the season 16/17, 17/18 and 18/19 we split the data sets at the same point where the COVID-19 pandemic forced the 19/20 season to abort. This way we increase the relevance for our use case.
-
-XXX Check below if still true XXX
-
-Following @leitner2010, we evaluate the models’ performance using the rank correlation between their predicted and the real ranking tables for the three past years’ seasons (2016, 2017 and 2018). We find that the Elo ranking system improves on the baseline model, which in turn performed better than the simple Poisson model. The fact that the points model achieves a 1.00 correlation in the 2017-18 season however makes these results doubtful, since the points model converges to the table as it was at the point of interruption. A perfect correlation with the final table can thus only occur if there is no change in the ranking after that date.
-
-Generally, the high correlation between the predicted and the actual table outcomes leads us to believe that adopting the results from each method would provide a fair improvement over anulling the 2019-20 season.
-
-\input{rank_corr.tex}
 
 \input{append_rank_corr.tex}
 
-
-
-# Conclusion
-The decision to quit all games later than 08th of march because of the pandemic was not revised while the infection rates relaxed during may and june in Germany. Combined with the unforseeble future of the COVID-19 situation we see a more fair and balanced decision making process by integrating statistical learning techniques, such as those, shown in this paper.
-
-\newpage
-
-\printbibliography
-
-\newpage
-
-
-# Appendix
-
-
-
-```{r , echo=FALSE, results = "asis"}
-
-stargazer(fake,fake,fake, header = FALSE,
-          # coefficients
-          coef = list(
-            f( nb.s$coefficients[grepl("Intercept|home", rownames(nb.s$coefficients)), 1]),
-            f( nb.s$coefficients[grepl("team", rownames(nb.s$coefficients)), 1]),
-            f( nb.s$coefficients[grepl("opponent", rownames(nb.s$coefficients)), 1])
-          ),
-          # standard errors
-          se = list(
-            f( nb.s$coefficients[grepl("Intercept|home", rownames(nb.s$coefficients)), 2]),
-            f( nb.s$coefficients[grepl("team", rownames(nb.s$coefficients)), 2]),
-            f( nb.s$coefficients[grepl("opponent", rownames(nb.s$coefficients)), 2])
-          ),
-          title  = "Regression output of the Negative Binomial model"  ,
-          column.labels = c("control","team", "opponent"),
-          colnames = FALSE,
-          # calculate pvalue using supplied coeff and se
-          t.auto = T,
-          #dep.var.caption  = "Dependend variable = goals",
-          #out = "stargazer_data.html",
-          omit.stat=c("all"),
-          type = "latex",
-          single.row = TRUE,
-          order = c("Constant", "home"),
-          align = TRUE,
-          column.sep.width = "-30pt",
-          font.size = "small",
-          style = "aer"
-          )
-#Template table layout?
-```
 
