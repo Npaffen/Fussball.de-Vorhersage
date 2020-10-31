@@ -1,10 +1,10 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds"))%>% filter(between(matchday, 1, 20))
+database_mr <- read_rds(here::here( "/data/database_match_results_1718.rds"))%>% filter(between(matchday, 1, 20))
 
-database_season <- read_rds(here::here("/data/database_season_1819.rds"))
+database_season <- read_rds(here::here("/data/database_season_1718.rds"))
 
-missinggames <- read_rds(here::here("/data/database_match_results_1819.rds")) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
+missinggames <- read_rds(here::here("/data/database_match_results_1718.rds")) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
 
 
 
@@ -33,21 +33,30 @@ poisson_model <-
       opponent=database_mr$club_name_home,
       home=0)) %>%
   
-  glm(goals ~ home + team +opponent, family=quasipoisson(link=log),data=.)
+  glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
 summary(poisson_model)
+
+
+  goals<- f_simulate_score_prob_poisson(foot_model = poisson_model,
+                                      homeTeam = missinggames$club_name_home,
+                                      awayTeam = missinggames$club_name_away
+                                      )
+  missinggames <- missinggames %>% mutate(Goals_team_home = goals$home, Goals_team_away = goals$away)
 
 
 if(database_season$season[1] == '1617'){
 matchday30 <- database_season %>% filter( matchday == 34) %>% filter(club_name != 'VfB Hüls II zg.')
 
 }else {matchday30 <- database_season %>% filter( matchday == 30)}
+  
+final_table <- table_update(missinggames, matchday30)  
 
 if(0){
 N <- 5000 # simulation runs
 sim_output_poisson <- f_score_prob_matches(missinggames, matchday30, poisson_model,max_goals = 15, N, limit = 0.01)
 saveRDS(sim_output_poisson, paste0(getwd(), "/data/poisson_score_simulation_1819_goals15.rds"))
 }
-sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_goals15.rds"))
+sim_output <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1819_goals15.rds"))
 
 # 2. evaluate result
 

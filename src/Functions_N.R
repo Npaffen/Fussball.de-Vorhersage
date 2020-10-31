@@ -82,10 +82,10 @@ table_update <- function(missinggames, matchday30){
   
   points_update <- map(clubs, ~ missinggames %>%
                          filter(club_name_home == .x ) %>%
-                         select(points_team_home) %>%
+                         dplyr::select(points_team_home) %>%
                          sum()+ missinggames %>% 
                          filter(club_name_away == .x ) %>%
-                         select(points_team_away) %>% 
+                         dplyr::select(points_team_away) %>% 
                          sum()) %>%
     unlist 
   
@@ -93,14 +93,14 @@ table_update <- function(missinggames, matchday30){
   
   goal_diff_update <- map(clubs, ~ missinggames %>%
                             filter(club_name_home == .x ) %>%
-                            select(Goal_diff_home) %>%
+                            dplyr::select(Goal_diff_home) %>%
                             sum()+ missinggames %>% 
                             filter(club_name_away == .x ) %>%
-                            select(Goal_diff_away) %>% 
+                            dplyr::select(Goal_diff_away) %>% 
                             sum()) %>%
     unlist 
   #all_scores <- all_scores %>%
-  # inner_join(missinggames %>% select(Goals_team_away, Goals_team_away)
+  # inner_join(missinggames %>% dplyr::select(Goals_team_away, Goals_team_away)
   # )
   
   final_table <- matchday30 %>%
@@ -108,10 +108,10 @@ table_update <- function(missinggames, matchday30){
             points = points + points_new,
             goal_diff_new = goal_diff_update,
             goal_diff = goal_diff + goal_diff_new) %>%
-    select(club_name, points, goal_diff) %>%
+    dplyr::select(club_name, points, goal_diff) %>%
     arrange(desc(points), desc(goal_diff)) %>%
     mutate(rank = 1:length(club_name)) %>%
-    select(rank, everything())
+    dplyr::select(rank, everything())
   
   return(final_table)
   
@@ -167,10 +167,10 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
     
     points_update <- map(clubs, ~ missinggames %>%
                           filter(club_name_home == .x ) %>%
-                          select(points_team_home) %>%
+                          dplyr::select(points_team_home) %>%
                           sum()+ missinggames %>% 
                           filter(club_name_away == .x ) %>%
-                          select(points_team_away) %>% 
+                          dplyr::select(points_team_away) %>% 
                           sum()) %>%
       unlist 
     
@@ -178,14 +178,14 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
     
     goal_diff_update <- map(clubs, ~ missinggames %>%
                              filter(club_name_home == .x ) %>%
-                             select(Goal_diff_home) %>%
+                             dplyr::select(Goal_diff_home) %>%
                              sum()+ missinggames %>% 
                              filter(club_name_away == .x ) %>%
-                             select(Goal_diff_away) %>% 
+                             dplyr::select(Goal_diff_away) %>% 
                              sum()) %>%
       unlist 
     #all_scores <- all_scores %>%
-     # inner_join(missinggames %>% select(Goals_team_away, Goals_team_away)
+     # inner_join(missinggames %>% dplyr::select(Goals_team_away, Goals_team_away)
    # )
     
     final_table <- matchday30 %>%
@@ -193,7 +193,7 @@ f_score_prob_matches <- function( missinggames, matchday30, foot_model, max_goal
               points = points + points_new,
               goal_diff_new = goal_diff_update,
               goal_diff = goal_diff + goal_diff_new) %>%
-      select(club_name, points, goal_diff) %>%
+      dplyr::select(club_name, points, goal_diff) %>%
       arrange(desc(points), desc(goal_diff)) 
     
     all_final_tables <- bind_rows(all_final_tables,final_table)
@@ -248,7 +248,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
   
   tie_prob <- database_season %>%
     filter( season == season) %>%
-    select(ties) %>% 
+    dplyr::select(ties) %>% 
     sum/length(database_season$ties)
   
   
@@ -308,10 +308,10 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
     
     points_update <- map(clubs, ~ missinggames %>%
                            filter(club_name_home == .x ) %>%
-                           select(points_team_home) %>%
+                           dplyr::select(points_team_home) %>%
                            sum()+ missinggames %>% 
                            filter(club_name_away == .x ) %>%
-                           select(points_team_away) %>% 
+                           dplyr::select(points_team_away) %>% 
                            sum()) %>%
       unlist 
     
@@ -319,7 +319,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
     final_table <- matchday30 %>%
       mutate( points_new =  points_update,
               points = points + points_new)%>%
-      select(club_name, points) %>%
+      dplyr::select(club_name, points) %>%
       arrange(desc(points)) 
     
     all_final_tables <- bind_rows(all_final_tables,final_table)
@@ -354,7 +354,7 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
                        main = paste0("didn't converge below ", limit, 
                                      " after ", N, " runs"))
   }
-  all_avg_tables <- all_avg_tables %>%  select(Group.1 , points) %>% rename(club_name = Group.1, score = points)
+  all_avg_tables <- all_avg_tables %>%  dplyr::select(Group.1 , points) %>% rename(club_name = Group.1, score = points)
   
   sim_output <- list("all_final_tables" = all_final_tables,
                      "conv_plot" = conv_plot,

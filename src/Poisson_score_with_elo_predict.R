@@ -62,9 +62,6 @@ sim_years <- c(1617,1718,1819,1920)
 map(.x = sim_years,~poisson_predict(sim_years = .x))
 
 library(ggplot2)
-actual <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds")))%>%
-  filter(between(matchday, 21, max(database_season$matchday))) 
-poisson <- missinggames 
 
 
 tibble(home = actual$goals_team_home, away = actual$goals_team_away) %>% 
@@ -81,11 +78,16 @@ tibble(home = actual$goals_team_home, away = actual$goals_team_away) %>%
   #geom_density(poisson$Goals_team_home)
 
   print(p0)
+
+  actual <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds")))%>%
+    filter(between(matchday, 21, max(database_season$matchday))) 
+  poisson <- missinggames 
   
+    
   data <- rbind(data.frame(type="home", value=actual$goals_team_home, stringsAsFactors=FALSE),
                 data.frame(type="away", value=actual$goals_team_home, stringsAsFactors=FALSE))
   
-  estimate <- group_by(data, type) %>% summarize(mu=mean(value))
+  estimate <- group_by(poisson %>% select(Goals_team_home,Goals_team_away), type) %>% summarize(mu=mean(value))
   dens <- expand.grid(value=0:max(data$value), type=c("away", "home"),
                       stringsAsFactors=FALSE) %>%
     inner_join(estimate) %>%
@@ -94,22 +96,11 @@ tibble(home = actual$goals_team_home, away = actual$goals_team_away) %>%
     group_by(type) %>% mutate(prop=count/sum(count)) 
   tmp_actual <- left_join(dens, prop) %>% replace_na(list(prop=0, count=0))
   
-  data <- rbind(data.frame(type="home", value=poisson$Goals_team_home, stringsAsFactors=FALSE),
-                data.frame(type="away", value=poisson$Goals_team_home, stringsAsFactors=FALSE))
+
   
-  estimate <- group_by(data, type) %>% summarize(mu=mean(value))
-  dens <- expand.grid(value=0:max(data$value), type=c("away", "home"),
-                      stringsAsFactors=FALSE) %>%
-    inner_join(estimate) %>%
-    mutate(density=dpois(value, mu))
-  prop <- group_by(data, type, value) %>% summarize(count=n()) %>%
-    group_by(type) %>% mutate(prop=count/sum(count)) 
-  tmp_poisson <- left_join(dens, prop) %>% replace_na(list(prop=0, count=0))%>%
-    add_row(value = 7,type = 'home',mu = dens$mu[1],density = 0,count = 0, prop =0) %>%
-    add_row(value = 7,type = 'away',mu = dens$mu[1],density = 0,count = 0, prop =0) %>%
-    add_row(value = 8,type = 'home',mu = dens$mu[1],density = 0,count = 0, prop =0) %>%
-    add_row(value = 88,type = 'away',mu = dens$mu[1],density = 0,count = 0, prop =0) %>%
-  
-  ggplot(tmp_actual, aes(x=value, weight=prop, fill=type)) + 
+    ggplot(tmp_actual, aes(x=value, weight=prop, fill=type)) + 
     geom_bar(position="dodge") +
-    geom_line(aes(tmp_poisson$value, tmp_poisson$density, color=type, weight=NULL))
+    geom_line(mapping = aes(value, density, color=type, weight=NULL))
+    
+    
+    
