@@ -1,10 +1,15 @@
 library(readr)
 library(tidyverse)
-database_mr <- read_rds(here::here( "/data/database_match_results_1819.rds")) 
+poisson_predict<- function(sim_years){
+database_mr <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds")))%>% filter(between(matchday, 1, 20))
 
-missinggames <- read_rds(here::here("/data/database_match_results_1819.rds"))
-
-database_season <- read_rds(here::here("/data/database_season_1819.rds"))
+database_season <- read_rds(here::here(paste0("/data/database_season_",sim_years,".rds")))
+if(sim_years == 1920){
+  missinggames <- read_rds(here::here(paste0("/data/database_missing_matches_1920.rds"))) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
+  
+}else{
+  missinggames <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds"))) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
+}
 
 source(here::here("src/functions_N.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
@@ -13,21 +18,26 @@ source(here::here("src/functions_N.R"))
 #Proportion zum Rankingunterschied. 
 
 
-played_matchdays <- database_mr %>% filter(between(matchday,1,20))
 
 
 #create ratings for the first 20 matchdays
 
-  rating <- f_rating(played_matchdays)
+  rating <- f_rating(database_mr)
 
-matchday30 <- database_season %>% filter(matchday == 30)
+  if(database_season$season[1] == '1617'){
+    matchday30 <- database_season %>% filter( matchday == 34) %>% filter(club_name != 'VfB Hüls II zg.')
+    
+  }else {matchday30 <- database_season %>% filter( matchday == 30)}
+  
 #simulate the 
 if(0){
 N = 5000
-sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01, season = 1617 )
+sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01, season = sim_years )
 
-saveRDS(sim_output, paste0(getwd(), "/data/elo_ties_simulation_1718.rds"))
-  }
+saveRDS(sim_output, paste0(getwd(), "/data/elo_ties_simulation_",sim_years,".rds"))
+}
+}
+
 sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation_1718.rds"))
 
 

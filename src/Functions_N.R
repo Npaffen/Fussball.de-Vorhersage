@@ -271,15 +271,15 @@ f_rating_prob_matches <- function( missinggames, matchday30, rating, ties, N, li
       
       dr_home <- rating_home - rating_away +100
       
-      dr_away <-  1 - dr_home
+      dr_away <-  rating_away - rating_home 
       
       if (ties == T){
         
-        W_e_home <- 1 / (10^(+dr_home/400) + 1) - tie_prob/2
+        W_e_home <- 1 / (10^(-dr_home/400) + 1) - tie_prob/2
         W_e_away <- 1 / (10^(-dr_away/400) + 1) - tie_prob/2
       } else {
         
-        W_e_home <- 1 / (10^(+dr_home/400) + 1)
+        W_e_home <- 1 / (10^(-dr_home/400) + 1)
         W_e_away <- 1 / (10^(-dr_away/400) + 1)
       }
       
