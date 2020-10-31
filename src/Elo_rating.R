@@ -1,6 +1,6 @@
 library(readr)
 library(tidyverse)
-poisson_predict<- function(sim_years){
+elo_predict<- function(sim_years){
 database_mr <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds")))%>% filter(between(matchday, 1, 20))
 
 database_season <- read_rds(here::here(paste0("/data/database_season_",sim_years,".rds")))
@@ -30,13 +30,17 @@ source(here::here("src/functions_N.R"))
   }else {matchday30 <- database_season %>% filter( matchday == 30)}
   
 #simulate the 
-if(0){
+
 N = 5000
 sim_output <- f_rating_prob_matches( missinggames, matchday30, rating, ties = T, N, limit = 0.01, season = sim_years )
 
 saveRDS(sim_output, paste0(getwd(), "/data/elo_ties_simulation_",sim_years,".rds"))
+
 }
-}
+sim_years <- c(1617,1718,1819,1920)
+
+map(.x = sim_years,~elo_predict(sim_years = .x))
+
 
 sim_output <- readRDS(paste0(getwd(), "/data/elo_ties_simulation_1718.rds"))
 
