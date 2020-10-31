@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.6.24)  28 OCT 2020 14:28
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7380 64-bit) (preloaded format=pdflatex 2020.6.24)  30 OCT 2020 14:43
 entering extended mode
 **./term_paper_eem.tex
 (term_paper_eem.tex
@@ -1148,7 +1148,7 @@ duelogo_en.png>]
 as been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.342 
+l.344 
        [1
 
 ] [2] [3]
@@ -1157,28 +1157,28 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [4]
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 5
-40.
+43.
 ("C:\Program Files\MiKTeX 2.9\tex/latex/lm\ts1lmr.fd"
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [5] [6]
+) [5] [6] [7]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 669.
+(Font)              <10.95> on input line 676.
 
-Overfull \hbox (36.11925pt too wide) in paragraph at lines 669--698
+Overfull \hbox (36.11925pt too wide) in paragraph at lines 676--705
  [][] 
  []
 
-[7] [8] [9] [10] (rank_corr.tex) (append_rank_corr.tex) [11] [12] [13]
-Overfull \hbox (36.11925pt too wide) in paragraph at lines 879--908
+[8] [9] (rank_corr.tex) (append_rank_corr.tex) [10] [11] [12]
+Overfull \hbox (36.11925pt too wide) in paragraph at lines 886--915
  [][] 
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 912.
-[14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 912.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 919.
+[13]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 919.
 (term_paper_eem.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 912.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 912.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 919.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 919.
 Package rerunfilecheck Info: File `term_paper_eem.out' has not changed.
 (rerunfilecheck)             Checksum: 5AD636D4AD51DB7CC4B0C81FF89C4670;1279.
 
@@ -1196,11 +1196,11 @@ Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 23685 strings out of 480896
- 384551 string characters out of 2908245
+ 23690 strings out of 480896
+ 384610 string characters out of 2908245
  1245584 words of memory out of 3000000
  38951 multiletter control sequences out of 15000+200000
- 599171 words of font info for 119 fonts, out of 3000000 for 9000
+ 599482 words of font info for 122 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
  58i,17n,63p,821b,6737s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program Files/M
@@ -1219,9 +1219,9 @@ s/type1/public/lm/lmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/l
 mri10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files/MiKTeX
  2.9/fonts/type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (17 pages, 302816 bytes).
+Output written on term_paper_eem.pdf (16 pages, 302962 bytes).
 PDF statistics:
- 295 PDF objects out of 1000 (max. 8388607)
- 63 named destinations out of 1000 (max. 500000)
+ 289 PDF objects out of 1000 (max. 8388607)
+ 62 named destinations out of 1000 (max. 500000)
  14444 words of extra memory for PDF output out of 17280 (max. 10000000)
 

@@ -102,7 +102,7 @@
   \postdate{\par}
   \date{today}
 
-\usepackage{dcolumn, xcolor}
+\usepackage{dcolumn, xcolor, amsmath}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
@@ -290,21 +290,23 @@
 
 Publicly available data and public attention are contributing to the
 interest in forecasting football game results and the relevance of the
-accuracy of those forecasts. We provide a short overview on the state of
-the literature and use data from the aborted German local men's league
+accuracy of those forecasts. Global pandemics like SARS-CoV2 are just
+one reason why seasons may be canceled, providing a regular reason to
+forecast missing games. We provide a short overview on the state of the
+literature and use data from the aborted German local men's league
 season 2019-20 to predict the season's outcome using three different
 statistical approaches. A measure of each team's strength is calculated
-from past games and used as quantifier in the simulation. Instead of
-annulling the games played thus far or using the table as of now, using
-a prediction algorithm to simulate that seasons end result might be
-fairer. That's because the algorithm includes the played games to make a
-better guess at the outcome of the missing games. Research has shown
-that measures like the Elo rating system are better predictors of a
-team's performance than for example current league table points on their
-own. For this data set we find that gains from using advanced methods
-are marginal when evaluating them with data from past seasons. Methods
-are evaluated by calculating the correlation of the forecast results for
-previous seasons with their actual outcomes.
+from past games and used as quantifier in the simulation or prediction.
+Instead of annulling the games played thus far or using the table as of
+now, using a prediction algorithm to simulate that seasons end result
+might be fairer. That's because the algorithm includes the played games
+to make a better guess at the outcome of the missing games. Research has
+shown that measures like the Elo rating system are better predictors of
+a team's performance than for example current league table points on
+their own. For this data set we find that gains from using advanced
+methods are marginal when evaluating them with data from past seasons.
+Methods are evaluated by calculating the correlation of the forecast
+results for previous seasons with their actual outcomes.
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -402,7 +404,7 @@ to the outcome of single matches and depending on the expected outcome
 with regard to the opponent's rating. This version was especially
 adapted for the use in ranking football teams. Glickman
 \autocite*{glickman1995} offers a comprehensive discussion of the Elo
-rating system.
+rating system. ELO RATING DRAW???
 
 The third model is a regression model that approximates the distribution
 of goals in each game to a Poisson or Negative Binomial distribution
@@ -410,10 +412,10 @@ with an estimated constant parameter to adjust for the home advantage.
 This approach follows the literature influenced by \textcite{maher1982}
 and others. Generally, these models include different parameters to
 allow for team-specific strengths when playing home or away, and while
-defending or attacking. Parameters for e.g.~random effects can be added,
-which we omit here for simplicity. For a general discussion see
-\textcite{karlis2003}. Many extensions of this model as well as model
-selection algorithms are possible.
+defending or attacking. Other parameters to include random effects, for
+example, can be added. We omit them here for simplicity. For a general
+discussion see \textcite{karlis2003}. Many extensions of this model as
+well as model selection algorithms are possible.
 
 For a more recent review of advances in the literature and a new
 approach based on the Weinbull distribution we refer to
@@ -427,16 +429,16 @@ returns.
 
 For our simulation study we decided to use data from the local men's
 league Recklinghausen class A1 in Westphalia for the 2019/2020 season.
-16 clubs will play against each other on a total of 30 match days in one
-home and one away game each. Due to the Covid-19 pandemic, the
-association has decided to cancel all matches from March 15, 2020. 20
-match days have already been played up to this point in time which
-corresponds to a database of 158 matches. As the first half of the
-season had already been completed, each team had already played at least
-once against each team in the league. The extraction of real data from
-websites using scraping scripts can be complicated, as website operators
-have an interest in protecting their data from such automated queries.
-\enquote{Fussball.de} is a website of the DFB (German Football
+16 clubs were scheduled to play against each other on a total of 30
+match days in one home and one away game each. Due to the SARS-CoV2
+pandemic, the association has decided to cancel all matches from March
+15, 2020. 20 match days have already been played up to this point in
+time which corresponds to a database of 158 matches. As the first half
+of the season had already been completed, each team had already played
+at least once against each team in the league. The extraction of real
+data from websites using scraping scripts can be complicated, as website
+operators have an interest in protecting their data from such automated
+queries. \enquote{Fussball.de} is a website of the DFB (German Football
 Association) which acts as a collection point for match results and
 news, especially in the amateur sector. In its terms and conditions
 \href{http://www.fussball.de/terms.and.conditions\#!/}{page}, the DFB
@@ -533,8 +535,9 @@ different methods.
 
 To predict the outcome of the canceled games, we determine each team's
 relative strength using each of the three candidate models. Based on
-this we simulate the end of the 2019/2020 season by way of calculating a
-winning probability for each missing game. Specifically we implement
+this we simulate or predict the end of the 2019/2020 season by way of
+calculating a winning probability for each missing game. Specifically we
+implement
 
 \begin{itemize}
 \item the points model,
@@ -547,17 +550,17 @@ probability of a team \emph{A} winning a game against team B using the
 formula
 
 \begin{align}
-P(A wins) = \frac{table points_A}{{table points}_A + {table points}_B},
+P(\text{\emph{A wins}}) = \frac{table points_A}{{table points}_A + {table points}_B},
 \end{align}
 
-where \emph{table points} corresponds to the number of games won at the
-current state of the season valued at three points plus the number of
-draws valued at one point. This value also governs the ranking and
-ultimate placement of the teams in the league. Two questions arise from
-this approach. Firstly, should the table points be updated after each
-simulated game? We argue no, because this would not include new
-information about the relative strength of the teams and just increase
-the variance of the result.
+where \emph{tablepoints} corresponds to the number of games won at the
+current state of the season (valued at three points) plus the number of
+draws (valued at one point). This value also governs the ranking and
+ultimate placement of the teams in the league. Two issues arise from
+this approach. Firstly, should the probability based on table points be
+updated after each simulated game? We argue no, because this would not
+include new information about the relative strength of the teams and
+just increase the variance of the result.
 
 Secondly, the average over many simulated runs will converge to the
 initial table from when the season was interrupted. This will defeat the
@@ -569,29 +572,33 @@ unfairly favor below-average teams.
 
 Our second model is based on the rating algorithm from
 \href{eloratings.net/about}{eloratings.net}. The anonymous site operator
-formulates the rating, representative of the strength of a team, as
-follows:
+uses the following formulation of the rating. Here, the new rating
+\(R_n\) is defined as an update of \(R_0\), which is the old rating. The
+rating is updated, if the outcome differs from what the old rating
+predicted. The size of the update, or the learning speed of the
+algorithm, is moderated according to the importance of the match and the
+goal difference.
 
 \begin{align}
-R_n = R_0 + K * (W - W_e)\\
-K \in \left( K_0 * 1.5, K_0 * 0.75, 3/4 + K_0 * \frac{N-3}{8} \right)
+R_n = R_0 + K * (W - W_e) &
 \end{align}
 
-Here, the new rating \(R_n\) is defined as an update of \(R_0\), which
-is the old rating. The weighting factor \emph{K} for each match is
-defined by \(K_0\), the type of tournament in which the match takes
-place and also controls for friendly matches, which is given to the
-lowest weight of 20. While matches in world championships and other
-major international tournaments are given weights between 40 and 60, the
-rest falls into the category \enquote{all other tournaments} which are
-given a weighting factor of 30. Following this example, we also set
-\(K_0\) to 30 for matches already played in the local league. The
-weighting factor \emph{K} modifies the effect that the goal difference
-of the result has on the new ranking. Thus, \emph{K} is increased by
-\(\dfrac{K}{2}\) if the match was won with two goals, by
-\(\dfrac{3}{4}* K\) if the match was won with three goals and by
-\(\dfrac{3}{4} + \dfrac{(N-3)}{8} * K\), where \emph{N} defines the goal
-difference of the match if the match was won with four or more goals.
+\begin{align}
+K = \begin{cases}
+    K_0         &\mbox{if won by 1 goal} \\
+    K_0 * 1.5   &\mbox{if won by 2 goals} \\
+    K_0 * 0.75  &\mbox{if won by 3 goals} \\
+    K_0 * \left( 3/4 + K_0 * \frac{N-3}{8} \right) &\mbox{if won by 4 or more goals})
+  \end{cases}
+\end{align}
+
+The weighting factor \emph{K} for each match is based on \(K_0\), the
+type of tournament in which the match takes place. The values range from
+World Cup finals (60) to friendly matches (20). Regular tournament
+matches are given a weighting factor of 30, which we also use here.
+\(K_0\) is then adjusted for the goal difference of the game outcome
+(how significant a victory or loss was) according to the formula above.
+A higher goal difference will have a higher impact on the final rating.
 \emph{W} is the result of the match. 0 for a loss, 0.5 for a draw and 1
 for a win. \(W_e\) is the probability of winning defined by the
 following formula:
