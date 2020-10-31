@@ -50,11 +50,11 @@ Publicly available data and public attention are contributing to the interest in
 
 # Introduction
 
-The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before all furhter matches were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the league on Sunday May 24, 2020. It was very likely at the time that the games could not be postponed to a later date, which turned out to be the case. So it was natural for players and fans alike to ask the question: "What would the outcome of the season have been?" We use data on games already played from the website [fussball.de](http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G#!/) to answer this question, drawing on established forecasting methods from the literature.
+The Covid-19 epidemic forced sports leagues in Germany to suspend championships that were already in full swing. For example, the local men's league Recklinghausen class A1 finished around 150 games, before all further matches were canceled starting from Sunday March 12, 2020, leaving around 90 games left unplayed until the last planned day of the league on Sunday May 24, 2020. It was very likely at the time that the games could not be postponed to a later date, which turned out to be the case. So it was natural for players and fans alike to ask the question: "What would the outcome of the season have been?" We use data on games already played from the website [fussball.de](http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G#!/) to answer this question, drawing on established forecasting methods from the literature.
 
 The league system in Germany is structured so that everyone plays two games against every opponent: The system colloquially known as 'Back and Forth' implies that each pair plays once at home and once away in the other team's stadium. This means it’s easier to forecast than the tournament system of the World Cup. There in the group stage, groups are determined by chance, a process known as “seeding”. Groups then play a so-called round-robin tournament, also known as all-play-all, were all group members play against each other, which corresponds to the mode in which the German local leagues play in each round. But the World Cup then continues with single-elimination, or a knock-out stage, which introduces random path dependencies that are not relevant for forecasting the Germany's local leagues. This implies that the part of the existing literature on forecasting results in the FIFA World Cup concerning the group stage remains highly relevant for the task at hand, since the game rules are otherwise identical.
 
-In the next section, we give an overview of models used and evaluated for the purpose of predicting football match outcomes. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
+In the next section, we give an overview of models used and evaluated for the purpose of predicting football match outcomes in the past. We introduce a small subset of models in more detail in the third part. The fourth part contains the results from calculating a simulation based on these for the local men's league Recklinghausen class A1. We also present some comparative statistics of the model performance and draw some conclusions in the last segment.
 
 
 # Literature
@@ -100,7 +100,6 @@ For further analysis we decided to scrape the data of season 16/17, 17/18 and 18
 # Predictive Models
 
 To predict the outcome of the canceled games, we determine each team's relative strength using each of the three candidate models. Based on this we simulate or predict the end of the 2019/2020 season by calculating a winning probability for each missing game. Specifically we implement
-
 
 \begin{itemize}
 \item the points model,
@@ -253,7 +252,7 @@ Note here that "1. SC BW Wulfen" is chosen as the base and no dummy for it is in
 
 !!! Check if below is still accurate after re-running the model !!!
 
-In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", is least likely to score a goal (low team estimate) and teams playing against them have the highest chance to score (high opponent estimate), with both estimates being highly significant. Since the club is in the last place in the current table, as mentioned in the Data section, this is the expected result. Conversely, we observe the opposite for the current table leader "VfL Ramsdorf". For the simulation the result is drawn from the Poisson distribution, and the score probabilities are based on the estimated parameters.
+In summary, the coefficients of the model show that the club "Altendorf-Ulfkotte", is least likely to score a goal (low team estimate) and teams playing against them have the highest chance to score (high opponent estimate), with both estimates being highly significant. Since the club is in the last place in the current table, as mentioned in the data section, this is the expected result. Conversely, we observe the opposite for the current table leader "VfL Ramsdorf". For the simulation the result is drawn from the Poisson distribution, and the score probabilities are based on the estimated parameters.
 
 !!! Check if above is still accurate after re-running the model !!!
 
@@ -261,9 +260,9 @@ The results from the estimation with a negative binomial distribution are very s
 
 Instead of simulating the result as with the first two methods, we can simply calculate the expected number of goals based on the regression estimate and sum up the expected final league table.
 
-A few alternatives have been developed for forecasting football games. The potential of using independent Poisson distributions to match the empirical distribution of goals scored by a team has been improved on by introducing correlation between the teams playing against one another in a bivariate Poisson distribution @karlis2003.
+A few alternatives have been developed for forecasting football games. The potential of using independent Poisson distributions to match the empirical distribution of goals scored by a team has been improved by introducing correlation between the teams playing against one another in a bivariate Poisson distribution @karlis2003.
 
-Boshnakov et al. -@boshnakov2016 use a Weibull count model to improve on the bivariate Poisson model, allowing them even to outperform betting market in selected bets. Further analysis should compare the predictive performance of models based on other distributions as well.
+Boshnakov et al. -@boshnakov2016 use a Weibull count model to improve on the bivariate Poisson model, allowing them even to outperform betting market in selected bets. Further analysis could compare the predictive performance of models based on other distributions as well.
 
 
 
@@ -311,15 +310,16 @@ average_table_point <- average_table_point %>% arrange(rank) %>% dplyr::select(r
 
 ```{r echo=FALSE}
 average_table_poisson <- readRDS(paste0(getwd(), "/data/poisson_score_simulation_1920_predict.rds")) %>% 
-  dplyr::select(rank, club_name, points) %>% 
-  dplyr::rename(club_name_poisson = club_name, points_poisson = points) 
 
+  dplyr::select(rank, club_name, points) %>%
+  dplyr::rename(club_name_poisson = club_name, points_poisson = points)
+  
 all_results <- inner_join(average_table_poisson,average_table_elo, by = "rank") %>%
-        inner_join(average_table_point, by = "rank")
+  inner_join(average_table_point, by = "rank")
 kable(all_results,
       caption = "Simulated Final Score Table",
-             booktabs = T 
-                    ) %>%
+      booktabs = T 
+) %>%
   add_header_above(c(" " = 1, "Poisson Distribution Model" = 2, "Elo Rating Model" = 2, "Points Model" = 2 )) %>%
   kable_styling(latex_options = c("striped", "HOLD_position", "scale_down"),full_width = F)
 

@@ -33,7 +33,7 @@ poisson_model <-
       opponent=database_mr$club_name_home,
       home=0)) %>%
   
-  glm(goals ~ home + team +opponent, family=poisson(link=log),data=.)
+  glm(goals ~ home + team +opponent, family=quasipoisson(link=log),data=.)
 summary(poisson_model)
 
 
