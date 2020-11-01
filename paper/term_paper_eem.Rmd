@@ -254,7 +254,7 @@ The results from the estimation with a Poisson distribution are very similar. Ho
 
 Instead of simulating the result as with the first two methods, we can simply calculate the expected number of goals based on the regression estimate and sum up the expected final league table.
 
-We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of one season. As can be seen in the example plot for season 16/17, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. This is representative for all three preceding seasons, as can be seen by the other plots in the Appendix. This could imply that using a different distribution can improve the fit.
+We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of the last three seasons and compare actual with predicted values. As can be seen in the bar plot below, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. It seems likely that using different distributions can improve the fit.
 
 ```{r echo = FALSE}
 include_graphics(paste0(getwd(), "/paper/plots/poisson_actual_home_1617.png"))
