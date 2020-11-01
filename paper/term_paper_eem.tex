@@ -288,52 +288,55 @@
 \section{Abstract}\label{abstract}}
 
 Publicly available data and public attention are contributing to the
-interest in forecasting football game results and the relevance of the
+interest in forecasting soccer game results and the relevance of the
 accuracy of those forecasts. Global pandemics like SARS-CoV2 are just
-one reason why seasons may be canceled, providing a regular reason to
-forecast missing games. We provide a short overview on the state of the
-literature and use data from the aborted German local men's league
-season 2019-20 to predict the season's outcome using three different
-statistical approaches. A measure of each team's strength is calculated
-from past games and used as quantifier in the simulation or prediction.
-Instead of annulling the games played thus far or using the table as of
-now, using a prediction algorithm to simulate that seasons end result
-might be fairer. That's because the algorithm includes the played games
-to make a better guess at the outcome of the missing games. Research has
-shown that measures like the Elo rating system are better predictors of
-a team's performance than for example current league table points on
-their own. For this data set we find that gains from using advanced
-methods are marginal when evaluating them with data from past seasons.
-Methods are evaluated by calculating the correlation of the forecast
-ranking results for previous seasons with their actual outcomes.
+one of the reasons why seasons may be canceled. Which provides us with a
+reason why forcasting canceld matches could be helpful in the decision
+process of promotion and relegation in soccer leagues. We provide a
+short overview on the state of the literature and use data from an
+aborted German local men's league season 2019-20 to predict the season's
+outcome using three different statistical approaches. A measure of each
+team's strength is calculated from past games and used as quantifier in
+the simulation or prediction. Instead of annulling the games played thus
+far or using the table as of now, using a prediction algorithm to
+simulate the seasons final table might be fairer. That's because the
+algorithm includes the played games to make a better guess at the
+outcome of the missing games. Research has shown that measures like the
+Elo rating system are better predictors of a team's performance than for
+example current league table points on their own. For our data set we
+find that there's no clear evidence that the Elo ranking or Poisson and
+negative binomial regressions improve predictions over the benchmark
+when evaluating them with data from past seasons. Methods are evaluated
+by calculating the correlation of the forecast ranking results for
+previous seasons with their actual outcomes.
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
 The Covid-19 epidemic forced sports leagues in Germany to suspend
 championships that were already in full swing. For example, the local
-men's league Recklinghausen class A1 finished around 150 games, before
-all further matches were canceled starting from Sunday March 12, 2020,
-leaving around 90 games left unplayed until the last planned day of the
-league on Sunday May 24, 2020. It was very likely at the time that the
-games could not be postponed to a later date, which turned out to be the
-case. So it was natural for players and fans alike to ask the question:
-\enquote{What would the outcome of the season have been?} We use data on
-games already played from the website
+men's league Recklinghausen class A1 played around 150 games, before all
+further matches were canceled starting from Sunday March 12, 2020,
+leaving around 90 games left unplayed until the last planned matchday of
+this season on Sunday May 24, 2020. It was very likely at the time that
+the games could not be postponed to a later date, which turned out to be
+the case. So it was natural for players and fans alike to ask the
+question: \enquote{What would the outcome of the season have been?} We
+use data on games already played from the website
 \href{http://www.fussball.de/spieltagsuebersicht/re-kl-a-1-kreis-recklinghausen-kreisliga-a-herren-saison1920-westfalen/-/staffel/027II28DH8000009VS5489B3VS3GHJJU-G\#!/}{fussball.de}
 to answer this question, drawing on established forecasting methods from
 the literature.
 
-The league system in Germany is structured so that everyone plays two
-games against every opponent: The system colloquially known as
-\enquote{Back and Forth} implies that each pair plays once at home and
-once away in the other team's stadium. This means it's easier to
-forecast than the tournament system of the World Cup. There in the group
-stage, groups are determined by chance, a process known as
-\enquote{seeding}. Groups then play a so-called round-robin tournament,
-also known as all-play-all, were all group members play against each
-other, which corresponds to the mode in which the German local leagues
-play in each round. But the World Cup then continues with
+The league system in Germany is structured so that every team within a
+league plays two games against every team within that league: The system
+colloquially known as \enquote{Back and Forth} implies that each pair
+plays once at home and once away in the other team's stadium. This means
+it's easier to forecast than the tournament system of the World Cup.
+There in the group stage, groups are determined by chance, a process
+known as \enquote{seeding}. Groups then play a so-called round-robin
+tournament, also known as all-play-all, were all group members play
+against each other, which corresponds to the mode in which the German
+local leagues play in each round. But the World Cup then continues with
 single-elimination, or a knock-out stage, which introduces random path
 dependencies that are not relevant for forecasting the Germany's local
 leagues. This implies that the part of the existing literature on
@@ -380,9 +383,9 @@ relevant for our use case than the absolute rankings, which determine
 whether a team advances, stays or drops out of a league.
 
 We consider three models for our calculation: First, a benchmark model
-based on the table points of each team at the time when the league was
-aborted. Second, an Elo rating system, and third a simple model based on
-the Poisson distribution.
+based on the table points of each team at the time when further matches
+were aborted. Second, an Elo rating system, and third a simple model
+based on the Poisson distribution.
 
 The benchmark model calculates the probability of winning a match by
 dividing a team's current points (victories are 3, draws are 2) by the
@@ -413,13 +416,14 @@ with an estimated constant parameter to adjust for the home advantage.
 This approach follows the literature influenced by \textcite{maher1982}
 and others. Generally, these models include different parameters to
 allow for team-specific strengths when playing home or away, and while
-defending or attacking. Other parameters that include for example random
-effects can be added. We omit them here for simplicity. For a general
-discussion see \textcite{karlis2003}. Many extensions of this model as
-well as model selection algorithms are possible.
+defending or attacking. Other parameters that can as an example include
+random effects can be added. We've chosen to omit them here for the sake
+of simplicity. For a general discussion see \textcite{karlis2003}. Many
+extensions of this model as well as model selection algorithms are
+possible.
 
-For a more recent review of advances in the literature and a new
-approach based on the Weinbull distribution we refer to
+For a more recent review of advances in this scientific literature and a
+new approach based on the Weinbull distribution we refer to
 \textcite{boshnakov2017}. They use an evaluation based on calibration
 curves as well as the payoff from betting strategies and find that their
 model improves on previous models and can yield positive betting
@@ -431,22 +435,22 @@ returns.
 For our simulation study we decided to use data from the local men's
 league Recklinghausen class A1 in Westphalia, Germany, for the 2019/2020
 season. 16 clubs were scheduled to play against each other on a total of
-30 match days in one home and one away game each. Due to the SARS-CoV2
-pandemic, the association has decided to cancel all matches from March
-15, 2020. 20 match days have already been played up to this point in
-time which corresponds to a database of 158 matches. As the first half
-of the season had already been completed, each team had already played
-at least once against each team in the league. The extraction of real
-data from websites using scraping scripts can be complicated, as website
-operators have an interest in protecting their data from such automated
-queries. \enquote{Fussball.de} is a website of the DFB (German Football
-Association) which acts as a collection point for match results and
-news, especially in the amateur sector. In its
-\href{http://www.fussball.de/terms.and.conditions\#!/}{terms and
+30 match days in one home and one away game per match paring each. Due
+to the SARS-CoV2 pandemic, the DFB, the german football association, has
+decided to cancel all matches from March 15, 2020. 20 match days have
+already been played up to this point in time which corresponds to a
+database of 158 matches. As the first half of the season had already
+been completed, each team had already played at least once against each
+team in the league. The extraction of real data from websites using
+scraping scripts can be complicated, as website operators have an
+interest in protecting their data from such automated queries.
+\enquote{Fussball.de} is a website of the DFB which acts as a collection
+point for match results and news, especially in the amateur sector. In
+its \href{http://www.fussball.de/terms.and.conditions\#!/}{terms and
 conditions page}, the DFB GmbH restricts the permanent storage of
 content from the website and commercial use. Therefore we can't store
-and or share the original data, but only the code we used to create them
-and the results that we derived from them.
+and or share the original data, but only the code we used to create the
+dataset and the results that we derived from them.
 
 The game results cannot be extracted directly from the website. They are
 masked, so they are made unreadable when viewing the HTML file and are
@@ -522,11 +526,11 @@ different methods.
 \hypertarget{predictive-models}{%
 \section{Predictive Models}\label{predictive-models}}
 
-To predict the outcome of the canceled games, we determine each team's
+To predict the outcome of the canceled games, we determined each team's
 relative strength using each of the three candidate models. Based on
-this we simulate or predict the end of the 2019/2020 season by
+this we simulated or predicted the end of the 2019/2020 season by
 calculating a winning probability for each missing game. Specifically we
-implement
+did this by implementing
 
 \begin{itemize}
 \item the points model,
@@ -547,9 +551,10 @@ current state of the season (valued at three points) plus the number of
 draws (valued at one point). This value also governs the ranking and
 ultimate placement of the teams in the league. Two issues arise from
 this approach. Firstly, should the probability based on table points be
-updated after each simulated game? We argue no, because this would not
-include new information about the relative strength of the teams and
-just increase the variance of the result.
+updated after each simulated game? We argue that this approach shouldn't
+be used, because this would not include new information about the
+relative strength of the teams and just increase the variance of the
+result.
 
 Secondly, the average over many simulated runs will converge to the
 initial table from when the season was interrupted. This will defeat the
@@ -744,18 +749,18 @@ estimate and sum up the expected final league table.
 \hypertarget{results}{%
 \section{Results}\label{results}}
 
-Simulation for the Elo model was repeated until the rate of change of
+We repeated the simulation of the Elo model until the rate of change of
 the point average was 1\% or less. Aggregation to this point occurred
 after about 2580 runs.
 
 Looking at the final predictions for the 19/20 season, a few
 observations stand out. First and foremost, the two relegation spots at
 the top and bottom end of the table stay the same in each simulation. In
-the middle field however, the models disagree and rate the teams there
-very close to each other. The points and Elo method predict more
+the middle field however, the models disagree and rate the teams in this
+field very close to each other. The points and Elo method predict more
 similarly, as well as (Quasi-)Poisson and the negative binomial model.
 The last two are almost identical. Only TuS Velen gains an extra point
-in (Quasi-)Poisson, which doesn't affect the ranking. Quasi- and
+in (Quasi-)Poisson, which doesn't affect the overall ranking. Quasi- and
 standard Poisson results are identical.
 
 \begin{table}[H]
@@ -797,26 +802,26 @@ rank & club\_pnt & score\_pnt & club\_e & score\_e & club\_psn & score\_psn & cl
 
 Making predictions of events that might never happen can obviously be
 criticized with a simple question. How do you know that your results
-reflect reality as good as possible? Following George E. P. Box who is
-known for his quote \enquote{All models are wrong}, which is often
-amended by \enquote{but some are useful}, we want to show that our
-models cover the latter. The out-of-sample error test statistic is one
-way to achieve this. One simply divides a data set into a small test
-data set and a larger training data set. For the seasons of 16/17, 17/18
-and 18/19, we split the data sets after the number of games, after which
-the SARS-Cov2 pandemic forced the 19/20 season to abort. This way we
-increase the relevance for our use case.
+reflect a possible reality? Following George E. P. Box who is known for
+his quote \enquote{All models are wrong}, which is often amended by
+\enquote{but some are useful}, we want to show that our models cover the
+latter. The out-of-sample error test statistic is one way to achieve
+this. One simply divides a data set into a small test data set and a
+larger training data set. For the seasons of 16/17, 17/18 and 18/19, we
+split the data sets after the number of games, after which the SARS-Cov2
+pandemic forced the 19/20 season to abort. This way we increase the
+relevance for our use case.
 
 Following \textcite{leitner2010}, we evaluate the models' performance
 using the rank correlation between their predicted and the real ranking
 tables for the three past years' seasons (2016, 2017 and 2018). We show
 both Kendall's tau and Spearman's rho rank correlation coefficients.
-Generally, no model performs best in all seasons. The Elo method however
-performs generally better than the regression models' predictions.
-Surprisingly, the benchmark points method performs best in two out of
-three seasons.
+Generally, no model performs best in all seasons. The Elo method
+performs generally better than the regression models' predictions
+however. Surprisingly, the benchmark points method performs best in two
+out of three seasons.
 
-Because no model is clearly better then the others, and performance
+Because no model is clearly superior to the others, and performance
 varies a lot between seasons, we see no clear evidence that one method
 should be preferred. A simulation based on these predictions would
 however be much fairer than a coin toss.
@@ -827,8 +832,8 @@ however be much fairer than a coin toss.
 
 We can evaluate the fit of the distributions also by looking at
 histograms comparing the actual distributions in the seasons before
-against the model's predictions. For this purpose we pool the values of
-all away and home goals of the last three seasons and compare actual
+against the model's predictions. For this purpose we pooled the values
+of all away and home goals of the last three seasons and compared actual
 with predicted values. As can be seen in Figure 1, the model does not
 predict enough outliers of high goal numbers and predicts too many one-
 and two-goal outcomes. It seems likely that using different
@@ -878,8 +883,8 @@ the current league table (the points method), one based on the Elo
 ranking, or one based on regressions using (Quasi-)Poisson or negative
 binomial methods is superior. Therefore we cannot recommend one in
 particular. Testing prediction methods with data from local football
-league's may help improving and evaluating more existing methods from
-the literature.
+league's may help improving and evaluating further methods from the
+existing scientific literature.
 
 \newpage
 

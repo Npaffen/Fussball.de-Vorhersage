@@ -62,7 +62,7 @@ actual <- tibble(all_goals = c(actual$goals_team_home, actual$goals_team_away))
 #png(file = here::here(paste0("paper/plots/nbinom_actual_home.png")) )
 
 
-png(file = here::here(paste0("paper/plots/nbinom_actual.png", )))
+
 nbinom <- tibble(nbinom = nbinom_method$all_goals,
                   actual = actual$all_goals
 )%>% gather(key=Type, value=Value) %>% 
