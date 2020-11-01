@@ -53,7 +53,7 @@ f_rating <- function(played_matchdays){
 
 
 ###  creating score probabiblities
-f_simulate_score_prob_poisson <- function(foot_model, homeTeam, awayTeam){
+f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam){
   
   
   home_goals_avg <- map2_df(.x = homeTeam, .y = awayTeam,~predict(foot_model,
@@ -117,17 +117,7 @@ table_update <- function(missinggames, matchday30){
   
 }
 
-###  creating score probabiblities for poisson
-f_simulate_score_prob <- function(foot_model, homeTeam, awayTeam, max_goals=10){
-  home_goals_avg <- predict(foot_model,
-                            data.frame(home=1, team=homeTeam, 
-                                       opponent=awayTeam), type="response")
-  away_goals_avg <- predict(foot_model, 
-                            data.frame(home=0, team=awayTeam, 
-                                       opponent=homeTeam), type="response")
-  dpois(0:max_goals, home_goals_avg) %o% dpois(0:max_goals, away_goals_avg) 
-  #map(1:nrow(prob_df), ~as.numeric(prob_df[.x,])) %>% unlist()
-}
+
 
 
 #simulate poisson score prob model
