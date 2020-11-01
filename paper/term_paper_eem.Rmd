@@ -257,10 +257,16 @@ Instead of simulating the result as with the first two methods, we can simply ca
 We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of the last three seasons and compare actual with predicted values. As can be seen in the bar plot below, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. It seems likely that using different distributions can improve the fit.
 
 ```{r echo = FALSE}
-include_graphics(paste0(getwd(), "/paper/plots/poisson_actual_home_1617.png"))
+include_graphics(paste0(getwd(), "/paper/plots/nbinom_actual.png"))
+
 
 ```
 
+```{r echo = FALSE}
+include_graphics(paste0(getwd(), "/paper/plots/poisson_actual.png"))
+
+
+```
 A few alternatives have been developed for forecasting football games. Approaches with independent Poisson distributions were improved by introducing correlation between the teams playing against one another in a bivariate Poisson distribution (@karlis2003).
 
 Boshnakov et al. -@boshnakov2016 use a Weibull count model to improve on the bivariate Poisson model, allowing them even to outperform betting market in selected bets. Further analysis could compare the predictive performance of models based on other distributions as well.
