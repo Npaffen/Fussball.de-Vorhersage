@@ -39,7 +39,7 @@ poisson_plot<- function(sim_years){
   summary(poisson_model)
   
   
- sim <- f_simulate_score_prob_poisson(foot_model = poisson_model,
+ sim <- f_simulate_score_prob(foot_model = poisson_model,
                                         homeTeam = missinggames$club_name_home,
                                         awayTeam = missinggames$club_name_away
   ) 
@@ -58,8 +58,13 @@ actual <- rbind(read_rds(here::here(paste0("/data/database_match_results_",sim_y
                 read_rds(here::here(paste0("/data/database_match_results_",sim_years[3],".rds"))) %>% .[,5:6])
 
 actual <- tibble(all_goals = c(actual$goals_team_home, actual$goals_team_away))
+<<<<<<< Updated upstream
 png(file = here::here(paste0("paper/plots/poisson_actual_home.png")) )
 poisson2 <- tibble(poisson = poisson_method$all_goals,
+=======
+png(file = here::here(paste0("paper/plots/poisson_actual.png")) )
+poisson <- tibble(poisson = poisson_method$all_goals,
+>>>>>>> Stashed changes
                actual = actual$all_goals
 )%>% gather(key=Type, value=Value) %>% 
   ggplot(aes(x=Value,fill=Type)) + 
