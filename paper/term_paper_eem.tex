@@ -116,6 +116,7 @@
 \usepackage{threeparttablex}
 \usepackage[normalem]{ulem}
 \usepackage{makecell}
+\usepackage{xcolor}
 
 %% linespread settings
 
@@ -491,23 +492,23 @@ expected a fight against relegation between \enquote{TuS 05 Sinsen II},
 \toprule
 Rank & Club & Games & Wins & Ties & Loss & Goal Relation & Goal Diff. & Points\\
 \midrule
-\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{17} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{74 : 21} & \cellcolor{gray!6}{53} & \cellcolor{gray!6}{52}\\
+\rowcolor{gray!6}  1 & VfL Ramsdorf & 20 & 17 & 1 & 2 & 74 : 21 & 53 & 52\\
 2 & TuS Gahlen & 20 & 14 & 4 & 2 & 54 : 15 & 39 & 46\\
-\cellcolor{gray!6}{3} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{14} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{60 : 24} & \cellcolor{gray!6}{36} & \cellcolor{gray!6}{45}\\
+\rowcolor{gray!6}  3 & SV Schermbeck II & 20 & 14 & 3 & 3 & 60 : 24 & 36 & 45\\
 4 & Fenerbahce I. Marl & 20 & 13 & 2 & 5 & 41 : 36 & 5 & 41\\
-\cellcolor{gray!6}{5} & \cellcolor{gray!6}{TSV Raesfeld} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{72 : 29} & \cellcolor{gray!6}{43} & \cellcolor{gray!6}{38}\\
+\rowcolor{gray!6}  5 & TSV Raesfeld & 20 & 12 & 2 & 6 & 72 : 29 & 43 & 38\\
 \addlinespace
 6 & 1. SC BW Wulfen & 19 & 12 & 1 & 6 & 58 : 32 & 26 & 37\\
-\cellcolor{gray!6}{7} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{44 : 44} & \cellcolor{gray!6}{0} & \cellcolor{gray!6}{29}\\
+\rowcolor{gray!6}  7 & TuS Velen & 20 & 9 & 2 & 9 & 44 : 44 & 0 & 29\\
 8 & SC Marl-Hamm & 19 & 9 & 0 & 10 & 53 : 52 & 1 & 27\\
-\cellcolor{gray!6}{9} & \cellcolor{gray!6}{SV Lembeck} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{8} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{49 : 48} & \cellcolor{gray!6}{1} & \cellcolor{gray!6}{27}\\
+\rowcolor{gray!6}  9 & SV Lembeck & 20 & 8 & 3 & 9 & 49 : 48 & 1 & 27\\
 10 & BVH Dorsten & 19 & 8 & 2 & 9 & 46 : 33 & 13 & 26\\
 \addlinespace
-\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{6} & \cellcolor{gray!6}{5} & \cellcolor{gray!6}{9} & \cellcolor{gray!6}{28 : 41} & \cellcolor{gray!6}{-13} & \cellcolor{gray!6}{23}\\
+\rowcolor{gray!6}  11 & FC RW Dorsten & 20 & 6 & 5 & 9 & 28 : 41 & -13 & 23\\
 12 & Westfalia Gemen II & 20 & 6 & 2 & 12 & 38 : 60 & -22 & 20\\
-\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{19} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{3} & \cellcolor{gray!6}{12} & \cellcolor{gray!6}{41 : 61} & \cellcolor{gray!6}{-20} & \cellcolor{gray!6}{15}\\
+\rowcolor{gray!6}  13 & SC Reken II & 19 & 4 & 3 & 12 & 41 : 61 & -20 & 15\\
 14 & TuS 05 Sinsen II & 20 & 2 & 5 & 13 & 25 : 62 & -37 & 11\\
-\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{20} & \cellcolor{gray!6}{2} & \cellcolor{gray!6}{4} & \cellcolor{gray!6}{14} & \cellcolor{gray!6}{23 : 64} & \cellcolor{gray!6}{-41} & \cellcolor{gray!6}{10}\\
+\rowcolor{gray!6}  15 & Adler Weseke II & 20 & 2 & 4 & 14 & 23 : 64 & -41 & 10\\
 \addlinespace
 16 & SV Altendorf-Ulfkotte & 20 & 2 & 1 & 17 & 17 : 101 & -84 & 7\\
 \bottomrule
@@ -748,9 +749,16 @@ all away and home goals of the last three seasons and compare actual
 with predicted values. As can be seen in the bar plot below, the model
 does not predict enough outliers of high goal numbers and predicts too
 many one- and two-goal outcomes. It seems likely that using different
-distributions can improve the fit.
+distributions would improve the fit.
 
-\includegraphics[width=6.67in]{C:/Users/Nils/Documents/GitHub/Fussball.de-Vorhersage/paper/plots/nbinom_actual}
+\begin{figure}
+
+{\centering \includegraphics[width=0.8\linewidth]{C:/Users/David/Seafile/Meine Bibliothek/Research/Fussball.de-Vorhersage/paper/plots/nbinom_actual} 
+
+}
+
+\caption{Comparison of actual distribution of goals in all preceding seasons with the prediction from a negative binomial regression}\label{fig:unnamed-chunk-3}
+\end{figure}
 
 A few alternatives have been developed for forecasting football games.
 Approaches with independent Poisson distributions were improved by
@@ -781,7 +789,7 @@ standard Poisson results are identical.
 
 \begin{table}[H]
 
-\caption{\label{tab:unnamed-chunk-6}Simulated Final Score Table}
+\caption{\label{tab:unnamed-chunk-7}Simulated Final Score Table}
 \centering
 \resizebox{\linewidth}{!}{
 \begin{tabular}[t]{rlrlrlrlr}
@@ -790,36 +798,28 @@ standard Poisson results are identical.
 \cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5} \cmidrule(l{3pt}r{3pt}){6-7} \cmidrule(l{3pt}r{3pt}){8-9}
 rank & club\_pnt & score\_pnt & club\_e & score\_e & club\_psn & score\_psn & club\_nbin & score\_nbin\\
 \midrule
-\cellcolor{gray!6}{1} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{72.20} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{64.35} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{80} & \cellcolor{gray!6}{VfL Ramsdorf} & \cellcolor{gray!6}{80}\\
+\rowcolor{gray!6}  1 & VfL Ramsdorf & 72.20 & VfL Ramsdorf & 64.35 & VfL Ramsdorf & 80 & VfL Ramsdorf & 80\\
 2 & TuS Gahlen & 65.04 & TuS Gahlen & 58.74 & TuS Gahlen & 72 & TuS Gahlen & 72\\
-\cellcolor{gray!6}{3} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{63.51} & \cellcolor{gray!6}{SV Schermbeck II} & \cellcolor{gray!6}{57.74} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{67} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{67}\\
+\rowcolor{gray!6}  3 & SV Schermbeck II & 63.51 & SV Schermbeck II & 57.74 & 1. SC BW Wulfen & 67 & 1. SC BW Wulfen & 67\\
 4 & Fenerbahce I. Marl & 58.06 & Fenerbahce I. Marl & 53.52 & SV Schermbeck II & 65 & SV Schermbeck II & 65\\
-\cellcolor{gray!6}{5} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{57.22} & \cellcolor{gray!6}{1. SC BW Wulfen} & \cellcolor{gray!6}{50.88} & \cellcolor{gray!6}{TSV Raesfeld} & \cellcolor{gray!6}{62} & \cellcolor{gray!6}{TSV Raesfeld} & \cellcolor{gray!6}{62}\\
+\rowcolor{gray!6}  5 & 1. SC BW Wulfen & 57.22 & 1. SC BW Wulfen & 50.88 & TSV Raesfeld & 62 & TSV Raesfeld & 62\\
 \addlinespace
 6 & TSV Raesfeld & 55.75 & TSV Raesfeld & 50.64 & Fenerbahce I. Marl & 50 & Fenerbahce I. Marl & 50\\
-\cellcolor{gray!6}{7} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{45.38} & \cellcolor{gray!6}{TuS Velen} & \cellcolor{gray!6}{41.79} & \cellcolor{gray!6}{SV Lembeck} & \cellcolor{gray!6}{46} & \cellcolor{gray!6}{SV Lembeck} & \cellcolor{gray!6}{48}\\
+\rowcolor{gray!6}  7 & TuS Velen & 45.38 & TuS Velen & 41.79 & SV Lembeck & 46 & SV Lembeck & 48\\
 8 & SV Lembeck & 44.15 & SC Marl-Hamm & 40.91 & BVH Dorsten & 44 & BVH Dorsten & 44\\
-\cellcolor{gray!6}{9} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{43.88} & \cellcolor{gray!6}{BVH Dorsten} & \cellcolor{gray!6}{39.90} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{44} & \cellcolor{gray!6}{SC Marl-Hamm} & \cellcolor{gray!6}{44}\\
+\rowcolor{gray!6}  9 & SC Marl-Hamm & 43.88 & BVH Dorsten & 39.90 & SC Marl-Hamm & 44 & SC Marl-Hamm & 44\\
 10 & BVH Dorsten & 42.64 & SV Lembeck & 39.57 & TuS Velen & 41 & TuS Velen & 40\\
 \addlinespace
-\cellcolor{gray!6}{11} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{37.59} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{35.82} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{28} & \cellcolor{gray!6}{FC RW Dorsten} & \cellcolor{gray!6}{28}\\
+\rowcolor{gray!6}  11 & FC RW Dorsten & 37.59 & FC RW Dorsten & 35.82 & FC RW Dorsten & 28 & FC RW Dorsten & 28\\
 12 & Westfalia Gemen II & 32.82 & Westfalia Gemen II & 32.40 & Westfalia Gemen II & 27 & Westfalia Gemen II & 27\\
-\cellcolor{gray!6}{13} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{27.60} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{29.11} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{25} & \cellcolor{gray!6}{SC Reken II} & \cellcolor{gray!6}{25}\\
+\rowcolor{gray!6}  13 & SC Reken II & 27.60 & SC Reken II & 29.11 & SC Reken II & 25 & SC Reken II & 25\\
 14 & TuS 05 Sinsen II & 21.28 & TuS 05 Sinsen II & 23.86 & TuS 05 Sinsen II & 15 & TuS 05 Sinsen II & 15\\
-\cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{18.88} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{22.60} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{15} & \cellcolor{gray!6}{Adler Weseke II} & \cellcolor{gray!6}{15}\\
+\rowcolor{gray!6}  15 & Adler Weseke II & 18.88 & Adler Weseke II & 22.60 & Adler Weseke II & 15 & Adler Weseke II & 15\\
 \addlinespace
 16 & SV Altendorf-Ulfkotte & 13.98 & SV Altendorf-Ulfkotte & 19.50 & SV Altendorf-Ulfkotte & 7 & SV Altendorf-Ulfkotte & 7\\
 \bottomrule
 \end{tabular}}
 \end{table}
-
-\begin{verbatim}
-## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-\end{verbatim}
-
-\begin{verbatim}
-## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-\end{verbatim}
 
 \hypertarget{oose-test-statistics}{%
 \section{OOSE Test Statistics}\label{oose-test-statistics}}
@@ -852,7 +852,7 @@ however be much fairer than a coin toss.
 
 \input{rank_corr.tex}
 
-\includegraphics{term_paper_eem_files/figure-latex/unnamed-chunk-9-1.pdf}
+\includegraphics{term_paper_eem_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}

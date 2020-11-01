@@ -254,15 +254,15 @@ The results from the estimation with a Poisson distribution are very similar. Ho
 
 Instead of simulating the result as with the first two methods, we can simply calculate the expected number of goals based on the regression estimate and sum up the expected final league table.
 
-We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of the last three seasons and compare actual with predicted values. As can be seen in the bar plot below, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. It seems likely that using different distributions can improve the fit.
+We can evaluate the fit of the distributions also by looking at histograms comparing the actual distributions in the seasons before against the model's predictions. For this purpose we pool the values of all away and home goals of the last three seasons and compare actual with predicted values. As can be seen in the bar plot below, the model does not predict enough outliers of high goal numbers and predicts too many one- and two-goal outcomes. It seems likely that using different distributions would improve the fit.
 
-```{r echo = FALSE}
+```{r echo = FALSE, fig.align = 'center', out.width = "80%", fig.cap = "Comparison of actual distribution of goals in all preceding seasons with the prediction from a negative binomial regression"}
 include_graphics(paste0(getwd(), "/paper/plots/nbinom_actual.png"))
 
 
 ```
 
-```{r echo = FALSE}
+```{r eval = FALSE, echo = FALSE}
 include_graphics(paste0(getwd(), "/paper/plots/poisson_actual.png"))
 
 
@@ -336,7 +336,7 @@ kable(all_results,
 ```
 
 
-```{r echo=FALSE}
+```{r eval = FALSE, echo=FALSE}
 library(readr)
 library(tidyverse)
 poisson_plot<- function(sim_years){
@@ -416,7 +416,7 @@ print(poisson)
 ```
 
 
-```{r echo=FALSE}
+ ```{r eval = FALSE, echo=FALSE}
 library(readr)
 library(tidyverse)
 nbinom_plot<- function(sim_years){
