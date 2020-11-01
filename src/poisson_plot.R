@@ -58,13 +58,12 @@ actual <- rbind(read_rds(here::here(paste0("/data/database_match_results_",sim_y
                 read_rds(here::here(paste0("/data/database_match_results_",sim_years[3],".rds"))) %>% .[,5:6])
 
 actual <- tibble(all_goals = c(actual$goals_team_home, actual$goals_team_away))
-<<<<<<< Updated upstream
-png(file = here::here(paste0("paper/plots/poisson_actual_home.png")) )
-poisson2 <- tibble(poisson = poisson_method$all_goals,
-=======
-png(file = here::here(paste0("paper/plots/poisson_actual.png")) )
+
+#png(file = here::here(paste0("paper/plots/poisson_actual_home.png")) )
+
+
+png(file = here::here(paste0("paper/plots/poisson_actual.png")))
 poisson <- tibble(poisson = poisson_method$all_goals,
->>>>>>> Stashed changes
                actual = actual$all_goals
 )%>% gather(key=Type, value=Value) %>% 
   ggplot(aes(x=Value,fill=Type)) + 
@@ -73,5 +72,5 @@ poisson <- tibble(poisson = poisson_method$all_goals,
   labs(x = 'Goals per Match', y = 'Frequency of Goals' )+ 
   scale_x_continuous(breaks = 0:20)+
   scale_y_continuous(breaks = seq(0,800,50))
-print(poisson2)
-dev.off()
+print(poisson)
+#dev.off()
