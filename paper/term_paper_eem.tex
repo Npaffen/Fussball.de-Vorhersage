@@ -305,7 +305,7 @@ a team's performance than for example current league table points on
 their own. For this data set we find that gains from using advanced
 methods are marginal when evaluating them with data from past seasons.
 Methods are evaluated by calculating the correlation of the forecast
-results for previous seasons with their actual outcomes.
+ranking results for previous seasons with their actual outcomes.
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
@@ -403,16 +403,18 @@ to the outcome of single matches and depending on the expected outcome
 with regard to the opponent's rating. This version was especially
 adapted for the use in ranking football teams. Glickman
 \autocite*{glickman1995} offers a comprehensive discussion of the Elo
-rating system. ELO RATING DRAW???
+rating system. Surprisingly, there is no obvious way of predicting the
+probability of a draw. Therefore we use the empirical average
+probability for each match.
 
 The third model is a regression model that approximates the distribution
-of goals in each game to a Poisson or Negative Binomial distribution
+of goals in each game to a Poisson or negative binomial distribution
 with an estimated constant parameter to adjust for the home advantage.
 This approach follows the literature influenced by \textcite{maher1982}
 and others. Generally, these models include different parameters to
 allow for team-specific strengths when playing home or away, and while
-defending or attacking. Other parameters to include random effects, for
-example, can be added. We omit them here for simplicity. For a general
+defending or attacking. Other parameters that include for example random
+effects can be added. We omit them here for simplicity. For a general
 discussion see \textcite{karlis2003}. Many extensions of this model as
 well as model selection algorithms are possible.
 
@@ -427,9 +429,9 @@ returns.
 \section{Data}\label{data}}
 
 For our simulation study we decided to use data from the local men's
-league Recklinghausen class A1 in Westphalia for the 2019/2020 season.
-16 clubs were scheduled to play against each other on a total of 30
-match days in one home and one away game each. Due to the SARS-CoV2
+league Recklinghausen class A1 in Westphalia, Germany, for the 2019/2020
+season. 16 clubs were scheduled to play against each other on a total of
+30 match days in one home and one away game each. Due to the SARS-CoV2
 pandemic, the association has decided to cancel all matches from March
 15, 2020. 20 match days have already been played up to this point in
 time which corresponds to a database of 158 matches. As the first half
@@ -448,7 +450,7 @@ and the results that we derived from them.
 
 The game results cannot be extracted directly from the website. They are
 masked, so they are made unreadable when viewing the HTML file and are
-only evaluated afterwards using javascript and transferred to the CSS of
+only evaluated afterwards using JavaScript and transferred to the CSS of
 the site. The site also offers a match report, which graphically
 represents a temporal course of the match. This is broken down in the
 HTML code, in contrast to the match results, unmasked, and shows the
@@ -529,7 +531,7 @@ implement
 \begin{itemize}
 \item the points model,
 \item the EloRankings.net model, 
-\item a Poisson/Negative Binomial regression model
+\item a Poisson/negative binomial regression model
 \end{itemize}
 
 The first model is just a simple baseline model that calculates the
@@ -572,10 +574,10 @@ R_n = R_0 + K * (W - W_e) &
 
 \begin{align}
 K = \begin{cases}
-    K_0         &\mbox{if won by 1 goal} \\
-    K_0 * 1.5   &\mbox{if won by 2 goals} \\
-    K_0 * 0.75  &\mbox{if won by 3 goals} \\
-    K_0 * \left( 0.75 + K_0 * \frac{N-3}{8} \right) &\mbox{if won by 4 or more goals})
+    K_0         &\mbox{if won/lost by 1 goal} \\
+    K_0 * 1.5   &\mbox{if won/lost by 2 goals} \\
+    K_0 * 0.75  &\mbox{if won/lost by 3 goals} \\
+    K_0 * \left( 0.75 + \frac{N-3}{8} \right) &\mbox{if won/lost by 4 or more goals}
   \end{cases}
 \end{align}
 
@@ -591,13 +593,13 @@ for a win. \(W_e\) is the probability of winning defined by the
 following formula:
 
 \begin{align}
-W_e = \frac{1}{/(10^{(-dr/400)}+1),}
+W_e = \frac{1}{10^{-dr/400}+1,}
 \end{align}
 
-where \emph{dr} is defined as the rating difference and the home team
-receives an arbitrary bonus of 100 points. This bonus is considered to
-be a psychological advantage resulting from the fact that the game is
-played on the home pitch (see, e.g., \textcite{Pollard2008}).
+where \emph{dr} is defined as the rating difference plus an arbitrary
+bonus of 100 points for the home team. This bonus is considered to be a
+psychological advantage resulting from the fact that the game is played
+on the home pitch (see, e.g., \textcite{Pollard2008}).
 
 To simulate the outcome of the league with the points and Elo ranking
 method, we follow Correa et al.~\autocite*{correa} and draw the results
@@ -636,12 +638,12 @@ estimate a log-linear Poisson regression model using data from the
 matches already played:
 
 \begin{align}
-log(\text{\emph{goals by team}}) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team + \sum_{j}^{T} \beta_j opponent
+log(\text{\emph{goals by team}}) \sim constant + \beta_1 home + \sum_{i}^{T} \beta_i team_i + \sum_{j}^{T} \beta_j opponent_j
 \end{align}
 
 Here \emph{goals by team} represents the number of goals scored by the
 team in a certain game. The dummy variable \emph{home} equals 1 if the
-team plays on it's home pitch, and \emph{team} and \emph{opponent}
+team plays on it's home pitch, and \(team_i\) and \(opponent_j\)
 represent dummies for each team out of a total of \emph{T} teams
 respectively. So each game is represented twice: Once from the defending
 home team and once from the opponents view. Because it is a model in
@@ -653,9 +655,9 @@ expected effect of the home field advantage. This could be seen as an
 improvement over the Elo model, because we do not fix this effect in
 advance.
 
-To estimate the model, we use the \emph{glm} function from the R
+To estimate the Poisson model, we use the \emph{glm} function from the R
 \emph{stats} package. With the option \emph{family =
-quasipoisson(link=log)}, a Quasi-Maximum Likelihood Estimation of the
+quasipoisson(link=log)}, a quasi-Maximum likelihood estimation of the
 log-transformation is calculated. The reason for choosing a
 Quasi-Poisson distribution is that this adjusts the standard-errors for
 overdispersion (the variance is larger than the mean). The resulting
@@ -666,8 +668,9 @@ Pearson's Chi-Squared goodness-of-fit test finds that the model does not
 fit the data very well (p = 0.00) The residual deviance (388.56) using
 the Poisson distribution is much larger than the degrees of freedom
 (284), so we estimate the model with a negative binomial distribution.
-We follow the method proposed in Cameron and Trivedi
-\autocite*{cameron2013}.
+We use the \emph{glm.nb} function from the \emph{MASS} package, which
+estimates the dispersion parameter using alternating score and
+information iterations.
 
 \begin{table}[!htbp] \centering 
   \caption{19/20 Season Regression Output for the Negative Binomial Model} 
@@ -717,7 +720,7 @@ zg.} forfeit before the season started. Therefore all games were
 canceled and the team was assigned to the last place of the seasons
 table (place 18).
 
-In summary, the coefficients of the model show that the club
+The coefficients of the model show that the club
 \enquote{Altendorf-Ulfkotte}, is least likely to score a goal (low team
 estimate) and teams playing against them have the highest chance to
 score (high opponent estimate), with both estimates being highly
@@ -730,7 +733,7 @@ score probabilities are based on the estimated parameters.
 
 The results from the estimation with a Poisson distribution are very
 similar. However, the residual difference is higher (388.56 compared to
-354.50), indicating a better fit. The goodness-of-fit test still rejects
+354.50), indicating a worse fit. The goodness-of-fit test also rejects
 the model (p = 0.00). The estimation results for Poisson can be found in
 the Appendix.
 
@@ -745,16 +748,15 @@ all away and home goals of one season. As can be seen in the example
 plot for season 16/17, the model does not predict enough outliers of
 high goal numbers and predicts too many one- and two-goal outcomes. This
 is representative for all three preceding seasons, as can be seen by the
-other plots in the Appendix. This opens up the possibility of using a
-different distribution, which is not pursued further in this paper.
+other plots in the Appendix. This could imply that using a different
+distribution can improve the fit.
 
 \includegraphics[width=12.11in]{C:/Users/Nils/Documents/GitHub/Fussball.de-Vorhersage/paper/plots/poisson_actual_home_1617}
 
 A few alternatives have been developed for forecasting football games.
-The potential of using independent Poisson distributions to match the
-empirical distribution of goals scored by a team has been improved by
+Approaches with independent Poisson distributions were improved by
 introducing correlation between the teams playing against one another in
-a bivariate Poisson distribution \textcite{karlis2003}.
+a bivariate Poisson distribution (\textcite{karlis2003}).
 
 Boshnakov et al.~\autocite*{boshnakov2016} use a Weibull count model to
 improve on the bivariate Poisson model, allowing them even to outperform
@@ -844,7 +846,7 @@ performs generally better than the regression models' predictions.
 Surprisingly, the benchmark points method performs best in two out of
 three seasons.
 
-Because no model is cleafrly better then the others, and performance
+Because no model is clearly better then the others, and performance
 varies a lot between seasons, we see no clear evidence that one method
 should be preferred. A simulation based on these predictions would
 however be much fairer than a coin toss.
@@ -855,6 +857,16 @@ however be much fairer than a coin toss.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
+
+In this paper, we evaluate two methods for simulating the outcome of the
+aborted local men's football league season 2019/2020 Recklinghausen
+Class A1. We provide a brief overview of the state of the literature on
+forecasting football game result. 90 out of 240 games were predicted
+with a weighted randomizing of the existing table as a benchmark, with a
+simulation based on the Elo ranking and with a Poisson/negative Binomial
+regression. We calculate an out-of-sample error for the preceding three
+seasons in form of rank-correlation coefficients of the predicted table
+rankings. We find that no method is clearly inferior or superior.
 
 The decision to quit all games later than 8th of March because of the
 pandemic was not revised while the infection rates relaxed during May
@@ -867,7 +879,9 @@ We find that neither a simulation using a weighted coin toss based on
 the current league table (the points method), one based on the Elo
 ranking, or one based on regressions using (Quasi-)Poisson or negative
 binomial methods is superior. Therefore we cannot recommend one in
-particular.
+particular. Testing prediction methods with data from local football
+league's may help improving and evaluating more existing methods from
+the literature.
 
 \newpage
 
