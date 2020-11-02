@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  1 NOV 2020 23:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 20.7) (preloaded format=pdflatex 2020.9.28)  2 NOV 2020 17:00
 entering extended mode
-**./term_paper_eem.tex
-(term_paper_eem.tex
+**./Stay_home_simulate.tex
+(Stay_home_simulate.tex
 LaTeX2e <2020-02-02> patch level 5
 L3 programming layer <2020-09-03> ("C:\Users\Nils\AppData\Local\Programs\MiKTeX
  2.9\tex/latex/base\article.cls"
@@ -1031,12 +1031,12 @@ Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'english'.
-(term_paper_eem.aux
+(Stay_home_simulate.aux
 
 LaTeX Warning: Label `' multiply defined.
 
 )
-\openout1 = `term_paper_eem.aux'.
+\openout1 = `Stay_home_simulate.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 140.
 LaTeX Font Info:    ... okay on input line 140.
@@ -1186,11 +1186,11 @@ File: german.lbx 2020/08/23 v3.15a biblatex localization (PK/MW)
 Package biblatex Info: Input encoding 'utf8' detected.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'utf8'.
-\openout3 = `term_paper_eem.bcf'.
+\openout3 = `Stay_home_simulate.bcf'.
 
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'term_paper_eem.bbl' found.
-(term_paper_eem.bbl)
+Package biblatex Info: ... file 'Stay_home_simulate.bbl' found.
+(Stay_home_simulate.bbl)
 Package biblatex Info: Reference section=0 on input line 140.
 Package biblatex Info: Reference segment=0 on input line 140.
 
@@ -1235,9 +1235,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 140.
 LaTeX Info: Redefining \pageref on input line 140.
 LaTeX Info: Redefining \nameref on input line 140.
-(term_paper_eem.out) (term_paper_eem.out)
+(Stay_home_simulate.out) (Stay_home_simulate.out)
 \@outlinefile=\write4
-\openout4 = `term_paper_eem.out'.
+\openout4 = `Stay_home_simulate.out'.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 149--152
@@ -1344,19 +1344,19 @@ uelogo_en.png>]
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(term_paper_eem.toc)
+(Stay_home_simulate.toc)
 \tf@toc=\write5
-\openout5 = `term_paper_eem.toc'.
+\openout5 = `Stay_home_simulate.toc'.
 
 [1
 
-] (term_paper_eem.lof)
+] (Stay_home_simulate.lof)
 \tf@lof=\write6
-\openout6 = `term_paper_eem.lof'.
+\openout6 = `Stay_home_simulate.lof'.
 
-(term_paper_eem.lot)
+(Stay_home_simulate.lot)
 \tf@lot=\write7
-\openout7 = `term_paper_eem.lot'.
+\openout7 = `Stay_home_simulate.lot'.
 
 [2]pdfTeX warning (ext4): destination with the same identifier (name{page.1}) h
 as been already used, duplicate ignored
@@ -1382,24 +1382,24 @@ Overfull \hbox (18.51968pt too wide) in paragraph at lines 684--718
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8] [9] [10] (rank_corr.tex)
-<term_paper_eem_files/figure-latex/unnamed-chunk-6-1.pdf, id=198, 469.755pt x 3
-25.215pt>
-File: term_paper_eem_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (typ
-e pdf)
-<use term_paper_eem_files/figure-latex/unnamed-chunk-6-1.pdf>
-Package pdftex.def Info: term_paper_eem_files/figure-latex/unnamed-chunk-6-1.pd
-f  used on input line 831.
+<Stay_home_simulate_files/figure-latex/unnamed-chunk-6-1.pdf, id=198, 469.755pt
+ x 325.215pt>
+File: Stay_home_simulate_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file 
+(type pdf)
+<use Stay_home_simulate_files/figure-latex/unnamed-chunk-6-1.pdf>
+Package pdftex.def Info: Stay_home_simulate_files/figure-latex/unnamed-chunk-6-
+1.pdf  used on input line 831.
 (pdftex.def)             Requested size: 441.01784pt x 305.32004pt.
-<term_paper_eem_files/figure-latex/unnamed-chunk-7-1.pdf, id=199, 469.755pt x 3
-25.215pt>
-File: term_paper_eem_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (typ
-e pdf)
-<use term_paper_eem_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: term_paper_eem_files/figure-latex/unnamed-chunk-7-1.pd
-f  used on input line 844.
+<Stay_home_simulate_files/figure-latex/unnamed-chunk-7-1.pdf, id=199, 469.755pt
+ x 325.215pt>
+File: Stay_home_simulate_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file 
+(type pdf)
+<use Stay_home_simulate_files/figure-latex/unnamed-chunk-7-1.pdf>
+Package pdftex.def Info: Stay_home_simulate_files/figure-latex/unnamed-chunk-7-
+1.pdf  used on input line 844.
 (pdftex.def)             Requested size: 441.01784pt x 305.32004pt.
-[11 <./term_paper_eem_files/figure-latex/unnamed-chunk-6-1.pdf>] [12 <./term_pa
-per_eem_files/figure-latex/unnamed-chunk-7-1.pdf>] [13] [14]
+[11 <./Stay_home_simulate_files/figure-latex/unnamed-chunk-6-1.pdf>] [12 <./Sta
+y_home_simulate_files/figure-latex/unnamed-chunk-7-1.pdf>] [13] [14]
 Overfull \hbox (36.11925pt too wide) in paragraph at lines 902--931
  [][] 
  []
@@ -1408,10 +1408,10 @@ Overfull \hbox (36.11925pt too wide) in paragraph at lines 902--931
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 937.
 [15] [16]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 937.
-(term_paper_eem.aux)
+(Stay_home_simulate.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 937.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 937.
-Package rerunfilecheck Info: File `term_paper_eem.out' has not changed.
+Package rerunfilecheck Info: File `Stay_home_simulate.out' has not changed.
 (rerunfilecheck)             Checksum: A67D36F76A9ABC2C15F73988DEC6FB34;1228.
 
 LaTeX Warning: There were undefined references.
@@ -1423,18 +1423,18 @@ LaTeX Warning: There were multiply-defined labels.
 Package biblatex Warning: Please rerun LaTeX.
 (biblatex)                Page breaks have changed.
 
-Package logreq Info: Writing requests to 'term_paper_eem.run.xml'.
-\openout1 = `term_paper_eem.run.xml'.
+Package logreq Info: Writing requests to 'Stay_home_simulate.run.xml'.
+\openout1 = `Stay_home_simulate.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
  24448 strings out of 481165
- 411767 string characters out of 2902574
- 1278380 words of memory out of 3000000
+ 411935 string characters out of 2902574
+ 1278396 words of memory out of 3000000
  39422 multiletter control sequences out of 15000+200000
  602274 words of font info for 127 fonts, out of 3000000 for 9000
  1143 hyphenation exceptions out of 8191
- 58i,17n,63p,805b,6835s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 58i,17n,63p,809b,6835s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc
 }{C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathit.
 enc}{C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.e
@@ -1456,7 +1456,7 @@ fonts/type1/public/lm/lmr8.pfb><C:/Users/Nils/AppData/Local/Programs/MiKTeX 2.9
 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/Nils/AppData/Local/Programs/MiKT
 eX 2.9/fonts/type1/public/lm/lmsy10.pfb><C:/Users/Nils/AppData/Local/Programs/M
 iKTeX 2.9/fonts/type1/public/lm/lmsy8.pfb>
-Output written on term_paper_eem.pdf (19 pages, 317712 bytes).
+Output written on Stay_home_simulate.pdf (19 pages, 317720 bytes).
 PDF statistics:
  316 PDF objects out of 1000 (max. 8388607)
  67 named destinations out of 1000 (max. 500000)

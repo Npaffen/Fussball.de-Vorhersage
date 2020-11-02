@@ -38,7 +38,7 @@ require(stargazer)
 require(kableExtra)
 require(gridExtra)
 source(here::here("src/functions.R"))
-source(here::here("src/functions_N.R"))
+
 ## load data or something for preparation
 
 ```
