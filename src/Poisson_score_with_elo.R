@@ -8,7 +8,7 @@ missinggames <- read_rds(here::here("/data/database_match_results_1718.rds")) %>
 
 
 
-source(here::here("src/functions_N.R"))
+source(here::here("src/functions.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
 #Annahme : Zwei gleichstarke Mannschaften haben eine höhere Wahrscheinlichkeit unentschieden zu spielen als zwei unterschiedlich Starke.
 #Ableitung : Für gleichstarke Mannschaften Durchschnittswert für unterschiedlich Starke den Wert diskontieren 

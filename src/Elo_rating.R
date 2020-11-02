@@ -11,7 +11,7 @@ if(sim_years == 1920){
   missinggames <- read_rds(here::here(paste0("/data/database_match_results_",sim_years,".rds"))) %>% filter(between(matchday, 21, max(database_season$matchday)))%>% .[1:4]
 }
 
-source(here::here("src/functions_N.R"))
+source(here::here("src/functions.R"))
 #Idee für Untenschieden : Ausrechen wie häufig unentschieden in dieser Saison gespielt wurde. 
 #Annahme : Zwei gleichstarke Mannschaften haben eine höhere Wahrscheinlichkeit unentschieden zu spielen als zwei unterschiedlich Starke.
 #Ableitung : Für gleichstarke Mannschaften Durchschnittswert für unterschiedlich Starke den Wert diskontieren 

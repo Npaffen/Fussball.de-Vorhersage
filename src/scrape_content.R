@@ -11,7 +11,7 @@ seasons <-  "1617"
 
 seasonsID <- "01SNI60QL4000007VS54898EVT9SILN7"
               
-source("src/Scrape_RL_Recklingh_A1_Kreis_Recklingh_A_Herren.R")
+source(here::here("src/functions.R"))
 md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .x, seasonID = .y)) %>%
   unlist()
 
@@ -30,7 +30,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
   saveRDS(database_season, here::here("/data/database_season_1617.rds"))
   
   #Download match results 
-    source("src/get_match_results.R")
+
     database_match_results <-  map_df(md_season_url, ~f_extract_match_results(md_url_season = .x ))
     
       #Some games cant be scraped due to a missing node but results are still there. Added them manually
@@ -50,7 +50,7 @@ md_season_url <- map2(.x = seasons, .y = seasonsID, ~ f_md_url_season(season = .
     
     
 #Download missing matches. Need to insert only urls of missing matchdays
-    source(here::here('src/get_missing_matches.R'))
+
   database_missing_matches_1920 <- map_df(md_season_url[21:30], ~f_extract_missing_matches(md_url_season = .x ))
   saveRDS(database_missing_matches_1920, here::here("/data/database_missing_matches_1920.rds"))
 
