@@ -44,7 +44,7 @@ source(here::here("src/functions.R"))
 ```
 
 
-
+DIES IST EINE VERÄNDERUNG!
 # Abstract
 
 Publicly available data and public attention are contributing to the interest in forecasting soccer game results and the relevance of the accuracy of those forecasts. Global pandemics like SARS-CoV2 are just one of the reasons why seasons may be canceled. Which provides us with a reason why forcasting canceld matches could be helpful in the decision process of promotion and relegation in soccer leagues. We provide a short overview on the state of the literature and use data from an aborted German local men's league season 2019-20 to predict the season’s outcome using three different statistical approaches. A measure of each team’s strength is calculated from past games and used as quantifier in the simulation or prediction. Instead of annulling the games played thus far or using the table as of now, using a prediction algorithm to simulate the seasons final table might be fairer. That's because the algorithm includes the played games to make a better guess at the outcome of the missing games. Research has shown that measures like the Elo rating system are better predictors of a team's performance than for example current league table points on their own. For our data set we find that there's no clear evidence that the Elo ranking or Poisson and negative binomial regressions improve predictions over the benchmark when evaluating them with data from past seasons. Methods are evaluated by calculating the correlation of the forecast ranking results for previous seasons with their actual outcomes.
